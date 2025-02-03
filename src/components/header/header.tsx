@@ -8,8 +8,6 @@ import Navigation from './navigation/navigation';
 import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
 import { HEADER_HEIGHT } from '../../data/headerData';
 
-import s from './header.module.scss';
-
 const allowedRoutes = ['/', '/about', '/articles'];
 
 const isAllowedRoute = (pathname: string) => {
