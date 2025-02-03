@@ -1,4 +1,6 @@
+'use client';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import AirplaneIcon from '../../../images/icon-human/airplane.svg';
 import BicycleIcon from '../../../images/icon-human/bicycle.svg';
 import BusIcon from '../../../images/icon-human/bus.svg';
@@ -68,6 +70,7 @@ type HumanVerificationProps = {
 };
 
 const HumanVerification: React.FC<HumanVerificationProps> = ({ onVerify }) => {
+  const pathname = usePathname();
   const [images, setImages] = useState<IconType[]>([]);
   const [isVerified, setIsVerified] = useState(false);
   const [verifiedName, setVerifiedName] = useState('');
@@ -91,7 +94,7 @@ const HumanVerification: React.FC<HumanVerificationProps> = ({ onVerify }) => {
   useEffect(() => {
     resetImages();
     setVerifiedName('');
-  }, []);
+  }, [pathname]);
 
   const handleImageClick = (iconName: string): void => {
     const isCorrect = iconName === targetIcon?.name;
