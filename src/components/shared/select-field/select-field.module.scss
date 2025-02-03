@@ -1,0 +1,64 @@
+@use '../../../styles/mixins';
+
+.label {
+  position: relative;
+  display: inline-block;
+  height: 35px;
+}
+
+.select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  margin-bottom: 35px;
+  width: 100%;
+  height: 35px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--second-text-color);
+  box-shadow: none;
+  border-radius: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  @include mixins.mq(tablet) {
+    width: 240px;
+    font-size: 15px;
+  }
+  @include mixins.mq(desktop) {
+    font-size: 16px;
+  }
+}
+
+.spanClass {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  width: 150px;
+  font-size: 14px;
+  color: var(--second-text-input-color);
+  transition: all var(--transition-duration) var(--timing-function);
+  pointer-events: none;
+  @include mixins.mq(tablet) {
+    font-size: 15px;
+  }
+  @include mixins.mq(desktop) {
+    font-size: 16px;
+  }
+}
+
+.label.language {
+  height: 35px;
+}
+
+.select.language {
+  margin-bottom: 0px;
+  width: 170px;
+}

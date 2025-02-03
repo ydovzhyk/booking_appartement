@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Oblik';
+  src: url('./fonts/Oblik-Bold.otf') format('opentype');
+  font-weight: bold;
+}
+
+.section {
+  @apply w-full my-sectionMobile sm:my-sectionTablet lg:my-sectionDesktop;
+}
+
+.hover-transition {
+  @apply transition-colors duration-300;
+}
+
+.test-border {
+  @apply border-solid border-red-600 border;
+}
+
+.regular-border {
+  @apply border-solid border-[#0f1d2d] border border-opacity-50;
+}
+
+.accent-border {
+  @apply border-solid border-[#ff662d] border;
+}
+
+:root {
+  --accent: #ff662d;
+  --accent-background: #0f1d2d;
+  --link: #00f;
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-background: #0f1d2d;
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Josefin Sans', sans-serif;
+}

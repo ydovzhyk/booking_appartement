@@ -1,0 +1,34 @@
+1️⃣ Створення Next.js проекту
+📌 Виконай команду у терміналі:
+npx create-next-app@latest booking_appartement
+2️⃣ Перехід у папку з проектом
+cd booking_appartement
+3️⃣ Налаштування Tailwind у tailwind.config.js
+Відкрий tailwind.config.js і заміни content: [] на:
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+      },
+    },
+  },
+  plugins: [],
+}
+🔹 Це вказує Tailwind, у яких файлах шукати класи.
+4️⃣ Додавання Tailwind у глобальні стилі
+Відкрий файл styles/globals.css і додай ці рядки:
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+5️⃣Запуск проекту
+npm run dev
+
+/////////////////////

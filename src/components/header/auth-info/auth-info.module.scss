@@ -1,0 +1,95 @@
+@use "../../../styles/mixins";
+
+.userInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.userWrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  align-items: center;
+}
+
+.userText {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.userText:hover {
+  font-weight: 600;
+}
+
+.text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-color);
+}
+
+.userPhoto {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-color);
+  border: 1px solid #41414153;
+}
+
+.userBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.userInfoSide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnWrapper {
+  width: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnExit {
+  font-weight: 400;
+  color: var(--text-color);
+  background-color: transparent;
+  transition:
+    box-shadow var(--transition-duration) var(--timing-function),
+    background-color var(--transition-duration) var(--timing-function),
+    color var(--transition-duration) var(--timing-function);
+  &:hover {
+    font-weight: 600;
+  }
+}
