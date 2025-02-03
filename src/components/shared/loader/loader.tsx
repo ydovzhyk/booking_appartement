@@ -1,19 +1,9 @@
 "use client";
-import { Oval } from 'react-loader-spinner';
 
-import s from './loader.module.scss';
+import { PuffLoader } from "react-spinners";
 
 const LoaderSpinner = () => {
-  return (
-    <div className={s.loader}>
-      <Oval
-        height="130"
-        width="130"
-        color="var(--text-color)"
-        secondaryColor="var(--main-color)"
-      />
-    </div>
-  );
+  return <PuffLoader color="#ff662d" size={60} />;
 };
 
 export default LoaderSpinner;
