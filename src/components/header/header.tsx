@@ -60,7 +60,7 @@ const Header = () => {
               Find your perfect getaway in any city!
             </Text>
           </div>
-          <div className={s.header__navigation}>
+          <div className="w-full">
             <Navigation />
           </div>
         </div>
