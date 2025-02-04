@@ -1,42 +1,48 @@
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import TranslateMe from "../../../utils/helpers/translating/translating";
-import { TranslatedText } from "../../../utils/helpers/translating/translating";
-
-import s from './navigation.module.scss';
+import TranslateMe from '../../../utils/helpers/translating/translating';
+import NavLink from '@/components/shared/navLink/navLink';
 
 const Navigation = () => {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  const isActive = (path: string) => {
-    return pathname === path ? `${s.link} ${s.active}` : s.link;
-  };
-
-    return (
-      <div className={s.navigation}>
-        <nav className={s.navigation__content}>
-          <ul className={s.navigation__wrapper}>
-            <li>
-              <Link href="/" passHref className={isActive('/')}>
-                <TranslatedText text="Home" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/article" passHref className={isActive('/article')}>
-                <TranslatedText text="Article" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" passHref className={isActive('/about')}>
-                <TranslatedText text="About" />
-              </Link>
-            </li>
-          </ul>
-        </nav>
-        <div className={s.navigation__translating}>
-          <TranslateMe />
-        </div>
-    </div>
+  return (
+    <nav className="relative w-full py-[13px]">
+      <ul className="flex flex-row items-center justify-center gap-[60px] w-full">
+        <li>
+          <NavLink
+            href="/"
+            textColor="text-white"
+            underlineColor="bg-white"
+            isActive={pathname === '/'}
+          >
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            href="/article"
+            textColor="text-white"
+            underlineColor="bg-white"
+            isActive={pathname === '/article'}
+          >
+            Article
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            href="/about"
+            textColor="text-white"
+            underlineColor="bg-white"
+            isActive={pathname === '/about'}
+          >
+            About
+          </NavLink>
+        </li>
+      </ul>
+      <div className="absolute top-[7px] right-0">
+        <TranslateMe />
+      </div>
+    </nav>
   );
 };
 

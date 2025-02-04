@@ -3,8 +3,8 @@ import Text from '../shared/text/text';
 export default function HomeComponent() {
   return (
     <div className="container">
-      <div className="section border-solid border-violet-600 border-2">
-        <div className="p-6">
+      <div className="section border-solid border-[var(--accent)] border">
+        <div className="flex flex-col gap-4 py-5">
           <Text type="title" as="h1">
             Main Heading (H1)
           </Text>
@@ -16,6 +16,13 @@ export default function HomeComponent() {
           </Text>
           <Text type="small" as="span" className="text-red-500">
             Small text in a span
+          </Text>
+          <Text
+            type="extraSmall"
+            as="span"
+            className="text-[var(--accent-background)]"
+          >
+            Extra small text in a span
           </Text>
         </div>
       </div>

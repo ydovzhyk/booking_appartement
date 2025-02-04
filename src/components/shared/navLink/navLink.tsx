@@ -6,12 +6,16 @@ interface NavLinkProps {
   href: string;
   isActive?: boolean;
   children: string;
+  textColor?: string;
+  underlineColor?: string;
 }
 
 const NavLink: React.FC<NavLinkProps> = ({
   href,
   isActive = false,
   children,
+  textColor = 'text-[var(--text-color)]',
+  underlineColor = 'bg-[var(--accent-background)]',
 }) => {
   return (
     <Link
@@ -22,12 +26,14 @@ const NavLink: React.FC<NavLinkProps> = ({
         type="regular"
         as="span"
         fontWeight={isActive ? 'normal' : 'medium'}
+        className={clsx(textColor, isActive ? 'font-bold' : 'font-medium')}
       >
         {children}
       </Text>
       <span
         className={clsx(
-          'absolute left-0 block h-[1px] bg-[var(--accent-background)] transition-all duration-300 ease-in-out origin-left',
+          'absolute left-0 block h-[1px] transition-all duration-300 ease-in-out origin-left',
+          underlineColor,
           isActive ? 'w-full' : 'w-0 group-hover:w-full'
         )}
       ></span>

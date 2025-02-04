@@ -4,7 +4,8 @@ import Text from '../text/text';
 interface IButtonProps {
   text: string;
   type?: 'submit' | 'button' | 'reset';
-  btnClass: string;
+  btnClass?: 'btnDark' | 'btnLight' | 'btnDisabled';
+  textColor?: string; // ДОДАНО: Колір тексту
   onClick?: () => void;
   id?: string;
   image?: string;
@@ -15,6 +16,7 @@ const Button: React.FC<IButtonProps> = ({
   text = '',
   type = 'submit',
   btnClass = 'btnDark',
+  textColor = 'text-black',
   onClick,
   id = '',
   image = null,
@@ -22,6 +24,7 @@ const Button: React.FC<IButtonProps> = ({
 }) => {
   const baseClasses =
     'flex items-center justify-center gap-2.5 hover-transition group w-[150px] h-[40px] md:w-[170px]';
+
   const btnDarkClasses = 'regular-border';
   const btnLightClasses = 'accent-border bg-[var(--accent)] text-white';
   const btnDisabledClasses =
@@ -37,43 +40,25 @@ const Button: React.FC<IButtonProps> = ({
   }
 
   return (
-    <>
-      {!disabled && (
-        <button
-          id={id}
-          className={`${baseClasses} ${buttonClasses}`}
-          onClick={onClick}
-          type={type}
+    <button
+      id={id}
+      className={`${baseClasses} ${buttonClasses}`}
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+    >
+      {image && <img src={image} alt="icon" className="w-5 h-5" />}
+      {text && (
+        <Text
+          type="small"
+          as="span"
+          fontWeight="normal"
+          className={`${textColor} group-hover:font-bold`}
         >
-          {image && <img src={image} alt="icon" className="w-5 h-5" />}
-          {text && (
-            <Text
-              type="small"
-              as="span"
-              fontWeight="normal"
-              className="group-hover:font-bold"
-            >
-              {text}
-            </Text>
-          )}
-        </button>
+          {text}
+        </Text>
       )}
-      {disabled && (
-        <div className={`${baseClasses} ${buttonClasses}`}>
-          {image && <img src={image} alt="icon" className="w-5 h-5" />}
-          {text && (
-            <Text
-              type="small"
-              as="span"
-              fontWeight="normal"
-              className="group-hover:font-bold"
-            >
-              {text}
-            </Text>
-          )}
-        </div>
-      )}
-    </>
+    </button>
   );
 };
 

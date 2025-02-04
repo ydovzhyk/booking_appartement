@@ -52,7 +52,7 @@ const Header = () => {
             <Text
               type="normal"
               as="p"
-              fontWeight="bold"
+              fontWeight="medium"
               className="text-left text-white"
             >
               Find your perfect getaway in any city!

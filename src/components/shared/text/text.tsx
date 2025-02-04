@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { TranslatedText } from '../../../utils/helpers/translating/translating';
-import { ReactNode } from 'react';
 
 type TextType = 'title' | 'normal' | 'regular' | 'small' | 'extraSmall';
 type TagType = 'h1' | 'h2' | 'h3' | 'p' | 'span';

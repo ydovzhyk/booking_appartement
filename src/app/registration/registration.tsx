@@ -44,7 +44,7 @@ const Registration = () => {
             fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
             flex flex-col items-center gap-5
             py-[30px] px-[20px] w-full min-w-[280px]
-            bg-[var(--background)]
+            bg-[var(--background)] rounded-lg
             shadow-[10px_10px_30px_rgba(82,85,95,0.4)]
             z-[10]
             md:mx-0 md:py-[40px] md:px-[20px] md:w-[380px]

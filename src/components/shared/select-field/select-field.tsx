@@ -1,9 +1,8 @@
-"use client";
+'use client';
 
 import Select, { StylesConfig } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
-
-import s from './select-field.module.scss';
+import Text from '../text/text';
 
 interface ISelectFieldProps {
   name: string;
@@ -14,6 +13,7 @@ interface ISelectFieldProps {
   options: { value: string; label: string }[];
   className?: string;
   defaultValue?: { value: string; label: string };
+  width?: string;
 }
 
 const SelectField: React.FC<ISelectFieldProps> = ({
@@ -23,68 +23,69 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   placeholder,
   required,
   options,
-  className,
+  width,
   defaultValue,
 }) => {
-  const labelClass = className ? `${s.label} ${s[className]}` : `${s.label}`;
-  const selectClass = className ? `${s.select} ${s[className]}` : `${s.select}`;
-
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1279 });
+  const isMobile = useMediaQuery({ maxWidth: 425 });
+  const isTablet = useMediaQuery({ minWidth: 426, maxWidth: 1279 });
 
   const customStyles: StylesConfig = {
-    control: (provided: any, state) => ({
+    control: (provided, state) => ({
       ...provided,
       fontSize: isMobile ? '14px' : isTablet ? '15px' : '16px',
-      height: isMobile ? '35px' : isTablet ? '35px' : '35px',
-      color: 'var(--second-text-color)',
-      pointerEvents: 'auto',
-      borderColor: state.isFocused ? 'white' : provided.borderColor,
+      height: '40px',
+      width: width,
+      color: 'var(--accent-background)',
+      backgroundColor: 'white',
+      borderColor: state.isFocused
+        ? 'var(--accent-background)'
+        : provided.borderColor,
+      boxShadow: state.isFocused
+        ? '0 0 0 2px var(--accent-background)'
+        : 'none',
+      '&:hover': {
+        borderColor: 'var(--accent-background)',
+      },
     }),
-    option: (styles, { isDisabled, isFocused, isSelected }) => {
-      const backgroundColor = isSelected
-        ? 'black'
+    option: (styles, { isDisabled, isFocused, isSelected }) => ({
+      ...styles,
+      backgroundColor: isSelected
+        ? 'var(--accent-background)'
         : isFocused
-        ? 'rgba(0, 0, 0, 0.3)'
-        : 'white';
-
-      const textColor = isSelected ? 'white' : 'black';
-
-      return {
-        ...styles,
-        backgroundColor: isDisabled ? undefined : backgroundColor,
-        color: isDisabled ? '#ccc' : textColor,
-        height: isMobile ? '35px' : isTablet ? '35px' : '35px',
-        display: 'flex',
-        alignItems: 'center',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-          ...styles[':active'],
-          backgroundColor: !isDisabled
-            ? isSelected
-              ? 'black'
-              : 'rgba(0, 0, 0, 0.3)'
-            : undefined,
-        },
-      };
-    },
-    menu: (provided, state) => ({
-      ...provided,
-      marginTop: isMobile ? '-8px' : isTablet ? '-8px' : '2px',
+          ? 'rgba(15,29,45,0.3)'
+          : 'var(--background-color)',
+      color: isSelected ? 'white' : 'var(--accent-background)',
+      height: '35px',
+      display: 'flex',
+      alignItems: 'center',
+      cursor: isDisabled ? 'not-allowed' : 'pointer',
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled
+          ? isSelected
+            ? 'var(--accent-background)'
+            : 'rgba(15,29,45,0.31)'
+          : undefined,
+      },
     }),
-    indicatorsContainer: (provided, state) => ({
+    menu: provided => ({
+      ...provided,
+      backgroundColor: 'var(--background-color)',
+      marginTop: isMobile || isTablet ? '-8px' : '2px',
+    }),
+    indicatorsContainer: provided => ({
       ...provided,
       padding: '0 6px',
     }),
   };
 
   const valueId = `select-${name}`;
+
   return (
-    <label className={labelClass}>
+    <label className="block w-full">
       <Select
         id={valueId}
         instanceId={valueId}
-        className={selectClass}
         name={name}
         value={value}
         onChange={handleChange}
@@ -93,17 +94,19 @@ const SelectField: React.FC<ISelectFieldProps> = ({
         options={options}
         styles={customStyles}
         defaultValue={defaultValue}
-        theme={(theme) => ({
+        theme={theme => ({
           ...theme,
-          borderRadius: 0,
+          borderRadius: 5,
           colors: {
             ...theme.colors,
-            primary: 'black',
+            primary: 'var(--accent-background)',
           },
         })}
       />
       {!defaultValue && value.value === '' && (
-        <span className={s.spanClass}>{placeholder}</span>
+        <Text type="small" as="span" className="absolute text-gray-500">
+          {placeholder}
+        </Text>
       )}
     </label>
   );

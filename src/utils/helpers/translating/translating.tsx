@@ -71,7 +71,7 @@ export default function TranslateMe() {
         placeholder="Select Language"
         required={true}
         options={options}
-        className="language"
+        width="150px"
       />
     </div>
   );

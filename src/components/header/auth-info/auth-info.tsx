@@ -6,15 +6,14 @@ import { getScreenType } from '../../../redux/technical/technical-selectors';
 import { getLogin, getUser } from '../../../redux/auth/auth-selectors';
 import { logout } from '../../../redux/auth/auth-operations';
 import Text from '@/components/shared/text/text';
-import { TranslatedText } from '../../../utils/helpers/translating/translating';
-
-import s from './auth-info.module.scss';
 
 const AuthInfo = () => {
   const dispatch: AppDispatch = useDispatch();
   const isUserLogin = useSelector(getLogin);
   const screenType = useSelector(getScreenType);
   const user = useSelector(getUser);
+
+  const greeting = `Hi, ${user.username ? user.username : 'User'}`;
 
   const onLogout = () => {
     dispatch(logout());
@@ -52,33 +51,60 @@ const AuthInfo = () => {
         </div>
       )}
       {isUserLogin && screenType !== 'isMobile' && (
-        <div className={s.userInfoSide}>
-          <div className={s.userBlock}>
+        <div className="flex flex-row items-center justify-between gap-[15px]">
+          <div className="flex flex-row items-center justify-between gap-[10px] w-[45px] h-[45px] bg-white rounded-full">
             {user.userAvatar !== null && (
               <img
                 src={user.userAvatar}
                 alt="Userphoto"
-                className="w-[40px] h-[40px] rounded-full border-solid border-wite-600 border-2"
+                className="w-[45px] h-[45px] rounded-full"
               />
             )}
           </div>
-          <span className={s.text}>Hi, {user.username}</span>
+          <Text
+            type="small"
+            as="span"
+            fontWeight="normal"
+            className="text-white"
+          >
+            {greeting}
+          </Text>
           <PiLineVertical
             size={24}
-            color="var(--text-color)"
+            color="white"
             style={{ marginLeft: '-10px', marginRight: '-10px' }}
           />
-          <div className={s.btnWrapper}>
-            <button type="button" onClick={onLogout} className={s.btnExit}>
-              <TranslatedText text="exit" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onLogout}
+            className="flex flex-row items-center justify-center bg-transparent hover-transition group mt-[2px]"
+          >
+            <Text
+              type="small"
+              as="span"
+              fontWeight="normal"
+              className="text-white group-hover:text-[var(--accent)]"
+            >
+              Exit
+            </Text>
+          </button>
         </div>
       )}
       {isUserLogin && screenType === 'isMobile' && (
-        <div className={s.userInfoSide}>
-          <button type="button" onClick={onLogout} className={s.btnExit}>
-            <TranslatedText text="exit" />
+        <div className="flex flex-row items-center justify-between gap-[15px]">
+          <button
+            type="button"
+            onClick={onLogout}
+            className="flex flex-row items-center justify-center bg-transparent hover-transition group mt-[2px]"
+          >
+            <Text
+              type="small"
+              as="span"
+              fontWeight="normal"
+              className="text-white group-hover:text-[var(--accent)]"
+            >
+              Exit
+            </Text>
           </button>
         </div>
       )}
