@@ -8,6 +8,7 @@ import AuthProvider from '../utils/helpers/auth-provider/auth-provider';
 import { HeaderProvider } from '../utils/helpers/HeaderContext';
 import { LanguageProvider } from '../utils/helpers/translating/language-context';
 import ModalWindow from '../components/shared/modal-window-message/modal-window-message';
+import ScrollToTopButton from '@/components/scrollToTopBtn/scrollToTopBtn';
 
 import '../styles/globals.css';
 
@@ -40,6 +41,7 @@ export default function RootLayout({
               <HeaderProvider>
                 <Header />
                 <main className="flex-1">{children}</main>
+                <ScrollToTopButton />
                 <Footer />
               </HeaderProvider>
             </div>

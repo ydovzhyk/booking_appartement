@@ -7,7 +7,6 @@ import SelectField from '../../../components/shared/select-field/select-field';
 import { useLanguage } from './language-context';
 import { lANGUAGE } from '@/data/languageData';
 
-// translate.key = 'AIzaSyA-LWuIlquldSBDqQWlgr3nJE8h3AMTDCE';
 translate.key = 'AIzaSyDLg_xiEx0CEGPUY4zPxiWnwGIQLzUOX-U';
 
 export default function TranslateMe() {

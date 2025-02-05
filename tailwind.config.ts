@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-const defaultTheme = require("tailwindcss/defaultTheme");
+import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
   content: [
@@ -9,6 +9,15 @@ export default {
   ],
   theme: {
     extend: {
+      keyframes: {
+        blink: {
+          '0%': { opacity: "0" },
+          '100%': { opacity: "1" },
+        },
+      },
+      animation: {
+        blink: 'blink 1s infinite alternate',
+      },
       fontFamily: {
         josefin: ["Josefin Sans", ...defaultTheme.fontFamily.sans],
         maven: ["Maven Pro", ...defaultTheme.fontFamily.sans],
