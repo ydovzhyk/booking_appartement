@@ -1,7 +1,9 @@
 'use client';
+import { Suspense } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import NotFound from './not-found';
 import Logo from '@/components/shared/logo/logo';
+import LoaderSpinner from '@/components/shared/loader/loader';
 
 const NotFoundPage = () => {
   const isMobile = useMediaQuery({ maxWidth: 425 });
@@ -15,7 +17,15 @@ const NotFoundPage = () => {
         </div>
       )}
       <div className="container">
-        <NotFound />
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center w-full h-full test-border">
+              <LoaderSpinner />
+            </div>
+          }
+        >
+          <NotFound />
+        </Suspense>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 'use client';
+import { Suspense } from 'react';
 import Login from './login';
 import Logo from '@/components/shared/logo/logo';
 import { useMediaQuery } from 'react-responsive';
+import LoaderSpinner from '@/components/shared/loader/loader';
 
 export default function LoginPage() {
   const isMobile = useMediaQuery({ maxWidth: 425 });
@@ -15,7 +17,15 @@ export default function LoginPage() {
         </div>
       )}
       <div className="container">
-        <Login />
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center w-full h-full test-border">
+              <LoaderSpinner />
+            </div>
+          }
+        >
+          <Login />
+        </Suspense>
       </div>
     </section>
   );
