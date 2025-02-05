@@ -69,7 +69,6 @@ const AuthInputForm = ({ typeOperation }: AuthInputFormProps) => {
           render={({ field: { onChange, value }, fieldState }) => (
             <TextField
               value={value}
-              control={control}
               handleChange={onChange}
               error={fieldState.error}
               autoComplete="off"
@@ -91,7 +90,6 @@ const AuthInputForm = ({ typeOperation }: AuthInputFormProps) => {
         render={({ field: { onChange, value }, fieldState }) => (
           <TextField
             value={value}
-            control={control}
             handleChange={onChange}
             error={fieldState.error}
             {...fields.email}
@@ -115,7 +113,6 @@ const AuthInputForm = ({ typeOperation }: AuthInputFormProps) => {
         render={({ field: { onChange, value }, fieldState }) => (
           <TextField
             value={value}
-            control={control}
             handleChange={onChange}
             error={fieldState.error}
             autoComplete="current-password"

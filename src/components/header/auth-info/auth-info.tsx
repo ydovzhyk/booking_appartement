@@ -6,6 +6,7 @@ import { getScreenType } from '../../../redux/technical/technical-selectors';
 import { getLogin, getUser } from '../../../redux/auth/auth-selectors';
 import { logout } from '../../../redux/auth/auth-operations';
 import Text from '@/components/shared/text/text';
+import Image from 'next/image';
 
 const AuthInfo = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -54,10 +55,12 @@ const AuthInfo = () => {
         <div className="flex flex-row items-center justify-between gap-[15px]">
           <div className="flex flex-row items-center justify-between gap-[10px] w-[45px] h-[45px] bg-white rounded-full">
             {user.userAvatar !== null && (
-              <img
+              <Image
                 src={user.userAvatar}
                 alt="Userphoto"
-                className="w-[45px] h-[45px] rounded-full"
+                width={45}
+                height={45}
+                className="rounded-full"
               />
             )}
           </div>

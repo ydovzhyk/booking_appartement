@@ -1,11 +1,12 @@
 import React from 'react';
 import Text from '../text/text';
+import Image from 'next/image';
 
 interface IButtonProps {
   text: string;
   type?: 'submit' | 'button' | 'reset';
   btnClass?: 'btnDark' | 'btnLight' | 'btnDisabled';
-  textColor?: string; // ДОДАНО: Колір тексту
+  textColor?: string;
   onClick?: () => void;
   id?: string;
   image?: string;
@@ -31,6 +32,7 @@ const Button: React.FC<IButtonProps> = ({
     'bg-text-color border border-text-color text-main-color cursor-not-allowed';
 
   let buttonClasses = '';
+
   if (disabled) {
     buttonClasses = btnDisabledClasses;
   } else if (btnClass === 'btnDark') {
@@ -47,7 +49,15 @@ const Button: React.FC<IButtonProps> = ({
       type={type}
       disabled={disabled}
     >
-      {image && <img src={image} alt="icon" className="w-5 h-5" />}
+      {image && (
+        <Image
+          src={image}
+          alt="icon"
+          width={20}
+          height={20}
+          className="w-5 h-5"
+        />
+      )}
       {text && (
         <Text
           type="small"

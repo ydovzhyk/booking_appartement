@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  images: {
+    domains: ['robohash.org'],
+  },
 };
 
 export default nextConfig;

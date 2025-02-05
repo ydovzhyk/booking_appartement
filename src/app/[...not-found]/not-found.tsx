@@ -1,6 +1,6 @@
 'use client';
+
 import BackLink from '../../components/shared/back-link/back-link';
-import NotFoundLogo from '../../images/404_logo.svg';
 import Text from '@/components/shared/text/text';
 
 const NotFound = () => {

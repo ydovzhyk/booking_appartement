@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import {
@@ -21,10 +21,8 @@ import {
   getModalVindowSttus,
 } from '../../../redux/technical/technical-selectors';
 import { setModalWindowStatus } from '../../../redux/technical/technical-slice';
-
 import { TfiClose } from 'react-icons/tfi';
 import Text from '../text/text';
-import s from './modal-window-message.module.scss';
 
 const ModalWindow = () => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -36,14 +34,14 @@ const ModalWindow = () => {
   const modalWindowStatus = useSelector(getModalVindowSttus);
   const [isError, setIsError] = useState(false);
 
-  const clearAllState = () => {
+  const clearAllState = useCallback(() => {
     dispatch(setModalWindowStatus(false));
     dispatch(clearTechnicalError());
     dispatch(clearTechnicalMessage());
     dispatch(clearUserError());
     dispatch(clearUserMessage());
     setIsError(false);
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (messageAuth || messageTechnical || errorAuth || errorTechnical) {
@@ -78,7 +76,7 @@ const ModalWindow = () => {
       document.removeEventListener('mousedown', handleOutsideClick);
       clearTimeout(timeoutId);
     };
-  }, [dispatch, modalWindowStatus]);
+  }, [modalWindowStatus, clearAllState]);
 
   const closeModal = () => {
     clearAllState();
@@ -92,7 +90,7 @@ const ModalWindow = () => {
       className={`absolute top-2 right-2 w-72 rounded-lg shadow-lg text-white border
         ${isError ? 'bg-red-500 border-red-700' : 'bg-green-500 border-green-700'}
         ${!modalWindowStatus ? 'hidden' : 'flex flex-col'}
-        sm:right-2 sm:translate-x-0  
+        sm:right-2 sm:translate-x-0
         xs:left-1/2 xs:-translate-x-1/2`}
       ref={modalRef}
     >

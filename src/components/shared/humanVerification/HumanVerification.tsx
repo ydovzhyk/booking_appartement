@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import AirplaneIcon from '../../../images/icon-human/airplane.svg';
 import BicycleIcon from '../../../images/icon-human/bicycle.svg';
@@ -75,6 +75,7 @@ const HumanVerification: React.FC<HumanVerificationProps> = ({ onVerify }) => {
   const [isVerified, setIsVerified] = useState(false);
   const [verifiedName, setVerifiedName] = useState('');
   const [targetIcon, setTargetIcon] = useState<IconType | null>(null);
+  const [targetIconName, setTargetIconName] = useState('');
 
   const getRandomIcons = (): IconType[] => {
     const randomIcons = new Set<IconType>();
@@ -85,16 +86,18 @@ const HumanVerification: React.FC<HumanVerificationProps> = ({ onVerify }) => {
     return Array.from(randomIcons);
   };
 
-  const resetImages = () => {
+  const resetImages = useCallback(() => {
     const newIcons = getRandomIcons();
     setImages(newIcons);
-    setTargetIcon(newIcons[Math.floor(Math.random() * newIcons.length)]);
-  };
+    const newTargetIcon = newIcons[Math.floor(Math.random() * newIcons.length)];
+    setTargetIcon(newTargetIcon);
+    setTargetIconName(newTargetIcon.name);
+  }, []);
 
   useEffect(() => {
-    resetImages();
     setVerifiedName('');
-  }, [pathname]);
+    resetImages();
+  }, [pathname, resetImages]);
 
   const handleImageClick = (iconName: string): void => {
     const isCorrect = iconName === targetIcon?.name;
@@ -121,7 +124,7 @@ const HumanVerification: React.FC<HumanVerificationProps> = ({ onVerify }) => {
             fontWeight="bold"
             className="text-[green]"
           >
-            {`${targetIcon?.name}.`}
+            {`${targetIconName}.`}
           </Text>
         </div>
         <div className="flex flex-row items-center gap-[15px]">

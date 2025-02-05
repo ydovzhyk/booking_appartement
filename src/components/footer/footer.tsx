@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import Logo from '../shared/logo/logo';
 import Text from '../shared/text/text';
 import { FaXTwitter } from 'react-icons/fa6';

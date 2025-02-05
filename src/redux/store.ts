@@ -15,13 +15,9 @@ import technicalReducer from './technical/technical-slice';
 import { IAuthStore } from '../types/store/store-auth';
 import { setupInterceptors } from '../api/auth';
 import logger from 'redux-logger';
+import storage from 'redux-persist/lib/storage';
 
 const isServer = typeof window === 'undefined';
-
-let storage;
-if (!isServer) {
-  storage = require('redux-persist/lib/storage').default;
-}
 
 const persistConfig = {
   key: 'auth-sid',
@@ -60,4 +56,5 @@ export type AppDispatch = typeof store.dispatch;
 export const persistor = isServer ? null : persistStore(store);
 
 setupInterceptors(store);
+
 

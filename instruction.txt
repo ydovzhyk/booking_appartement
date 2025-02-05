@@ -32,3 +32,8 @@ module.exports = {
 npm run dev
 
 /////////////////////
+✅ npm run lint → Запускає ESLint перевірку.
+✅ npm run type-check → Перевіряє TypeScript.
+✅ npm run build → Перед білдом запускає ESLint та TypeScript перевірку.
+✅ Автоматична перевірка в VS Code при збереженні.
+✅ ESLint перевіряє код перед комітом у Git.
