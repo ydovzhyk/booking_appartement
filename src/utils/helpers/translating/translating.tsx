@@ -7,7 +7,7 @@ import SelectField from '../../../components/shared/select-field/select-field';
 import { useLanguage } from './language-context';
 import { lANGUAGE } from '@/data/languageData';
 
-translate.key = 'AIzaSyDLg_xiEx0CEGPUY4zPxiWnwGIQLzUOX-U';
+translate.key = process.env.NEXT_PUBLIC_TRANSLATE_API_KEY || '';
 
 export default function TranslateMe() {
   const { updateLanguageIndex } = useLanguage();

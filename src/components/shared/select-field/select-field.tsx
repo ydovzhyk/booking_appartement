@@ -42,6 +42,9 @@ const SelectField: React.FC<ISelectFieldProps> = ({
       boxShadow: state.isFocused
         ? '0 0 0 2px var(--accent-background)'
         : 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       '&:hover': { borderColor: 'var(--accent-background)' },
     }),
   };
