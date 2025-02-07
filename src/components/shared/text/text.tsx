@@ -12,11 +12,20 @@ type FontWeightType =
   | 'bold'
   | 'extrabold';
 
+type LineHeightType =
+  | 'none'
+  | 'tight'
+  | 'snug'
+  | 'normal'
+  | 'relaxed'
+  | 'loose';
+
 interface TextProps {
   type?: TextType;
   as?: TagType;
   fontFamily?: FontFamilyType;
   fontWeight?: FontWeightType;
+  lineHeight?: LineHeightType;
   children: string;
   className?: string;
 }
@@ -26,6 +35,7 @@ const Text: React.FC<TextProps> = ({
   as: Tag = 'p',
   fontFamily = 'josefin',
   fontWeight = 'normal',
+  lineHeight = 'tight',
   children,
   className,
 }) => {
@@ -52,6 +62,15 @@ const Text: React.FC<TextProps> = ({
     extrabold: 'font-extrabold',
   };
 
+  const lineHeightValues = {
+    none: '1',
+    tight: '1.2',
+    snug: '1.3',
+    normal: '1.5',
+    relaxed: '1.6',
+    loose: '1.7',
+  };
+
   return (
     <Tag
       className={clsx(
@@ -60,6 +79,7 @@ const Text: React.FC<TextProps> = ({
         fontWeightClasses[fontWeight],
         className
       )}
+      style={{ lineHeight: lineHeightValues[lineHeight] }}
     >
       <TranslatedText text={children} />
     </Tag>
