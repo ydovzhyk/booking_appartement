@@ -1,5 +1,6 @@
 import { usePathname } from 'next/navigation';
 import TranslateMe from '../../../utils/helpers/translating/translating';
+import Currencies from '../../currencies/currencies';
 import NavLink from '@/components/shared/navLink/navLink';
 
 const Navigation = () => {
@@ -39,7 +40,8 @@ const Navigation = () => {
           </NavLink>
         </li>
       </ul>
-      <div className="absolute top-[7px] right-0">
+      <div className="absolute bottom-[8px] right-0 flex flex-row items-center gap-[10px]">
+        <Currencies />
         <TranslateMe />
       </div>
     </nav>

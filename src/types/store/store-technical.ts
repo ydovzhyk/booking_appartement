@@ -4,4 +4,8 @@ export interface ITechnicalState {
   hideHeaderFooter: boolean;
   screenType: string;
   modalWindowStatus: boolean;
+  currency: string;
+  exchangeRateData: object;
+  exchangeRate: number;
+  totalAmountCurrency: number
 }

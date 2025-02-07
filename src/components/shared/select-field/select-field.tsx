@@ -1,4 +1,5 @@
-import Select, { GroupBase, SingleValue, StylesConfig } from 'react-select';
+import Select, { SingleValue, StylesConfig } from 'react-select';
+import Text from '../text/text';
 
 interface ISelectFieldProps {
   name: string;
@@ -12,6 +13,7 @@ interface ISelectFieldProps {
   className?: string;
   defaultValue?: { value: string; label: string };
   width?: string;
+  showLabelWithValue?: boolean;
 }
 
 const SelectField: React.FC<ISelectFieldProps> = ({
@@ -23,17 +25,15 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   options,
   width,
   defaultValue,
+  showLabelWithValue = false,
 }) => {
-  const customStyles: StylesConfig<
-    { value: string; label: string },
-    false,
-    GroupBase<{ value: string; label: string }>
-  > = {
+  const customStyles: StylesConfig<{ value: string; label: string }, false> = {
     control: (provided, state) => ({
       ...provided,
       fontSize: '16px',
-      height: '40px',
       width: width,
+      cursor: 'pointer',
+      height: '40px',
       color: 'var(--accent-background)',
       backgroundColor: 'white',
       borderColor: state.isFocused
@@ -47,12 +47,31 @@ const SelectField: React.FC<ISelectFieldProps> = ({
       justifyContent: 'center',
       '&:hover': { borderColor: 'var(--accent-background)' },
     }),
+    singleValue: provided => ({
+      ...provided,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: '4px',
+      color: 'var(--accent-background)',
+    }),
+    input: provided => ({
+      ...provided,
+      height: '20px',
+      textAlign: 'center',
+      color: 'black',
+      padding: '0px',
+    }),
   };
 
   const valueId = `select-${name}`;
 
   return (
-    <label className="block w-full">
+    <label className="w-full flex flex-col items-center gap-[0px]">
+      <Text type="small" as="span" fontWeight="light" className="text-white">
+        {placeholder}
+      </Text>
       <Select<{ value: string; label: string }>
         id={valueId}
         instanceId={valueId}
@@ -64,6 +83,11 @@ const SelectField: React.FC<ISelectFieldProps> = ({
         options={options}
         styles={customStyles}
         defaultValue={defaultValue}
+        formatOptionLabel={option =>
+          showLabelWithValue
+            ? `${option.value} - ${option.label}`
+            : option.label
+        }
         theme={theme => ({
           ...theme,
           borderRadius: 5,

@@ -68,6 +68,7 @@ const Login = () => {
             </Text>
             <a
               href={`${REACT_APP_API_URL}/google?origin=${currentOrigin}`}
+              style={{ borderRadius: '5px' }}
               className="
                 inline-flex justify-center items-center gap-[10px] mx-auto mb-5 cursor-pointer
                 regular-border group

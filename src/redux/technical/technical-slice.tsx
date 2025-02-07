@@ -7,6 +7,10 @@ const initialState: ITechnicalState = {
   hideHeaderFooter: false,
   screenType: 'isDesctop',
   modalWindowStatus: false,
+  currency: '',
+  exchangeRate: 0,
+  exchangeRateData: {},
+  totalAmountCurrency: 0,
 };
 
 const technical = createSlice({
@@ -28,6 +32,25 @@ const technical = createSlice({
     setTechnicalError: (store, action) => {
       store.error = action.payload;
     },
+    setCurrency: (store, action) => {
+      store.currency = action.payload;
+    },
+    setExchangeRateData: (store, action) => {
+      store.exchangeRateData = action.payload as Record<string, number>;
+
+      const firstEntry = Object.entries(store.exchangeRateData)[0];
+
+      if (firstEntry) {
+        const [firstKey, firstValue] = firstEntry;
+        store.exchangeRate = firstValue;
+        store.currency = firstKey;
+      }
+    },
+    setUpdateExchangeRate: (store, action) => {
+      console.log(action.payload);
+      store.currency = action.payload;
+      store.exchangeRate = store.exchangeRateData[action.payload];
+    },
   },
 
   // extraReducers: (builder) => {
@@ -42,4 +65,7 @@ export const {
   setScreenType,
   setModalWindowStatus,
   setTechnicalError,
+  setCurrency,
+  setExchangeRateData,
+  setUpdateExchangeRate,
 } = technical.actions;

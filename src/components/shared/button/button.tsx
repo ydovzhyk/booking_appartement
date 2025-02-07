@@ -24,7 +24,7 @@ const Button: React.FC<IButtonProps> = ({
   disabled = false,
 }) => {
   const baseClasses =
-    'flex items-center justify-center gap-2.5 hover-transition group w-[150px] h-[40px] md:w-[170px]';
+    'flex items-center justify-center gap-2.5 hover-transition group w-[150px] h-[40px] md:w-[170px] ';
 
   const btnDarkClasses = 'regular-border';
   const btnLightClasses = 'accent-border bg-[var(--accent)] text-white';
@@ -48,6 +48,7 @@ const Button: React.FC<IButtonProps> = ({
       onClick={onClick}
       type={type}
       disabled={disabled}
+      style={{ borderRadius: '5px' }}
     >
       {image && (
         <Image

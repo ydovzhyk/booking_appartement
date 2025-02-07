@@ -7,6 +7,7 @@ import { getLogin, getUser } from '../../../redux/auth/auth-selectors';
 import { logout } from '../../../redux/auth/auth-operations';
 import Text from '@/components/shared/text/text';
 import Image from 'next/image';
+import Button from '@/components/shared/button/button';
 
 const AuthInfo = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -29,7 +30,7 @@ const AuthInfo = () => {
               <Text
                 type="small"
                 as="p"
-                fontWeight="normal"
+                fontWeight="light"
                 className="text-white group-hover:text-[var(--accent)] hover-transition"
               >
                 Login
@@ -42,7 +43,7 @@ const AuthInfo = () => {
               <Text
                 type="small"
                 as="p"
-                fontWeight="normal"
+                fontWeight="light"
                 className="text-white group-hover:text-[var(--accent)] hover-transition"
               >
                 Registration
@@ -53,6 +54,13 @@ const AuthInfo = () => {
       )}
       {isUserLogin && screenType !== 'isMobile' && (
         <div className="flex flex-row items-center justify-between gap-[15px]">
+          <div className="mr-[30px]">
+            <Button
+              text="List your property"
+              btnClass="btnLight"
+              textColor="white"
+            />
+          </div>
           <div className="flex flex-row items-center justify-between gap-[10px] w-[45px] h-[45px] bg-white rounded-full">
             {user.userAvatar !== null && (
               <Image
@@ -64,14 +72,16 @@ const AuthInfo = () => {
               />
             )}
           </div>
-          <Text
-            type="small"
-            as="span"
-            fontWeight="normal"
-            className="text-white"
-          >
-            {greeting}
-          </Text>
+          <Link href="/user" className="group cursor-pointer">
+            <Text
+              type="small"
+              as="p"
+              fontWeight="light"
+              className="text-white group-hover:text-[var(--accent)] hover-transition"
+            >
+              {greeting}
+            </Text>
+          </Link>
           <PiLineVertical
             size={24}
             color="white"
@@ -85,7 +95,7 @@ const AuthInfo = () => {
             <Text
               type="small"
               as="span"
-              fontWeight="normal"
+              fontWeight="light"
               className="text-white group-hover:text-[var(--accent)]"
             >
               Exit
@@ -103,7 +113,7 @@ const AuthInfo = () => {
             <Text
               type="small"
               as="span"
-              fontWeight="normal"
+              fontWeight="light"
               className="text-white group-hover:text-[var(--accent)]"
             >
               Exit

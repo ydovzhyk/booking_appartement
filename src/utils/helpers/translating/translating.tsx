@@ -67,10 +67,10 @@ export default function TranslateMe() {
         name="language"
         value={options[languageIndex]}
         handleChange={handleChange}
-        placeholder="Select Language"
+        placeholder="Language"
         required={true}
         options={options}
-        width="150px"
+        width="135px"
       />
     </div>
   );
