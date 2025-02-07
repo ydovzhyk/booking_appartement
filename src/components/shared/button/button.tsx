@@ -64,7 +64,7 @@ const Button: React.FC<IButtonProps> = ({
           type="small"
           as="span"
           fontWeight="normal"
-          lineHeight="tight"
+          lineHeight="none"
           className={`${textColor} group-hover:font-bold`}
         >
           {text}
