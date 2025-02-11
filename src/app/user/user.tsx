@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TextField from '../../components/shared/text-field/text-field';
 import { fields } from '../../components/shared/text-field/fields';
 import Button from '../../components/shared/button/button';
@@ -102,7 +102,7 @@ const UserPageComponent = () => {
     const userInfo = { 'username': data.username ?? '', 'country': data.country ?? '', 'city': data.city ?? '', 'address': data.address ?? '', 'phone': data.phone ?? '', 'verified': isVerified, 'userAvatar': selectedAvatar as string};
     console.log(userInfo);
 
-    setFile(null);
+    // setFile(null);
     setSelectedAvatar(null);
     setIsVerified(false);
     reset();
