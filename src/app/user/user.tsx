@@ -13,9 +13,9 @@ import Image from 'next/image';
 import Text from '@/components/shared/text/text';
 
 const UserPageComponent = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const user = useSelector(getUser);
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [isVerified, setIsVerified] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | ArrayBuffer | null>(null);
 
@@ -67,7 +67,7 @@ const UserPageComponent = () => {
     { label: 'Czech Republic', value: 'Czech Republic' },
   ];
 
-  const { control, register, handleSubmit, reset, setValue } =
+  const { control, register, handleSubmit, reset } =
     useForm<IAuthUserData>({
       defaultValues: {
         username: user.username || '',
@@ -138,7 +138,7 @@ const UserPageComponent = () => {
               const fileResized = new File([blob], file.name, {
                 type: 'image/jpeg',
               });
-              setFile(fileResized);
+              // setFile(fileResized);
             }
           },
           'image/jpeg',
