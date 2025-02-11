@@ -71,6 +71,7 @@ export default function TranslateMe() {
         required={true}
         options={options}
         width="135px"
+        topPlaceholder={true}
       />
     </div>
   );

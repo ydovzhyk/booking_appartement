@@ -36,7 +36,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
     const labelBase =
       'relative inline-block w-full h-[35px] text-[var(--text-color)] mb-[45px] md:mb-[45px] lg:mb-[50px]';
     const inputBase =
-      'absolute top-0 left-0 pl-[10px] w-full h-[40px] font-normal text-base leading-none regular-border border-opacity-50 tracking-[1px] transition-all duration-300 ease-in-out outline-none';
+      'absolute top-0 left-0 pl-[10px] w-full h-[40px] font-normal text-base leading-none regular-border border-opacity-50 rounded-[5px] tracking-[1px] transition-all duration-300 ease-in-out outline-none';
     const emptyInputClass = 'regular-border border-opacity-50 outline-none';
 
     const labelClass = clsx(labelBase, className);
@@ -60,7 +60,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
             type="small"
             as="span"
             fontWeight="normal"
-            className="absolute top-[-25px] left-0.25"
+            className="absolute top-[-23px] left-0.2"
           >
             {placeholder}
           </Text>
@@ -70,7 +70,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
             type="small"
             as="span"
             fontWeight="normal"
-            className="absolute top-[6px] left-0.25 ml-2.5"
+            className="absolute top-[10px] left-0.25 ml-2.5"
           >
             {placeholder}
           </Text>

@@ -65,7 +65,7 @@ const Button: React.FC<IButtonProps> = ({
           as="span"
           fontWeight="normal"
           lineHeight="none"
-          className={`${textColor} group-hover:font-bold`}
+          className={`${textColor} group-hover:font-bold mt-[1px]`}
         >
           {text}
         </Text>

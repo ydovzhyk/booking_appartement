@@ -1,11 +1,19 @@
 export const fields = {
   username: {
-    label: "User name",
+    label: "Name",
     name: "username",
     type: "text",
-    placeholder: "User name",
+    placeholder: "Name",
     title: "*The Name field must be more than 2 and less than 15 characters",
     required: true,
+  },
+  surname: {
+    label: "Surname",
+    name: "surname",
+    type: "text",
+    placeholder: "Surname",
+    title: "*The Surname field must be more than 2 and less than 50 characters",
+    required: false,
   },
   email: {
     label: "Email",
@@ -23,6 +31,30 @@ export const fields = {
     title:
       "*The Password field must be more than 2 and less than 21 characters",
     required: true,
+  },
+  city: {
+    label: "City",
+    name: "city",
+    type: "text",
+    placeholder: "City",
+    title: "*The City field must be more than 2 and less than 50 characters",
+    required: false,
+  },
+  address: {
+    label: "Address",
+    name: "address",
+    type: "text",
+    placeholder: "Address",
+    title: "*The Address field must be more than 2 and less than 50 characters",
+    required: false,
+  },
+  phone: {
+    label: "Phone number",
+    name: "phone",
+    type: "tel",
+    placeholder: "Phone number",
+    title: "*Enter a valid phone number",
+    required: false,
   },
   search: {
     name: "search",

@@ -3,7 +3,7 @@ import Text from '../text/text';
 
 interface ISelectFieldProps {
   name: string;
-  value: { value: string; label: string };
+  value: { value: string; label: string } | null;
   handleChange: (
     selectedOption: SingleValue<{ value: string; label: string }>
   ) => void;
@@ -14,6 +14,8 @@ interface ISelectFieldProps {
   defaultValue?: { value: string; label: string };
   width?: string;
   showLabelWithValue?: boolean;
+  topPlaceholder?: boolean;
+  textAlign?: 'center' | 'left' | 'right';
 }
 
 const SelectField: React.FC<ISelectFieldProps> = ({
@@ -25,23 +27,25 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   options,
   width,
   defaultValue,
+  topPlaceholder = false,
   showLabelWithValue = false,
+  textAlign = 'center',
 }) => {
   const customStyles: StylesConfig<{ value: string; label: string }, false> = {
+    container: provided => ({
+      ...provided,
+      width: width,
+    }),
     control: (provided, state) => ({
       ...provided,
-      fontSize: '16px',
-      width: width,
+      outline: 'none',
       cursor: 'pointer',
       height: '40px',
-      color: 'var(--accent-background)',
       backgroundColor: 'white',
       borderColor: state.isFocused
-        ? 'var(--accent-background)'
-        : provided.borderColor,
-      boxShadow: state.isFocused
-        ? '0 0 0 2px var(--accent-background)'
-        : 'none',
+        ? provided.borderColor
+        : 'var(--accent-background)',
+      boxShadow: state.isFocused ? 'var(--accent-background)' : 'none',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -49,29 +53,49 @@ const SelectField: React.FC<ISelectFieldProps> = ({
     }),
     singleValue: provided => ({
       ...provided,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
       paddingTop: '4px',
-      color: 'var(--accent-background)',
+      textAlign: textAlign,
+      color: 'black',
     }),
     input: provided => ({
       ...provided,
-      height: '20px',
-      textAlign: 'center',
-      color: 'black',
       padding: '0px',
+      marginTop: "5px",
+      fontSize: '16px',
+      textAlign: textAlign,
+      color: 'black',
+      
+    }),
+    placeholder: provided => ({
+      ...provided,
+      fontSize: '16px',
+      textAlign: textAlign,
+      color: 'black',
+      marginTop: '4px',
     }),
   };
 
   const valueId = `select-${name}`;
 
+  const dynamicValue = textAlign === 'center' ? 'center' : 'flex-start';
+
   return (
-    <label className="w-full flex flex-col items-center gap-[0px]">
-      <Text type="small" as="span" fontWeight="light" className="text-white">
-        {placeholder}
-      </Text>
+    <label className="relative w-full flex flex-col items-center gap-[0px]">
+      {(topPlaceholder || value) && (
+        <div
+          className="absolute top-[-23px] left-0 w-full flex items-center"
+          style={{ justifyContent: dynamicValue }}
+        >
+          <Text
+            type="small"
+            as="span"
+            fontWeight="normal"
+            className={`${topPlaceholder ? 'text-white' : 'text-black'}`}
+          >
+            {placeholder}
+          </Text>
+        </div>
+      )}
       <Select<{ value: string; label: string }>
         id={valueId}
         instanceId={valueId}

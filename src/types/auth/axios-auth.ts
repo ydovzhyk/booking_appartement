@@ -33,6 +33,14 @@ export interface IUser {
     userAvatar: string | null;
     passwordHash: string | null;
     dateCreate: Date | null;
+    surname: string | null;
+    country: string | null;
+    city: string | null;
+    address: string | null;
+    phone: string | null;
+    verified: boolean | null;
+    sex: string | null;
+    about: string | null;
 }
 
 

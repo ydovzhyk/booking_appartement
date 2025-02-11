@@ -29,6 +29,7 @@ const eslintConfig = [
       '@next/next/no-html-link-for-pages': 'off',
       '@typescript-eslint/no-explicit-any': 'off', // Вимкнення правила no-explicit-any
     },
+    ignorePatterns: ['node_modules/', 'dist/', '.next/', 'public/'], // 🛑 Вимикаємо перевірку цих директорій
   }),
 ];
 

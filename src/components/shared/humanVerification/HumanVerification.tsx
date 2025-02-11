@@ -112,7 +112,7 @@ const HumanVerification: React.FC<HumanVerificationProps> = ({ onVerify }) => {
   };
 
   return (
-    <div className="w-[300px] regular-border">
+    <div className="w-[300px] regular-border rounded-[5px]">
       <div className="p-[10px] flex flex-col items-center gap-[10px]">
         <div className="text-center">
           <Text type="small" as="span" fontWeight="normal">

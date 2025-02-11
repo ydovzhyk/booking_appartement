@@ -10,7 +10,7 @@ export default function UserPage() {
       <div className="container">
         <Suspense
           fallback={
-            <div className="flex justify-center items-center w-full h-full test-border">
+            <div className="flex justify-center items-center w-full h-full">
               <LoaderSpinner />
             </div>
           }
