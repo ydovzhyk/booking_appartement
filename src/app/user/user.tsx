@@ -132,18 +132,18 @@ const UserPageComponent = () => {
         const resizedDataURL = canvas.toDataURL('image/jpeg', 0.8);
         setSelectedAvatar(resizedDataURL);
 
-        canvas.toBlob(
-          blob => {
-            if (blob) {
-              const fileResized = new File([blob], file.name, {
-                type: 'image/jpeg',
-              });
-              // setFile(fileResized);
-            }
-          },
-          'image/jpeg',
-          0.8
-        );
+        // canvas.toBlob(
+        //   blob => {
+        //     if (blob) {
+        //       const fileResized = new File([blob], file.name, {
+        //         type: 'image/jpeg',
+        //       });
+        //       setFile(fileResized);
+        //     }
+        //   },
+        //   'image/jpeg',
+        //   0.8
+        // );
       };
     };
 
