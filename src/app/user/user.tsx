@@ -67,21 +67,20 @@ const UserPageComponent = () => {
     { label: 'Czech Republic', value: 'Czech Republic' },
   ];
 
-  const { control, register, handleSubmit, reset } =
-    useForm<IAuthUserData>({
-      defaultValues: {
-        username: user.username || '',
-        userAvatar: user.userAvatar || '',
-        surname: user.surname || '',
-        country: user.country || '',
-        city: user.city || '',
-        address: user.address || '',
-        phone: user.phone || '',
-        verified: user.verified || false,
-        sex: user.sex || '',
-        about: user.about || '',
-      },
-    });
+  const { control, register, handleSubmit, reset } = useForm<IAuthUserData>({
+    defaultValues: {
+      username: user.username || '',
+      userAvatar: user.userAvatar || '',
+      surname: user.surname || '',
+      country: user.country || '',
+      city: user.city || '',
+      address: user.address || '',
+      phone: user.phone || '',
+      verified: user.verified || false,
+      sex: user.sex || '',
+      about: user.about || '',
+    },
+  });
 
   const onSubmit = async (data: IAuthUserData) => {
     // const dataForUpload = new FormData();
@@ -99,7 +98,15 @@ const UserPageComponent = () => {
     //   dataForUpload.append('userAvatar', selectedAvatar as string);
     // }
 
-    const userInfo = { 'username': data.username ?? '', 'country': data.country ?? '', 'city': data.city ?? '', 'address': data.address ?? '', 'phone': data.phone ?? '', 'verified': isVerified, 'userAvatar': selectedAvatar as string};
+    const userInfo = {
+      username: data.username ?? '',
+      country: data.country ?? '',
+      city: data.city ?? '',
+      address: data.address ?? '',
+      phone: data.phone ?? '',
+      verified: isVerified,
+      userAvatar: selectedAvatar as string,
+    };
     console.log(userInfo);
 
     // setFile(null);
