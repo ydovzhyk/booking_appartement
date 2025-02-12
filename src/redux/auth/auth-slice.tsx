@@ -9,22 +9,30 @@ import { IAuthStore } from '../../types/store/store-auth';
 import { ILoginResponse } from '../../types/auth/axios-auth';
 
 const initialState: IAuthStore = {
-    user: {
-        id: null as string | null,
-        username: null as string | null,
-        email: null as string | null,
-        userAvatar: null as string | null,
-        passwordHash: null as string | null,
-        dateCreate: null as Date | null,
-    },
-    sid: null,
-    accessToken: null,
-    refreshToken: null,
-    isLogin: false,
-    loading: false,
-    isRefreshing: false,
-    error: '',
-    message: '',
+  user: {
+    id: null as string | null,
+    username: null as string | null,
+    email: null as string | null,
+    userAvatar: null as string | null,
+    passwordHash: null as string | null,
+    dateCreate: null as Date | null,
+    surname: null as string | null,
+    country: null as string | null, 
+    city: null as string | null, 
+    address: null as string | null, 
+    phone: null as string | null, 
+    verified: null as boolean | null, 
+    sex: null as string | null, 
+    about: null as string | null, 
+  },
+  sid: null,
+  accessToken: null,
+  refreshToken: null,
+  isLogin: false,
+  loading: false,
+  isRefreshing: false,
+  error: '',
+  message: '',
 };
 
 const accessAuth = (store: IAuthStore, payload: ILoginResponse) => {
