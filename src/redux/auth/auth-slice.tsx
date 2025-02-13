@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
-    register,
-    login,
-    logout,
-    getCurrentUser,
+  register,
+  login,
+  logout,
+  getCurrentUser,
+  updateUserInfo,
+  verifyEmail,
 } from './auth-operations';
 import { IAuthStore } from '../../types/store/store-auth';
 import { ILoginResponse } from '../../types/auth/axios-auth';
@@ -17,13 +19,13 @@ const initialState: IAuthStore = {
     passwordHash: null as string | null,
     dateCreate: null as Date | null,
     surname: null as string | null,
-    country: null as string | null, 
-    city: null as string | null, 
-    address: null as string | null, 
-    phone: null as string | null, 
-    verified: null as boolean | null, 
-    sex: null as string | null, 
-    about: null as string | null, 
+    country: null as string | null,
+    city: null as string | null,
+    address: null as string | null,
+    phone: null as string | null,
+    verified: null as boolean | null,
+    sex: null as string | null,
+    aboutUser: null as string | null,
   },
   sid: null,
   accessToken: null,
@@ -64,12 +66,12 @@ const auth = createSlice({
 
 
     extraReducers: (builder) => {
-    // * REGISTER
-    builder.addCase(register.pending, (store) => {
+      // * REGISTER
+      builder.addCase(register.pending, store => {
         store.loading = true;
         store.error = '';
-    });
-    builder.addCase(register.fulfilled, (store, action) => {
+      });
+      builder.addCase(register.fulfilled, (store, action) => {
         store.loading = false;
         store.isLogin = false;
         store.sid = '';
@@ -79,50 +81,93 @@ const auth = createSlice({
         store.user.email = action.payload.email;
         store.user.id = action.payload.id;
         store.user.userAvatar = action.payload.userAvatar;
-    });
-    builder.addCase(register.rejected, (store, action: any) => {
+      });
+      builder.addCase(register.rejected, (store, action: any) => {
         store.loading = false;
-        store.error = action.payload.data?.message || 'Oops, something went wrong, try again';
-    });
-        
-    // * LOGIN
-    builder.addCase(login.pending, (store) => {
+        store.error =
+          action.payload.data?.message ||
+          'Oops, something went wrong, try again';
+      });
+
+      // * LOGIN
+      builder.addCase(login.pending, store => {
         store.loading = true;
         store.error = '';
-    });
-    builder.addCase(login.fulfilled, (store, { payload }) => accessAuth(store, payload));
-    builder.addCase(login.rejected, (store, action: any) => {
+      });
+      builder.addCase(login.fulfilled, (store, { payload }) =>
+        accessAuth(store, payload)
+      );
+      builder.addCase(login.rejected, (store, action: any) => {
         store.loading = false;
-        store.error = action.payload.data?.message || 'Oops, something went wrong, try again';
-    });
-        
-    //* LOGOUT
-    builder.addCase(logout.pending, (store) => {
+        store.error =
+          action.payload.data?.message ||
+          'Oops, something went wrong, try again';
+      });
+
+      //* LOGOUT
+      builder.addCase(logout.pending, store => {
         store.loading = true;
         store.error = '';
-    });
-    builder.addCase(logout.fulfilled, () => initialState);
-    builder.addCase(logout.rejected, (store, action: any) => {
+      });
+      builder.addCase(logout.fulfilled, () => initialState);
+      builder.addCase(logout.rejected, (store, action: any) => {
         store.loading = false;
-        store.error = action.payload.data?.message || 'Oops, something went wrong, try again';
-    });
-        
-    // *GET CURRENT USER
-    builder.addCase(getCurrentUser.pending, (store) => {
+        store.error =
+          action.payload.data?.message ||
+          'Oops, something went wrong, try again';
+      });
+
+      // *GET CURRENT USER
+      builder.addCase(getCurrentUser.pending, store => {
         store.loading = true;
         store.isRefreshing = true;
         store.error = '';
-    });
-    builder.addCase(getCurrentUser.fulfilled, (store, { payload }) => {
+      });
+      builder.addCase(getCurrentUser.fulfilled, (store, { payload }) => {
         accessAuth(store, payload);
         store.isRefreshing = false;
-    });
-    builder.addCase(getCurrentUser.rejected, (store, action: any) => {
+      });
+      builder.addCase(getCurrentUser.rejected, (store, action: any) => {
         store.loading = false;
-        
-        store.error = action.payload.data?.message || 'Oops, something went wrong, try again';
-    });
-}   
+        store.error =
+          action.payload.data?.message ||
+          'Oops, something went wrong, try again';
+      });
+
+      // *UPDATE USER
+      builder.addCase(updateUserInfo.pending, store => {
+        store.loading = true;
+        store.error = '';
+      });
+      builder.addCase(updateUserInfo.fulfilled, (store, { payload }) => {
+        store.loading = false;
+        store.user = payload.user;
+        store.message = 'User data updated successfully';
+      });
+      builder.addCase(updateUserInfo.rejected, (store, action: any) => {
+        store.loading = false;
+        store.error =
+          action.payload.data?.message ||
+          'Oops, something went wrong, try again';
+      });
+
+      // *VERIFY EMAIL
+      builder.addCase(verifyEmail.pending, store => {
+        store.loading = true;
+        store.error = '';
+      });
+      builder.addCase(verifyEmail.fulfilled, (store, { payload }) => {
+        store.loading = false;
+        store.user = payload.user;
+        store.message = payload.message;
+      });
+      builder.addCase(verifyEmail.rejected, (store, action: any) => {
+        store.loading = false;
+        store.error =
+          action.payload.data?.message ||
+          'Oops, something went wrong, try again';
+      });
+    }   
 });
 
 export default auth.reducer;

@@ -1,7 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../utils/helpers/hooks';
 import TextField from '../../components/shared/text-field/text-field';
 import { fields } from '../../components/shared/text-field/fields';
 import Button from '../../components/shared/button/button';
@@ -11,12 +12,14 @@ import { IAuthUserData } from '@/types/auth/auth';
 import { getUser } from '@/redux/auth/auth-selectors';
 import Image from 'next/image';
 import Text from '@/components/shared/text/text';
+import VerifyWindow from './verify-window/verify-window';
+import { updateUserInfo } from '@/redux/auth/auth-operations';
+import { MdOutlineVerifiedUser } from 'react-icons/md';
 
 const UserPageComponent = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const user = useSelector(getUser);
-  // const [file, setFile] = useState<File | null>(null);
-  const [isVerified, setIsVerified] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | ArrayBuffer | null>(null);
 
   const sexTypes = [
@@ -78,40 +81,44 @@ const UserPageComponent = () => {
       phone: user.phone || '',
       verified: user.verified || false,
       sex: user.sex || '',
-      about: user.about || '',
+      aboutUser: user.aboutUser || '',
     },
   });
 
+  useEffect(() => {
+    reset({
+      username: user?.username || '',
+      userAvatar: user?.userAvatar || '',
+      surname: user?.surname || '',
+      country: user?.country || '',
+      city: user?.city || '',
+      address: user?.address || '',
+      phone: user?.phone || '',
+      verified: user?.verified || false,
+      sex: user?.sex || '',
+      aboutUser: user?.aboutUser || '',
+    });
+  }, [user, reset]);
+
   const onSubmit = async (data: IAuthUserData) => {
-    // const dataForUpload = new FormData();
-
-    // dataForUpload.append('username', data.username ?? '');
-    // dataForUpload.append('country', data.country ?? '');
-    // dataForUpload.append('city', data.city ?? '');
-    // dataForUpload.append('address', data.address ?? '');
-    // dataForUpload.append('phone', data.phone ?? '');
-    // dataForUpload.append('verified', isVerified);
-    // dataForUpload.append('sex', data.sex ?? '');
-    // dataForUpload.append('about', data.about ?? '');
-
-    // if (selectedAvatar) {
-    //   dataForUpload.append('userAvatar', selectedAvatar as string);
-    // }
-
     const userInfo = {
-      username: data.username ?? '',
-      country: data.country ?? '',
-      city: data.city ?? '',
-      address: data.address ?? '',
-      phone: data.phone ?? '',
-      verified: isVerified,
-      userAvatar: selectedAvatar as string,
+      username: data.username ? data.username : (user.username ?? ''),
+      surname: data.surname ? data.surname : (user.surname ?? ''),
+      country: data.country ? data.country : (user.country ?? ''),
+      city: data.city ? data.city : (user.city ?? ''),
+      address: data.address ? data.address : (user.address ?? ''),
+      phone: data.phone ? data.phone : (user.phone ?? ''),
+      sex: data.sex ? data.sex : (user.sex ?? ''),
+      userAvatar: selectedAvatar
+        ? (selectedAvatar as string)
+        : (user.userAvatar ?? ''),
+      aboutUser: data.aboutUser ? data.aboutUser : (user.aboutUser ?? ''),
+      email: user.email ?? '',
+      password: '',
     };
-    console.log(userInfo);
-
-    // setFile(null);
+    
+    dispatch(updateUserInfo(userInfo));
     setSelectedAvatar(null);
-    setIsVerified(false);
     reset();
   };
 
@@ -160,7 +167,7 @@ const UserPageComponent = () => {
 
 
   const handleVerify = () => {
-    setIsVerified(true);
+    setIsModalOpen(true);
   };
 
   return (
@@ -222,9 +229,12 @@ const UserPageComponent = () => {
             >
               {`${user.email}`}
             </Text>
+            {user.verified && (
+              <MdOutlineVerifiedUser size={24} color="#66ff00" />
+            )}
           </div>
           <Button
-            text="Verify"
+            text={user.verified ? 'Re-verify' : 'Verify'}
             btnClass="btnLight"
             textColor="text-white"
             onClick={handleVerify}
@@ -418,7 +428,7 @@ const UserPageComponent = () => {
         {/* About */}
         <Controller
           control={control}
-          name="about"
+          name="aboutUser"
           rules={{
             maxLength: {
               value: 500,
@@ -427,21 +437,21 @@ const UserPageComponent = () => {
           }}
           render={({ field: { onChange, value }, fieldState }) => (
             <div className="flex flex-col gap-[10px] col-span-full mt-[40px] mb-[30px]">
-              <label htmlFor="about">
+              <label htmlFor="aboutUser">
                 <Text type="regular" as="span" fontWeight="normal">
                   Leave a short review about yourself
                 </Text>
               </label>
               <div className="relative">
                 <textarea
-                  id="about"
+                  id="aboutUser"
                   value={value}
                   onChange={onChange}
-                  rows={4}
+                  rows={3}
                   className="w-full regular-border outline-none p-[10px]"
                 />
                 {fieldState.error && (
-                  <div className='absolute top-[78px] left-0 w-full'>
+                  <div className="absolute top-[78px] left-0 w-full">
                     <Text
                       type="extraSmall"
                       as="span"
@@ -462,6 +472,7 @@ const UserPageComponent = () => {
           <Button text="Update" btnClass="btnDark" />
         </div>
       </form>
+      {isModalOpen && <VerifyWindow onClose={() => setIsModalOpen(false)} />}
     </section>
   );
 };

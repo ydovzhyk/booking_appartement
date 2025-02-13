@@ -5,6 +5,8 @@ import {
   axiosLogin,
   axiosLogout,
   axiosGetCurrentUser,
+  axiosUpdateUserData,
+  axiosVerifyEmail,
 } from '../../api/auth';
 import { IAuthUserData } from '../../types/auth/auth';
 import {
@@ -12,7 +14,10 @@ import {
   ILoginResponse,
   ILogoutResponse,
   IAuth,
+  IUpdateUserResponse,
+  IVerifyResponse,
 } from '../../types/auth/axios-auth';
+import { IVerifyEmailData } from '../../types/auth/auth';
 
 export const register = createAsyncThunk(
   'auth/register',
@@ -22,7 +27,10 @@ export const register = createAsyncThunk(
       return data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      const { data, status } = axiosError.response || {};
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
       const customError = { data, status };
       return rejectWithValue(customError);
     }
@@ -37,7 +45,10 @@ export const login = createAsyncThunk(
       return data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      const { data, status } = axiosError.response || {};
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
       const customError = { data, status };
       return rejectWithValue(customError);
     }
@@ -52,7 +63,10 @@ export const logout = createAsyncThunk(
       return data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      const { data, status } = axiosError.response || {};
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
       const customError = { data, status };
       return rejectWithValue(customError);
     }
@@ -67,9 +81,53 @@ export const getCurrentUser = createAsyncThunk(
       return data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      const { data, status } = axiosError.response || {};
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
       const customError = { data, status };
       return rejectWithValue(customError);
     }
   }
 );
+
+export const updateUserInfo = createAsyncThunk(
+  'auth/edit',
+  async (userData: IAuthUserData, { rejectWithValue }) => {
+    try {
+      const data: IUpdateUserResponse = await axiosUpdateUserData(userData);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
+  }
+);
+
+export const verifyEmail = createAsyncThunk(
+  'auth/verify',
+  async (userData: IVerifyEmailData | FormData, { rejectWithValue }) => {
+    try {
+      const data: IVerifyResponse = await axiosVerifyEmail(userData);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
+  }
+);
+
+export const verifyConfirmation = message => ({
+  type: 'auth/verifyConfirmation',
+  payload: { message },
+});

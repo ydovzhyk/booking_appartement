@@ -1,7 +1,7 @@
 export interface IAuthUserData {
     username?: string,
-    email: string,
-    password: string,
+    email?: string,
+    password?: string,
     userAvatar?: string,
     surname?: string,
     country?: string,
@@ -10,5 +10,12 @@ export interface IAuthUserData {
     phone?: string,
     verified?: boolean,
     sex?: string,
-    about?: string,
+    aboutUser?: string,
+}
+
+export interface IVerifyEmailData {
+    email: string;
+    location: string;
+    message: object;
+    logo: File | null | undefined;
 }

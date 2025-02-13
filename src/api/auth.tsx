@@ -8,12 +8,15 @@ import {
   ILoginResponse,
   ILogoutResponse,
   IAuth,
+  IUpdateUserResponse,
+  IVerifyResponse,
 } from '../types/auth/axios-auth';
+import { IVerifyEmailData } from '../types/auth/auth';
 import { setRefreshUserData } from '../redux/auth/auth-slice';
 
-// const REACT_APP_API_URL = "http://localhost:4000";
-const REACT_APP_API_URL =
-  "https://test-task-backend-34db7d47d9c8.herokuapp.com";
+const REACT_APP_API_URL = "http://localhost:4000";
+// const REACT_APP_API_URL =
+//   "https://test-task-backend-34db7d47d9c8.herokuapp.com";
 
 export const instance = axios.create({
   baseURL: REACT_APP_API_URL,
@@ -125,5 +128,29 @@ export const axiosLogout = async (): Promise<ILogoutResponse> => {
 
 export const axiosGetCurrentUser = async ( userData: IAuth ): Promise<ILoginResponse> => {
   const { data }: { data: ILoginResponse } = await instance.post('/auth/current', userData);
+  return data;
+};
+
+export const axiosUpdateUserData = async (
+  userData: IAuthUserData
+): Promise<IUpdateUserResponse> => {
+  const { data }: { data: IUpdateUserResponse } = await instance.post(
+    '/auth/edit',
+    userData
+  );
+  return data;
+};
+
+export const axiosVerifyEmail = async (
+  userData: IVerifyEmailData | FormData
+): Promise<IVerifyResponse> => {
+  const { data }: { data: IVerifyResponse } = await instance.post(
+    '/auth/verify',
+    userData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
   return data;
 };

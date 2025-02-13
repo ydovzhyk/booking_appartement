@@ -22,7 +22,16 @@ export interface ILoginResponse {
     sid: string,
 }
 
+export interface IUpdateUserResponse {
+    user: IUser,
+}
+
 export interface ILogoutResponse {
+    message: string,
+}
+
+export interface IVerifyResponse {
+    user: IUser,
     message: string,
 }
 
@@ -40,7 +49,7 @@ export interface IUser {
     phone: string | null;
     verified: boolean | null;
     sex: string | null;
-    about: string | null;
+    aboutUser: string | null;
 }
 
 

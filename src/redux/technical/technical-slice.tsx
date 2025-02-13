@@ -47,7 +47,6 @@ const technical = createSlice({
       }
     },
     setUpdateExchangeRate: (store, action) => {
-      console.log(action.payload);
       store.currency = action.payload;
       store.exchangeRate = store.exchangeRateData[action.payload];
     },
