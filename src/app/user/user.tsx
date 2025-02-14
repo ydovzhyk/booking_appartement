@@ -15,6 +15,7 @@ import Text from '@/components/shared/text/text';
 import VerifyWindow from './verify-window/verify-window';
 import { updateUserInfo } from '@/redux/auth/auth-operations';
 import { MdOutlineVerifiedUser } from 'react-icons/md';
+import { Tooltip } from 'react-tooltip';
 
 const UserPageComponent = () => {
   const dispatch = useAppDispatch();
@@ -213,14 +214,16 @@ const UserPageComponent = () => {
         </div>
         <div className="flex flex-col items-center gap-[10px]">
           <div className="flex flex-row items-center gap-[10px]">
-            <Text
-              type="regular"
-              as="span"
-              fontWeight="light"
-              className="text-white"
-            >
-              Verify email:
-            </Text>
+            {!user.verified && (
+              <Text
+                type="regular"
+                as="span"
+                fontWeight="light"
+                className="text-white"
+              >
+                Verify email:
+              </Text>
+            )}
             <Text
               type="regular"
               as="span"
@@ -230,7 +233,27 @@ const UserPageComponent = () => {
               {`${user.email}`}
             </Text>
             {user.verified && (
-              <MdOutlineVerifiedUser size={24} color="#66ff00" />
+              <>
+                <MdOutlineVerifiedUser
+                  size={24}
+                  color="#66ff00"
+                  data-tooltip-id="verified-tooltip"
+                />
+                <Tooltip
+                  id="verified-tooltip"
+                  place="top"
+                  style={{ transform: 'translateY(-25px)', backgroundColor: '#0f1d2d', borderRadius: '5px' }}
+                >
+                  <Text
+                    type="small"
+                    as="span"
+                    fontWeight="light"
+                    className="text-white"
+                  >
+                    User verified
+                  </Text>
+                </Tooltip>
+              </>
             )}
           </div>
           <Button

@@ -12,6 +12,7 @@ import { TfiClose } from 'react-icons/tfi';
 import { useAppDispatch } from '../../../utils/helpers/hooks';
 import { verifyEmail } from '@/redux/auth/auth-operations';
 import { useTranslate } from '@/utils/helpers/translating/translating';
+import { MdOutlineVerifiedUser } from 'react-icons/md';
 
 interface VerifyWindowProps {
   onClose: () => void;
@@ -118,6 +119,15 @@ const VerifyWindow = ({ onClose }: VerifyWindowProps) => {
             className="flex flex-row items-start gap-[40px] w-[600px] mb-[-30px]"
             onSubmit={handleSubmit(onSubmit)}
           >
+            {user.verified && (
+              <div className="mr-[-30px]">
+                <MdOutlineVerifiedUser
+                  size={35}
+                  color="green"
+                  data-tooltip-id="verified-tooltip"
+                />
+              </div>
+            )}
             <Controller
               control={control}
               name="email"

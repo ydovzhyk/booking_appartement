@@ -4,6 +4,7 @@ interface RootAuthStore {
     auth: IAuthStore;
 }
 
+export const getLoadingAuth = (store: RootAuthStore) => store.auth.loading;
 export const getLogin = (store: RootAuthStore) => store.auth.isLogin;
 export const getUser = (store: RootAuthStore) => store.auth.user;
 export const getAuthLoading = (store: RootAuthStore) => store.auth.loading;

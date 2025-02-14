@@ -11,12 +11,16 @@ const initialState: ITechnicalState = {
   exchangeRate: 0,
   exchangeRateData: {},
   totalAmountCurrency: 0,
+  loading: false,
 };
 
 const technical = createSlice({
   name: 'technical',
   initialState,
   reducers: {
+    setMessage: (store, action) => {
+      store.message = action.payload;
+    },
     clearTechnicalError: store => {
       store.error = '';
     },
@@ -67,4 +71,5 @@ export const {
   setCurrency,
   setExchangeRateData,
   setUpdateExchangeRate,
+  setMessage,
 } = technical.actions;

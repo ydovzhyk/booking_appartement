@@ -10,3 +10,5 @@ export const getExchangeRate = (state: RootState) =>
   state.technical.exchangeRate;
 export const getExchangeRateData = (state: RootState) =>
   state.technical.exchangeRateData;
+
+export const getLoadingTechnical = (state: RootState) => state.technical.loading;

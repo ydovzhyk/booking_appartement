@@ -21,16 +21,19 @@ const eslintConfig = [
       },
     },
     rules: {
-      // Вимкнені або модифіковані правила
       'react/no-unescaped-entities': 'off',
       '@next/next/no-page-custom-font': 'off',
-      '@next/next/no-img-element': 'warn', // Попередження замість помилки
-      '@next/next/no-typos': 'error', // Заборона помилок у Next.js API
+      '@next/next/no-img-element': 'warn',
+      '@next/next/no-typos': 'error',
       '@next/next/no-html-link-for-pages': 'off',
-      '@typescript-eslint/no-explicit-any': 'off', // Вимкнення правила no-explicit-any
+      '@typescript-eslint/no-explicit-any': 'off',
     },
-    ignorePatterns: ['node_modules/', 'dist/', '.next/', 'public/'], // 🛑 Вимикаємо перевірку цих директорій
   }),
 ];
 
-export default eslintConfig;
+const finalEslintConfig = {
+  ...eslintConfig[0],
+  ignores: ['node_modules', 'dist', '.next', 'public', 'coverage'],
+};
+
+export default finalEslintConfig;

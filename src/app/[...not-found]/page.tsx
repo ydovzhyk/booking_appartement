@@ -19,9 +19,7 @@ const NotFoundPage = () => {
       <div className="container">
         <Suspense
           fallback={
-            <div className="flex justify-center items-center w-full h-full test-border">
-              <LoaderSpinner />
-            </div>
+            <LoaderSpinner />
           }
         >
           <NotFound />
