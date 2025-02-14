@@ -1,4 +1,7 @@
 'use client';
+
+export const dynamic = "force-dynamic"; 
+
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
