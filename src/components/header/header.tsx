@@ -9,7 +9,7 @@ import Navigation from './navigation/navigation';
 import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
 import { HEADER_HEIGHT } from '../../data/headerData';
 
-const allowedRoutes = ['/', '/about', '/articles', '/user'];
+const allowedRoutes = ['/', '/about', '/articles', '/user', '/add-property'];
 
 const isAllowedRoute = (pathname: string) => {
   return allowedRoutes.some(

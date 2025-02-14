@@ -1,10 +1,10 @@
 'use client';
 import { Suspense } from 'react';
 import { useAuth } from '../../utils/helpers/useAuth';
-import UserPageComponent from './user';
+import AddProperty from './add-property';
 import LoaderSpinner from '@/components/shared/loader/loader';
 
-function UserPage() {
+function AddPropertyPage() {
   const authStatus = useAuth();
 
   if (authStatus === null) {
@@ -18,16 +18,14 @@ function UserPage() {
   return (
     <div>
       <div className="container">
-        <Suspense
-          fallback={
-            <LoaderSpinner />
-          }
-        >
-          <UserPageComponent />
+        <Suspense fallback={<LoaderSpinner />}>
+          <AddProperty />
         </Suspense>
       </div>
     </div>
   );
 }
 
-export default UserPage;
+export default AddPropertyPage;
+
+

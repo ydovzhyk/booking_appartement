@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { PiLineVertical } from 'react-icons/pi';
 import { getScreenType } from '../../../redux/technical/technical-selectors';
 import { getLogin, getUser } from '../../../redux/auth/auth-selectors';
@@ -10,6 +11,7 @@ import Image from 'next/image';
 import Button from '@/components/shared/button/button';
 
 const AuthInfo = () => {
+  const router = useRouter();
   const dispatch: AppDispatch = useDispatch();
   const isUserLogin = useSelector(getLogin);
   const screenType = useSelector(getScreenType);
@@ -19,6 +21,10 @@ const AuthInfo = () => {
 
   const onLogout = () => {
     dispatch(logout());
+  };
+
+  const navigateToAddProperty = () => {
+    router.push('/add-property');
   };
 
   return (
@@ -59,6 +65,7 @@ const AuthInfo = () => {
               text="List your property"
               btnClass="btnLight"
               textColor="white"
+              onClick={navigateToAddProperty}
             />
           </div>
           <div className="flex flex-row items-center justify-between gap-[10px] w-[45px] h-[45px] bg-white rounded-full">

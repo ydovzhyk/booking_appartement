@@ -13,7 +13,7 @@ import { CiFacebook } from 'react-icons/ci';
 import { IoLogoInstagram } from 'react-icons/io5';
 import { FiYoutube } from 'react-icons/fi';
 
-const allowedRoutes = ['/', '/about', '/articles', '/user'];
+const allowedRoutes = ['/', '/about', '/articles', '/user', '/add-property'];
 
 const isAllowedRoute = (pathname: string) => {
   return allowedRoutes.some(
