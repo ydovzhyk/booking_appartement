@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { getLoadingAuth } from '@/redux/auth/auth-selectors';
@@ -44,7 +44,9 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       <AuthProvider />
       <HeaderProvider>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <Suspense fallback={<LoaderSpinner />}>{children}</Suspense>
+        </main>
         <ScrollToTopButton />
         <Footer />
       </HeaderProvider>
