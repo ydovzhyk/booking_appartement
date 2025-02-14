@@ -124,7 +124,6 @@ const VerifyWindow = ({ onClose }: VerifyWindowProps) => {
                 <MdOutlineVerifiedUser
                   size={35}
                   color="green"
-                  data-tooltip-id="verified-tooltip"
                 />
               </div>
             )}
