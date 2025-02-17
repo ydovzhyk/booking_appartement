@@ -11,7 +11,6 @@ type FontWeightType =
   | 'medium'
   | 'bold'
   | 'extrabold';
-
 type LineHeightType =
   | 'none'
   | 'tight'
@@ -26,8 +25,9 @@ interface TextProps {
   fontFamily?: FontFamilyType;
   fontWeight?: FontWeightType;
   lineHeight?: LineHeightType;
-  children: string;
+  children: React.ReactNode; // 👈 Тепер підтримує JSX
   className?: string;
+  noTranslate?: boolean; // 👈 Опція для вимкнення перекладу
 }
 
 const Text: React.FC<TextProps> = ({
@@ -38,6 +38,7 @@ const Text: React.FC<TextProps> = ({
   lineHeight = 'tight',
   children,
   className,
+  noTranslate = false,
 }) => {
   const typeClasses = {
     title: 'text-xl sm:text-2xl md:text-3xl lg:text-4xl',
@@ -81,7 +82,7 @@ const Text: React.FC<TextProps> = ({
       )}
       style={{ lineHeight: lineHeightValues[lineHeight] }}
     >
-      <TranslatedText text={children} />
+      {noTranslate ? children : <TranslatedText text={children as string} />}
     </Tag>
   );
 };
