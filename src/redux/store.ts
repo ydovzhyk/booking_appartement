@@ -12,6 +12,7 @@ import {
 } from 'redux-persist';
 import authReducer from './auth/auth-slice';
 import technicalReducer from './technical/technical-slice';
+import propertyReducer from './property/property-slice';
 import { IAuthStore } from '../types/store/store-auth';
 import { setupInterceptors } from '../api/auth';
 import logger from 'redux-logger';
@@ -35,6 +36,7 @@ export const store = configureStore({
   reducer: {
     auth: finalAuthReducer,
     technical: technicalReducer,
+    property: propertyReducer,
   },
   middleware: (getDefaultMiddleware) => {
     const middlewares = getDefaultMiddleware({

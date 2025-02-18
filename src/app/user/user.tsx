@@ -245,7 +245,11 @@ const UserPageComponent = () => {
                 <Tooltip
                   id="verified-tooltip"
                   place="top"
-                  style={{ transform: 'translateY(-25px)', backgroundColor: '#0f1d2d', borderRadius: '5px' }}
+                  style={{
+                    transform: 'translateY(-25px)',
+                    backgroundColor: '#0f1d2d',
+                    borderRadius: '5px',
+                  }}
                 >
                   <Text
                     type="small"
@@ -268,7 +272,9 @@ const UserPageComponent = () => {
         </div>
       </div>
 
-      <Text>Update your information</Text>
+      <Text as="h1" fontWeight="bold">
+        Update your information
+      </Text>
 
       <form
         className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-0 justify-center py-[40px] px-[35px] regular-border"

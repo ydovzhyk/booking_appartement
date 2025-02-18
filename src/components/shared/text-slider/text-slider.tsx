@@ -19,14 +19,14 @@ const TextSlider = () => {
     let interval: NodeJS.Timeout;
 
     const updateWord = () => {
-      setFade(false); // Починаємо fade-out
+      setFade(false);
       setTimeout(() => {
         setCurrentWord(prevWord => {
           const currentIndex = words.indexOf(prevWord);
           const nextIndex = (currentIndex + 1) % words.length;
           return words[nextIndex];
         });
-        setFade(true); // Вмикаємо fade-in
+        setFade(true);
       }, 700);
     };
 
@@ -47,7 +47,7 @@ const TextSlider = () => {
         fontWeight="bold"
         className={`inline-block transition-opacity duration-500 text-left text-white lowercase ${
           fade ? 'opacity-100' : 'opacity-0'
-        } lowercase text-left text-gray-400 stroke-text-white`}
+        } lowercase text-left stroke-text-white text-gray-400`}
       >
         {currentWord}
       </Text>
