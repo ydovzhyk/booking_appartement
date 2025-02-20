@@ -8,7 +8,7 @@ export const axiosRegisterProperty = async (
   propertyData: IPropertyRegister | FormData
 ): Promise<IPropertyRegisterResponse> => {
   const { data }: { data: IPropertyRegisterResponse } = await instance.post(
-    '/property/register',
+    '/apartments/create',
     propertyData,
     {
       headers: propertyData instanceof FormData

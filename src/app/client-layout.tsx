@@ -23,7 +23,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   }, [loadingAuth, loadingTechnical]);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="reletive min-h-screen flex flex-col justify-between">
       {loading && <LoaderSpinner />}
       <ModalWindow />
       <MediaQuery />

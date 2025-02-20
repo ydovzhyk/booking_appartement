@@ -34,6 +34,7 @@ const initialState: IPropertyStore = {
       value: '',
       currency: '',
     },
+    category: '',
     servicesList: [],
     mainImage: '',
     imagesLink: [],

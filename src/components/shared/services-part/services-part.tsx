@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+
 import Text from '@/components/shared/text/text';
 import freeWiFi from '../../../../public/images/services_icons/free_wi-fi.png';
 import airportShuttle from '../../../../public/images/services_icons/airport_shuttle.png';
@@ -87,8 +87,8 @@ const Service = ({ icon, name, isChecked, onToggle }) => {
 
 
     
-const ServicesPart = () => {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+const ServicesPart = ({ selectedServices, setSelectedServices }) => {
+  // const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
   const handleToggle = (serviceName: string) => {
     setSelectedServices(prev =>
@@ -99,9 +99,9 @@ const ServicesPart = () => {
   };
 
   return (
-    <div className="w-full">
-      <Text className='mb-[20px]'>
-        Select the service options that are relevant to your accommodation.
+    <div className="w-full flex flex-col gap-[20px]">
+      <Text type="regular" as="span" fontWeight="normal">
+        Select the service options that are relevant to your accommodation:
       </Text>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {services.map((service, index) => (

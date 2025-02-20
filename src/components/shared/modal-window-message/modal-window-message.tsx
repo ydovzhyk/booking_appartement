@@ -11,10 +11,12 @@ import {
   clearUserMessage,
   clearUserError,
 } from '../../../redux/auth/auth-slice';
+import { clearPropertyMessage, clearPropertyError } from '@/redux/property/property-slice';
 import {
   getAuthMessage,
   getAuthError,
 } from '../../../redux/auth/auth-selectors';
+import { getPropertyMessage, getPropertyError } from '@/redux/property/property-selectors';
 import {
   getTechnicalError,
   getTechnicalMessage,
@@ -29,9 +31,12 @@ const ModalWindow = () => {
   const dispatch: AppDispatch = useDispatch();
   const messageAuth = useSelector(getAuthMessage);
   const messageTechnical = useSelector(getTechnicalMessage);
+  const messageProperty = useSelector(getPropertyMessage);
   const errorAuth = useSelector(getAuthError);
   const errorTechnical = useSelector(getTechnicalError);
+  const errorProperty = useSelector(getPropertyError);
   const modalWindowStatus = useSelector(getModalVindowSttus);
+  
   const [isError, setIsError] = useState(false);
 
   const clearAllState = useCallback(() => {
@@ -40,19 +45,21 @@ const ModalWindow = () => {
     dispatch(clearTechnicalMessage());
     dispatch(clearUserError());
     dispatch(clearUserMessage());
+    dispatch(clearPropertyError());
+    dispatch(clearPropertyMessage());
     setIsError(false);
   }, [dispatch]);
 
   useEffect(() => {
-    if (messageAuth || messageTechnical || errorAuth || errorTechnical) {
+    if (messageAuth || messageTechnical || messageProperty || errorAuth || errorTechnical || errorProperty) {
       dispatch(setModalWindowStatus(true));
-      if (errorAuth || errorTechnical) {
+      if (errorAuth || errorTechnical || errorProperty) {
         setIsError(true);
       }
     } else {
       return;
     }
-  }, [dispatch, messageAuth, messageTechnical, errorAuth, errorTechnical]);
+  }, [dispatch, messageAuth, messageTechnical,messageProperty, errorAuth, errorTechnical, errorProperty]);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -82,18 +89,16 @@ const ModalWindow = () => {
     clearAllState();
   };
 
-  const errorMessage = `${errorAuth ? errorAuth : errorTechnical}`;
-  const infoMessage = `${messageAuth ? messageAuth : messageTechnical}`;
+  const errorMessage = `${errorAuth ? errorAuth : errorTechnical ? errorTechnical : errorProperty}`;
+  const infoMessage = `${messageAuth ? messageAuth : messageTechnical ? messageTechnical : messageProperty}`;
 
   return (
     <div
-      className={`fixed top-2 right-2 w-72 rounded-lg shadow-lg text-white border
+      className={`w-72 min-h-[50px] rounded-lg shadow-lg text-white border
         ${isError ? 'bg-red-500 border-red-700' : 'bg-green-500 border-green-700'}
-        ${!modalWindowStatus ? 'hidden' : 'flex flex-col'}
-        sm:right-2 sm:translate-x-0
-        xs:left-1/2 xs:-translate-x-1/2`}
+        ${!modalWindowStatus ? 'hidden' : 'flex flex-col'}`}
       ref={modalRef}
-      style={{ zIndex: 100 }}
+      style={{position: 'absolute', top: '10px', right: '10px', zIndex: 200, }}
     >
       <div className="reletive w-[100%] flex flex-col items-center gap-[5px] py-2 px-5">
         <button
@@ -102,7 +107,7 @@ const ModalWindow = () => {
         >
           <TfiClose color="var(--text-color)" size={15} />
         </button>
-        {(errorAuth || errorTechnical) && (
+        {(errorAuth || errorTechnical || errorProperty) && (
           <>
             <Text type="small" as="p" fontWeight="normal">
               We got an error:
@@ -112,7 +117,7 @@ const ModalWindow = () => {
             </Text>
           </>
         )}
-        {(messageAuth || messageTechnical) && (
+        {(messageAuth || messageTechnical || messageProperty) && (
           <>
             <Text type="small" as="p" fontWeight="normal">
               We got a message:

@@ -7,7 +7,7 @@ import {
 import { axiosRegisterProperty } from '../../api/property';
 
 export const registerProperty = createAsyncThunk(
-  'property/register',
+  '/apartments/create',
   async (userData: IPropertyRegister | FormData, { rejectWithValue }) => {
     try {
       const data: IPropertyRegisterResponse =

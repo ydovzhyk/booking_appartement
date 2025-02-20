@@ -23,6 +23,7 @@ export interface IProperty {
     value: string;
     currency: string;
   };
+  category: string;
   servicesList?: string[];
   mainImage?: string;
   imagesLink?: string[];
