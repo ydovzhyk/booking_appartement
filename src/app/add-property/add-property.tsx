@@ -21,6 +21,39 @@ import { registerProperty } from '@/redux/property/property-operations';
 import { resizeImage } from '@/utils/helpers/resize-img';
 import Slider from '@/components/shared/slider/slider';
 
+export const ukrainianCities = [
+  { label: 'Kyiv', value: 'Kyiv' },
+  { label: 'Kharkiv', value: 'Kharkiv' },
+  { label: 'Odesa', value: 'Odesa' },
+  { label: 'Dnipro', value: 'Dnipro' },
+  { label: 'Lviv', value: 'Lviv' },
+  { label: 'Zaporizhzhia', value: 'Zaporizhzhia' },
+  { label: 'Kryvyi Rih', value: 'Kryvyi Rih' },
+  { label: 'Mykolaiv', value: 'Mykolaiv' },
+  { label: 'Mariupol', value: 'Mariupol' },
+  { label: 'Vinnytsia', value: 'Vinnytsia' },
+  { label: 'Kherson', value: 'Kherson' },
+  { label: 'Poltava', value: 'Poltava' },
+  { label: 'Chernihiv', value: 'Chernihiv' },
+  { label: 'Cherkasy', value: 'Cherkasy' },
+  { label: 'Zhytomyr', value: 'Zhytomyr' },
+  { label: 'Sumy', value: 'Sumy' },
+  { label: 'Rivne', value: 'Rivne' },
+  { label: 'Ivano-Frankivsk', value: 'Ivano-Frankivsk' },
+  { label: 'Ternopil', value: 'Ternopil' },
+  { label: 'Lutsk', value: 'Lutsk' },
+  { label: 'Uzhhorod', value: 'Uzhhorod' },
+  { label: 'Chernivtsi', value: 'Chernivtsi' },
+  { label: 'Kropyvnytskyi', value: 'Kropyvnytskyi' },
+  { label: 'Kramatorsk', value: 'Kramatorsk' },
+  { label: 'Bila Tserkva', value: 'Bila Tserkva' },
+  { label: 'Melitopol', value: 'Melitopol' },
+  { label: 'Sloviansk', value: 'Sloviansk' },
+  { label: 'Severodonetsk', value: 'Severodonetsk' },
+  { label: 'Uman', value: 'Uman' },
+  { label: 'Kamianets-Podilskyi', value: 'Kamianets-Podilskyi' },
+];
+
 const AddProperty = () => {
   const dispatch = useAppDispatch();
   const user = useSelector(getUser);
@@ -30,39 +63,6 @@ const AddProperty = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [urlMainImage, setUrlMainImage] = useState<string>('');
   const [urlImages, setUrlImages] = useState<string[]>([]);
-
-  const ukrainianCities = [
-    { label: 'Kyiv', value: 'Kyiv' },
-    { label: 'Kharkiv', value: 'Kharkiv' },
-    { label: 'Odesa', value: 'Odesa' },
-    { label: 'Dnipro', value: 'Dnipro' },
-    { label: 'Lviv', value: 'Lviv' },
-    { label: 'Zaporizhzhia', value: 'Zaporizhzhia' },
-    { label: 'Kryvyi Rih', value: 'Kryvyi Rih' },
-    { label: 'Mykolaiv', value: 'Mykolaiv' },
-    { label: 'Mariupol', value: 'Mariupol' },
-    { label: 'Vinnytsia', value: 'Vinnytsia' },
-    { label: 'Kherson', value: 'Kherson' },
-    { label: 'Poltava', value: 'Poltava' },
-    { label: 'Chernihiv', value: 'Chernihiv' },
-    { label: 'Cherkasy', value: 'Cherkasy' },
-    { label: 'Zhytomyr', value: 'Zhytomyr' },
-    { label: 'Sumy', value: 'Sumy' },
-    { label: 'Rivne', value: 'Rivne' },
-    { label: 'Ivano-Frankivsk', value: 'Ivano-Frankivsk' },
-    { label: 'Ternopil', value: 'Ternopil' },
-    { label: 'Lutsk', value: 'Lutsk' },
-    { label: 'Uzhhorod', value: 'Uzhhorod' },
-    { label: 'Chernivtsi', value: 'Chernivtsi' },
-    { label: 'Kropyvnytskyi', value: 'Kropyvnytskyi' },
-    { label: 'Kramatorsk', value: 'Kramatorsk' },
-    { label: 'Bila Tserkva', value: 'Bila Tserkva' },
-    { label: 'Melitopol', value: 'Melitopol' },
-    { label: 'Sloviansk', value: 'Sloviansk' },
-    { label: 'Severodonetsk', value: 'Severodonetsk' },
-    { label: 'Uman', value: 'Uman' },
-    { label: 'Kamianets-Podilskyi', value: 'Kamianets-Podilskyi' },
-  ];
 
   const category = [
     { label: 'hotel', value: 'hotel' },

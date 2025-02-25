@@ -1,10 +1,14 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { usePathname } from 'next/navigation';
 import Text from '../../shared/text/text';
 import TextSlider from '../../shared/text-slider/text-slider';
+import { getLogin, getUser } from '@/redux/auth/auth-selectors';
 
 const HeaderText = () => {
+  const isLogin = useSelector(getLogin);
+  const user = useSelector(getUser);
   const pathname = usePathname();
   const [opacity, setOpacity] = useState(1);
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -50,7 +54,7 @@ const HeaderText = () => {
         overflow: 'hidden',
       }}
     >
-      {pathname !== '/add-property' && (
+      {pathname !== '/add-property' && !isLogin && (
         <div
           className="flex flex-col gap-5"
           style={{
@@ -77,6 +81,35 @@ const HeaderText = () => {
           </Text>
         </div>
       )}
+
+      {pathname !== '/add-property' && isLogin && (
+        <div
+          className="flex flex-col gap-5"
+          style={{
+            opacity: opacity,
+            transform: `translateY(${(1 - opacity) * -10}px)`,
+            transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
+          }}
+        >
+          <Text
+            type="title"
+            as="h1"
+            fontWeight="bold"
+            className="text-left text-white"
+          >
+            {`Where to next, ${user.username}!`}
+          </Text>
+          <Text
+            type="normal"
+            as="p"
+            fontWeight="medium"
+            className="text-left text-white"
+          >
+            Find an exclusive place in every corner of Ukraine!
+          </Text>
+        </div>
+      )}
+
       {pathname === '/add-property' && (
         <div
           className="flex flex-col gap-5"

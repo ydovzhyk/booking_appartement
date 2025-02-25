@@ -88,7 +88,6 @@ const Service = ({ icon, name, isChecked, onToggle }) => {
 
     
 const ServicesPart = ({ selectedServices, setSelectedServices }) => {
-  // const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
   const handleToggle = (serviceName: string) => {
     setSelectedServices(prev =>

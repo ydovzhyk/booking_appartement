@@ -38,14 +38,15 @@ const TextSlider = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-[10px]">
+    <div className="flex flex-col gap-[5px]">
       <Text type="title" fontWeight="bold" className="text-left text-white">
         List
       </Text>
       <Text
         type="title"
-        fontWeight="bold"
-        className={`inline-block transition-opacity duration-500 text-left text-white lowercase ${
+        fontWeight="light"
+        lineHeight='normal'
+        className={`inline-block transition-opacity duration-500 text-left text-white lowercase underline fo ${
           fade ? 'opacity-100' : 'opacity-0'
         } lowercase text-left stroke-text-white text-gray-400`}
       >

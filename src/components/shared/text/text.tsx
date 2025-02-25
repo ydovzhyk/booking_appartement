@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { TranslatedText } from '../../../utils/helpers/translating/translating';
 
-type TextType = 'title' | 'normal' | 'regular' | 'small' | 'extraSmall';
+type TextType = 'title' | 'normal' | 'regular' | 'small' | 'tiny' | 'extraSmall';
 type TagType = 'h1' | 'h2' | 'h3' | 'p' | 'span';
 type FontFamilyType = 'josefin' | 'maven' | 'oblik';
 type FontWeightType =
@@ -45,6 +45,7 @@ const Text: React.FC<TextProps> = ({
     normal: 'text-base sm:text-lg md:text-xl lg:text-2xl',
     regular: 'text-sm sm:text-base md:text-lg lg:text-xl',
     small: 'text-xs sm:text-sm md:text-base lg:text-lg',
+    tiny: 'text-[14px]',
     extraSmall: 'text-[12px] sm:text-[12px] md:text-[12px] lg:text-[12px]',
   };
 
