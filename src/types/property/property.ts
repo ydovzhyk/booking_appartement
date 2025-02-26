@@ -1,5 +1,6 @@
 export interface IProperty {
-  dateCreated?: string;
+  _id: string;
+  dateCreated: string;
   title: string;
   location: {
     city: string;
@@ -28,6 +29,6 @@ export interface IProperty {
   mainImage?: string;
   imagesLink?: string[];
   bookingDates?: string[];
-  ranking?: number;
+  ranking: number;
   usersFeedback?: string[];
 }

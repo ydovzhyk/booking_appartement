@@ -68,7 +68,9 @@ const AddProperty = () => {
     { label: 'hotel', value: 'hotel' },
     { label: 'apartment', value: 'apartment' },
     { label: 'resort', value: 'resort' },
+    { label: 'cottages', value: 'cottages' },
     { label: 'holiday home', value: 'holiday home' },
+    { label: 'villas', value: 'villas' },
   ];
 
   const formDefaultValues = {
@@ -135,6 +137,7 @@ const AddProperty = () => {
     setUrlMainImage('');
     setUrlImages([]);
     reset();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

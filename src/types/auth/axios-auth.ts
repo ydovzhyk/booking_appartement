@@ -50,6 +50,7 @@ export interface IUser {
     verified: boolean | null;
     sex: string | null;
     aboutUser: string | null;
+    likedApartments: string[] | null;
 }
 
 

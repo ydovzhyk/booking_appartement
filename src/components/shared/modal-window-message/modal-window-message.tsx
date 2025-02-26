@@ -98,7 +98,7 @@ const ModalWindow = () => {
         ${isError ? 'bg-red-500 border-red-700' : 'bg-green-500 border-green-700'}
         ${!modalWindowStatus ? 'hidden' : 'flex flex-col'}`}
       ref={modalRef}
-      style={{position: 'absolute', top: '10px', right: '10px', zIndex: 200, }}
+      style={{position: 'fixed', top: '10px', right: '10px', zIndex: 200, }}
     >
       <div className="reletive w-[100%] flex flex-col items-center gap-[5px] py-2 px-5">
         <button

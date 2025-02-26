@@ -1,3 +1,5 @@
+import { IProperty } from "./property";
+
 export interface IPropertyRegister {
   title: string;
   location: {
@@ -30,4 +32,16 @@ export interface IPropertyRegister {
 
 export interface IPropertyRegisterResponse {
   message: string;
+}
+
+export interface ILikeProperty {
+  propertyId: string;
+}
+
+export interface ILikePropertyResponse {
+  message: string;
+}
+
+export interface IPropertyTypesArrayResponse {
+  propertyTypes: IProperty[];
 }

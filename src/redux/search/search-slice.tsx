@@ -4,16 +4,17 @@ import { ISearchState } from '../../types/store/store-search';
 const initialState: ISearchState = {
   error: '',
   message: '',
-    loading: false,
-    searchConditions: {
-        numberAdults: 1,
-        numberChildren: 0,
-        numberRooms: 1,
-        petsAllowed: false,
-        dateFrom: '',
-        dateTo: '',
-        city: '',
-    },
+  loading: false,
+  searchConditions: {
+    numberAdults: 1,
+    numberChildren: 0,
+    numberRooms: 1,
+    petsAllowed: false,
+    dateFrom: '',
+    dateTo: '',
+    city: '',
+    propertyType: '',
+  },
 };
 
 const search = createSlice({

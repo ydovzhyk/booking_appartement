@@ -11,6 +11,7 @@ export interface IAuthUserData {
     verified?: boolean,
     sex?: string,
     aboutUser?: string,
+    likedApartments?: string[],
 }
 
 export interface IVerifyEmailData {

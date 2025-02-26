@@ -1,79 +1,84 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Text from '../text/text';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { FaStar, FaRegStar } from 'react-icons/fa';
+import { likeProperty } from '@/redux/property/property-operations';
+import { useAppDispatch } from '@/utils/helpers/hooks';
+import { getUser, getLogin } from '@/redux/auth/auth-selectors';
+import { getCurrency, getExchangeRate } from '@/redux/technical/technical-selectors';
+import { IProperty } from '@/types/property/property';
 
-// Типи для пропсів
-interface Location {
-  city: string;
-  street: string;
-  building: string;
-}
-
-interface PropertyCardProps {
-  id: string;
-  title: string;
-  mainPhoto: string;
-  ranking: number;
-  liked: boolean;
-  location: Location;
-  description: string;
-  price: number;
-}
-
-const PropertyCard: React.FC<PropertyCardProps> = ({
-  id,
+const PropertyCard: React.FC<IProperty> = ({
+  _id,
   title,
-  mainPhoto,
+  mainImage,
   ranking,
-  liked,
   location,
   description,
   price,
 }) => {
-  const [isLiked, setIsLiked] = useState<boolean>(liked);
+  const { likedApartments } = useSelector(getUser);
+  const isLogin = useSelector(getLogin);
+  const currency = useSelector(getCurrency);
+  const exchangeRate = useSelector(getExchangeRate);
+  const dispatch = useAppDispatch();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
+  const convertedPrice = (Number(price.value) * exchangeRate).toFixed(2);
+
+  useEffect(() => {
+    setIsLiked(likedApartments?.includes(_id) || false);
+  }, [likedApartments,_id]);
+
   const toggleLike = () => {
-    setIsLiked(prev => !prev);
-    console.log(`Property ${id} liked:`, !isLiked);
+    dispatch(likeProperty({ propertyId: _id }));
   };
 
   return (
     <div
-      className="relative flex flex-col bg-white shadow-lg overflow-hidden transition-transform"
+      className="relative flex flex-col bg-white shadow-lg overflow-hidden transition-transform cursor-pointer"
       style={{ borderRadius: '5px' }}
     >
       {/* Лайк */}
-      <div
-        className="absolute top-2 right-2 flex items-center justify-center w-[45px] h-[45px] rounded-full cursor-pointer z-10 hover:scale-110 transition-transform duration-200 ease-in-out backdrop-blur-sm bg-white/20"
-        onClick={toggleLike}
-      >
-        {isLiked ? (
-          <AiFillHeart size={26} color="var(--accent)" />
-        ) : (
-          <AiOutlineHeart size={26} color="#D1D5DB" />
-        )}
-      </div>
+      {isLogin && (
+        <div
+          className="absolute top-2 right-2 flex items-center justify-center w-[45px] h-[45px] rounded-full cursor-pointer z-10 hover:scale-110 transition-transform duration-200 ease-in-out backdrop-blur-sm bg-white/20"
+          onClick={toggleLike}
+        >
+          {isLiked ? (
+            <AiFillHeart size={26} color="white" />
+          ) : (
+            <AiOutlineHeart size={26} color="#D1D5DB" />
+          )}
+        </div>
+      )}
 
       {/* Фото */}
       <div
         className="relative w-full h-[220px] bg-cover bg-center transition-all duration-300"
-        style={{ backgroundImage: `url(${mainPhoto})` }}
+        style={{ backgroundImage: `url(${mainImage})` }}
         onMouseEnter={() => setShowInfo(true)}
         onMouseLeave={() => setShowInfo(false)}
       >
         {/* Оверлей опису */}
         {showInfo && (
-          <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center p-4 text-white transition-opacity duration-300">
+          <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center gap-[20px] p-4 text-white transition-opacity duration-300">
             <Text type="tiny" className="text-center">
               {description.slice(0, 300)}...
             </Text>
-            <Text type="normal" fontWeight="bold" className="mt-2">
-              Price: ${price}
-            </Text>
+
+            <div className="flex flex-row items-center gap-2">
+              <Text type="small" fontWeight="bold" className="mt-2">
+                Price per night:
+              </Text>
+              <Text type="small" fontWeight="normal" className="mt-2">
+                {convertedPrice} {currency}
+              </Text>
+            </div>
           </div>
         )}
       </div>

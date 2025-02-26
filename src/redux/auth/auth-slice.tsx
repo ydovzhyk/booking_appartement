@@ -26,6 +26,7 @@ const initialState: IAuthStore = {
     verified: null as boolean | null,
     sex: null as string | null,
     aboutUser: null as string | null,
+    likedApartments: null as string[] | null,
   },
   sid: null,
   accessToken: null,

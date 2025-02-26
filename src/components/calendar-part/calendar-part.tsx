@@ -95,6 +95,7 @@ ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`
       petsAllowed: conditions?.petsAllowed || data.petsAllowed,
       dateFrom: startDate ? moment(startDate).format('MM/DD/YYYY') : undefined,
       dateTo: endDate ? moment(endDate).format('MM/DD/YYYY') : undefined,
+      propertyType: conditions?.propertyType || '',
     };
 
     dispatch(
@@ -104,7 +105,7 @@ ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`
   };
 
   return (
-    <div className="w-fll flex flex-row items-center justify-center mr-[auto] ml-[auto] py-[20px]">
+    <div className="w-fll flex flex-row items-center justify-center mr-[auto] ml-[auto] py-[40px]">
       <form
         className="w-[70%] flex flex-row items-center justify-center gap-[5px]"
         onSubmit={handleSubmit(onSubmit)}
