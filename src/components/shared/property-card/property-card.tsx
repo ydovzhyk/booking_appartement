@@ -86,7 +86,7 @@ const PropertyCard: React.FC<IProperty> = ({
       <div className="flex flex-col gap-2 p-4">
         <div className='min-h-[58px]'>
           <Text as="h2" fontWeight="bold">
-            {title.slice(0, 60)}...
+            {title.slice(0, 60)}
           </Text>
         </div>
         <Text type="small" className="text-gray-600">
