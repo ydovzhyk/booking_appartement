@@ -10,6 +10,7 @@ import {
   ISearchRegister,
   ISearchResponse,
 } from './../types/search/axios-search';
+import { IProperty } from '@/types/property/property';
 
 export const axiosRegisterProperty = async (
   propertyData: IPropertyRegister | FormData
@@ -54,3 +55,10 @@ export const axiosPropertyTypesArray =
       await instance.get('/apartments/type');
     return data;
   };
+
+export const axiosGetDetailProperty = async (
+  id: string
+): Promise<IProperty> => {
+  const { data }: { data: IProperty } = await instance.get(`/apartments/${id}`);
+  return data;
+};

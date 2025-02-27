@@ -1,32 +1,51 @@
 'use client';
-import { Suspense } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import NotFound from './not-found';
-import Logo from '@/components/shared/logo/logo';
+import { Suspense, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/utils/helpers/hooks';
+import { useParams, useRouter } from 'next/navigation';
 import LoaderSpinner from '@/components/shared/loader/loader';
+import { getDetailProperty } from '@/redux/property/property-operations';
+import { getPropertyDetail } from '@/redux/property/property-selectors';
 
-const NotFoundPage = () => {
-  const isMobile = useMediaQuery({ maxWidth: 425 });
-  // const isTablet = useMediaQuery({ minWidth: 426, maxWidth: 1279 });
-  // const isDesktop = useMediaQuery({ minWidth: 1280 });
+function DetaisPropertyPage() {
+  const { propertyName, id } = useParams();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  console.log(id, propertyName);
+
+  // useEffect(() => {
+  //   if (
+  //     !propertyName ||
+  //     typeof propertyName !== 'string' ||
+  //     !id ||
+  //     typeof id !== 'string'
+  //   ) {
+  //     router.replace('/not-found');
+  //     return;
+  //   }
+
+  //   dispatch(getDetailProperty(id));
+  // }, [dispatch, id, propertyName, router]);
+
+  const property = useSelector(getPropertyDetail);
+
+  // 🔹 Якщо API-запит не повернув property → редіректимо на кастомний 404
+  // useEffect(() => {
+  //   if (!property) {
+  //     router.replace('/not-found');
+  //   }
+  // }, [property, router]);
+
   return (
-    <div className="bg-[url('/images/background.webp')] bg-cover bg-no-repeat h-screen">
-      {!isMobile && (
-        <div className="absolute top-[70px] left-[40px] z-20">
-          <Logo width={170} height={40} />
-        </div>
-      )}
+    <div>
       <div className="container">
-        <Suspense
-          fallback={
-            <LoaderSpinner />
-          }
-        >
-          <NotFound />
+        <Suspense fallback={<LoaderSpinner />}>
+          <h1>{property?.title || 'Loading...'}</h1>
         </Suspense>
       </div>
     </div>
   );
-};
+}
 
-export default NotFoundPage;
+export default DetaisPropertyPage;

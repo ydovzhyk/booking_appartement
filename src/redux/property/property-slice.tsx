@@ -3,6 +3,7 @@ import {
   registerProperty,
   likeProperty,
   propertyTypesArray,
+  getDetailProperty,
 } from './property-operations';
 import { IPropertyStore } from '../../types/store/store-property';
 
@@ -10,6 +11,7 @@ const initialState: IPropertyStore = {
   loading: false,
   error: '',
   message: '',
+  propertyDetail: null,
   properties: [],
   propertyTypes: [],
   property: {
@@ -100,6 +102,20 @@ const property = createSlice({
       store.propertyTypes = action.payload.propertyTypes;
     });
     builder.addCase(propertyTypesArray.rejected, (store, action: any) => {
+      store.loading = false;
+      store.error =
+        action.payload.data?.message || 'Oops, something went wrong, try again';
+    });
+    // * GET PROPERTY BY ID
+    builder.addCase(getDetailProperty.pending, store => {
+      store.loading = true;
+      store.error = '';
+    });
+    builder.addCase(getDetailProperty.fulfilled, (store, action) => {
+      store.loading = false;
+      store.propertyDetail = action.payload;
+    });
+    builder.addCase(getDetailProperty.rejected, (store, action: any) => {
       store.loading = false;
       store.error =
         action.payload.data?.message || 'Oops, something went wrong, try again';

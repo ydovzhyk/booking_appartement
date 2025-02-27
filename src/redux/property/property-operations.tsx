@@ -7,12 +7,14 @@ import {
   IPropertyRegisterResponse,
   ILikeProperty,
   ILikePropertyResponse,
-  IPropertyTypesArrayResponse
+  IPropertyTypesArrayResponse,
 } from '../../types/property/axios-property';
+import { IProperty } from '../../types/property/property';
 import {
   axiosRegisterProperty,
   axiosLikeProperty,
   axiosPropertyTypesArray,
+  axiosGetDetailProperty,
 } from '../../api/property';
 
 export const registerProperty = createAsyncThunk(
@@ -78,3 +80,20 @@ export const likeProperty = createAsyncThunk(
   }
 );
 
+export const getDetailProperty = createAsyncThunk(
+  '/apartments/:id',
+  async (propertyId: string, { rejectWithValue }) => {
+    try {
+      const data: IProperty = await axiosGetDetailProperty(propertyId);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const { data, status } = axiosError.response || {
+        data: axiosError.code,
+        status: axiosError.status,
+      };
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
+  }
+);

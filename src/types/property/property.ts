@@ -26,8 +26,8 @@ export interface IProperty {
   };
   category: string;
   servicesList?: string[];
-  mainImage?: string;
-  imagesLink?: string[];
+  mainImage: string;
+  imagesLink: string[];
   bookingDates?: string[];
   ranking: number;
   usersFeedback?: string[];

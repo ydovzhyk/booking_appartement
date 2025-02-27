@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ['robohash.org'],
+    domains: ['robohash.org', 'storage.googleapis.com'],
   },
 };
 

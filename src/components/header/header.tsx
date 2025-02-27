@@ -9,11 +9,21 @@ import { HEADER_HEIGHT } from '../../data/headerData';
 import HeaderText from './header-text/header-text';
 import CalendarPart from '@/components/calendar-part/calendar-part';
 
-const allowedRoutes = ['/', '/about', '/articles', '/user', '/add-property'];
+const allowedRoutes = [
+  '/',
+  '/about',
+  '/articles',
+  '/user',
+  '/add-property',
+  '/property',
+];
 
 const isAllowedRoute = (pathname: string) => {
   return allowedRoutes.some(
-    route => route === pathname || pathname.startsWith('/articles')
+    route =>
+      route === pathname ||
+      pathname.startsWith('/articles') ||
+      pathname.startsWith('/property')
   );
 };
 

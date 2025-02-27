@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from "next/navigation";
 import Text from '../text/text';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { FaStar, FaRegStar } from 'react-icons/fa';
@@ -24,24 +25,39 @@ const PropertyCard: React.FC<IProperty> = ({
   const isLogin = useSelector(getLogin);
   const currency = useSelector(getCurrency);
   const exchangeRate = useSelector(getExchangeRate);
-  const dispatch = useAppDispatch();
+  const appDispatch = useAppDispatch();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [showInfo, setShowInfo] = useState<boolean>(false);
+  const router = useRouter();
 
   const convertedPrice = (Number(price.value) * exchangeRate).toFixed(2);
 
   useEffect(() => {
     setIsLiked(likedApartments?.includes(_id) || false);
-  }, [likedApartments,_id]);
+  }, [likedApartments, _id]);
 
-  const toggleLike = () => {
-    dispatch(likeProperty({ propertyId: _id }));
+  const toggleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation(); // ❗ Зупиняємо подію, щоб не викликався handleNavigate
+    appDispatch(likeProperty({ propertyId: _id }));
   };
+
+  const formattedTitle = title
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-');
+
+    const handleNavigate = () => {
+      router.push(`/property/${formattedTitle}/${_id}`);
+    };
 
   return (
     <div
       className="relative flex flex-col h-full bg-white shadow-lg overflow-hidden transition-transform cursor-pointer"
       style={{ borderRadius: '5px' }}
+      onClick={handleNavigate }
     >
       {/* Лайк */}
       {isLogin && (
@@ -84,7 +100,7 @@ const PropertyCard: React.FC<IProperty> = ({
       </div>
 
       <div className="flex flex-col gap-2 p-4">
-        <div className='min-h-[58px]'>
+        <div className="min-h-[58px]">
           <Text as="h2" fontWeight="bold">
             {title.slice(0, 60)}
           </Text>
