@@ -45,7 +45,7 @@ const TextSlider = () => {
       <Text
         type="title"
         fontWeight="light"
-        lineHeight='normal'
+        lineHeight="normal"
         className={`inline-block transition-opacity duration-500 text-left text-white lowercase underline fo ${
           fade ? 'opacity-100' : 'opacity-0'
         } lowercase text-left stroke-text-white text-gray-400`}

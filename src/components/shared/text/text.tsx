@@ -1,7 +1,13 @@
 import clsx from 'clsx';
 import { TranslatedText } from '../../../utils/helpers/translating/translating';
 
-type TextType = 'title' | 'normal' | 'regular' | 'small' | 'tiny' | 'extraSmall';
+type TextType =
+  | 'title'
+  | 'normal'
+  | 'regular'
+  | 'small'
+  | 'tiny'
+  | 'extraSmall';
 type TagType = 'h1' | 'h2' | 'h3' | 'p' | 'span';
 type FontFamilyType = 'josefin' | 'maven' | 'oblik';
 type FontWeightType =

@@ -50,7 +50,6 @@ const initialState: IPropertyStore = {
   },
 };
 
-
 const property = createSlice({
   name: 'property',
   initialState,
@@ -124,7 +123,4 @@ const property = createSlice({
 });
 
 export default property.reducer;
-export const {
-  clearPropertyError,
-  clearPropertyMessage,
-} = property.actions;
+export const { clearPropertyError, clearPropertyMessage } = property.actions;

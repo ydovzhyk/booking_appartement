@@ -104,7 +104,7 @@ const AddProperty = () => {
       ...formDefaultValues,
     },
   });
-  
+
   useEffect(() => {
     reset({
       ...formDefaultValues,
@@ -114,21 +114,27 @@ const AddProperty = () => {
   const onSubmit = async (data: IPropertyRegister) => {
     const dataForUpload = new FormData();
     dataForUpload.append('title', data.title);
-    dataForUpload.append('location', JSON.stringify(data.location)); 
+    dataForUpload.append('location', JSON.stringify(data.location));
     dataForUpload.append('description', data.description);
     dataForUpload.append('owner', JSON.stringify(data.owner));
-    dataForUpload.append('accommodation', JSON.stringify(data.accommodation)); 
-    dataForUpload.append('price', JSON.stringify(data.price)); 
+    dataForUpload.append('accommodation', JSON.stringify(data.accommodation));
+    dataForUpload.append('price', JSON.stringify(data.price));
     dataForUpload.append('category', data.category);
     dataForUpload.append('servicesList', selectedServices.join(','));
-    dataForUpload.append('mainImage', mainImageName ? mainImageName : property?.mainImage || '');
+    dataForUpload.append(
+      'mainImage',
+      mainImageName ? mainImageName : property?.mainImage || ''
+    );
 
     if (imageFiles.length > 0) {
       imageFiles.forEach(file => {
         dataForUpload.append('files', file);
-    });
+      });
     } else {
-      dataForUpload.append('imagesLink', JSON.stringify(property?.imagesLink || []));
+      dataForUpload.append(
+        'imagesLink',
+        JSON.stringify(property?.imagesLink || [])
+      );
     }
     dispatch(registerProperty(dataForUpload));
     setSelectedServices([]);
@@ -161,7 +167,7 @@ const AddProperty = () => {
     );
     const base64Promises: Promise<string>[] = [];
     uniqueFiles.forEach(file => {
-      setImageFiles(prevFiles => [...prevFiles, file]); 
+      setImageFiles(prevFiles => [...prevFiles, file]);
 
       base64Promises.push(
         new Promise((resolve, reject) => {
@@ -173,7 +179,7 @@ const AddProperty = () => {
     });
 
     Promise.all(base64Promises).then(resizedImages => {
-      setUrlImages(prev => [...prev, ...resizedImages]); 
+      setUrlImages(prev => [...prev, ...resizedImages]);
     });
   };
 

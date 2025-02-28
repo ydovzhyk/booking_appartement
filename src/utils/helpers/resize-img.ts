@@ -11,8 +11,8 @@ export function resizeImage(
 
     const img = new Image();
     img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
 
       if (!ctx) return;
 
@@ -40,7 +40,7 @@ export function resizeImage(
       ctx.drawImage(img, 0, 0, width, height);
 
       // Отримуємо base64 представлення зменшеної фотографії
-      const base64Data = canvas.toDataURL("image/jpeg");
+      const base64Data = canvas.toDataURL('image/jpeg');
 
       // Викликаємо колбек з обробленою фотографією
       callback(base64Data);

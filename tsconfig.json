@@ -23,6 +23,12 @@
     },
     "noImplicitAny": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/helpers/PowerStation.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/utils/helpers/PowerStation.ts"
+  ],
   "exclude": ["node_modules"]
 }

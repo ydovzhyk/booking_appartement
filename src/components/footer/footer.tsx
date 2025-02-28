@@ -13,11 +13,21 @@ import { CiFacebook } from 'react-icons/ci';
 import { IoLogoInstagram } from 'react-icons/io5';
 import { FiYoutube } from 'react-icons/fi';
 
-const allowedRoutes = ['/', '/about', '/articles', '/user', '/add-property', '/property'];
+const allowedRoutes = [
+  '/',
+  '/about',
+  '/articles',
+  '/user',
+  '/add-property',
+  '/property',
+];
 
 const isAllowedRoute = (pathname: string) => {
   return allowedRoutes.some(
-    route => route === pathname || pathname.startsWith('/articles') || pathname.startsWith('/property')
+    route =>
+      route === pathname ||
+      pathname.startsWith('/articles') ||
+      pathname.startsWith('/property')
   );
 };
 

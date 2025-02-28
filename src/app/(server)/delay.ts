@@ -4,7 +4,7 @@ type DelayOptions =
 
 export function delayed<T>(
   data: T,
-  options: DelayOptions = { shouldFail: false, timeout: 1500 },
+  options: DelayOptions = { shouldFail: false, timeout: 1500 }
 ) {
   const { shouldFail, timeout } = options;
   return new Promise<T>((resolve, reject) => {

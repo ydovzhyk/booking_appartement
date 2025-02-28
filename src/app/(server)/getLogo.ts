@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const filePath = path.join(process.cwd(), 'public/logo.png'); 
+    const filePath = path.join(process.cwd(), 'public/logo.png');
     const fileBuffer = fs.readFileSync(filePath);
     const base64Logo = fileBuffer.toString('base64');
 

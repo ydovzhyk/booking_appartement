@@ -60,11 +60,10 @@ const SelectField: React.FC<ISelectFieldProps> = ({
     input: provided => ({
       ...provided,
       padding: '0px',
-      marginTop: "5px",
+      marginTop: '5px',
       fontSize: '16px',
       textAlign: textAlign,
       color: 'black',
-      
     }),
     placeholder: provided => ({
       ...provided,

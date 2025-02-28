@@ -5,11 +5,7 @@ export default function AboutPage() {
   return (
     <section className="">
       <div className="container">
-        <Suspense
-          fallback={
-            <LoaderSpinner />
-          }
-        ></Suspense>
+        <Suspense fallback={<LoaderSpinner />}></Suspense>
       </div>
     </section>
   );

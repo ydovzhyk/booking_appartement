@@ -25,9 +25,7 @@ const VerifyWindow = ({ onClose }: VerifyWindowProps) => {
   const [fileLogo, setFileLogo] = useState<File | null>(null);
 
   const title = useTranslate('Email verification on the GOHome website.');
-  const text = useTranslate(
-    `Follow the link to confirm your email.`
-  );
+  const text = useTranslate(`Follow the link to confirm your email.`);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -38,7 +36,7 @@ const VerifyWindow = ({ onClose }: VerifyWindowProps) => {
       try {
         const res = await fetch('/api/getLogo');
         if (!res.ok) throw new Error('Failed to fetch logo');
-        
+
         const blob = await res.blob();
         const file = new File([blob], 'logo.png', { type: blob.type });
 
@@ -57,11 +55,10 @@ const VerifyWindow = ({ onClose }: VerifyWindowProps) => {
   });
 
   const onSubmit = async (data: IVerifyEmailData) => {
-
-    const message = {text, title};
+    const message = { text, title };
     const dataForUpload = new FormData();
     dataForUpload.append('email', data.email);
-    dataForUpload.append('location', currentOrigin);  
+    dataForUpload.append('location', currentOrigin);
     dataForUpload.append('message', JSON.stringify(message));
     if (fileLogo) {
       dataForUpload.append('file', fileLogo);
@@ -121,10 +118,7 @@ const VerifyWindow = ({ onClose }: VerifyWindowProps) => {
           >
             {user.verified && (
               <div className="mr-[-30px]">
-                <MdOutlineVerifiedUser
-                  size={35}
-                  color="green"
-                />
+                <MdOutlineVerifiedUser size={35} color="green" />
               </div>
             )}
             <Controller

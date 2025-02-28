@@ -25,13 +25,18 @@ const persistConfig = {
   key: 'auth-sid',
   storage,
   whitelist: ['sid', 'accessToken', 'refreshToken'],
+  debug: process.env.NODE_ENV === 'development' ? true : false,
+  suppressWarnings: true,
 };
 
 type AuthState = IAuthStore & Partial<{ _persist: PersistedState }>;
 
 const finalAuthReducer: Reducer<AuthState> = isServer
   ? (authReducer as unknown as Reducer<AuthState>)
-  : (persistReducer(persistConfig, authReducer) as unknown as Reducer<AuthState>);
+  : (persistReducer(
+      persistConfig,
+      authReducer
+    ) as unknown as Reducer<AuthState>);
 
 export const store = configureStore({
   reducer: {
@@ -40,7 +45,7 @@ export const store = configureStore({
     property: propertyReducer,
     search: searchReducer,
   },
-  middleware: (getDefaultMiddleware) => {
+  middleware: getDefaultMiddleware => {
     const middlewares = getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
@@ -60,5 +65,3 @@ export type AppDispatch = typeof store.dispatch;
 export const persistor = isServer ? null : persistStore(store);
 
 setupInterceptors(store);
-
-

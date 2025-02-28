@@ -30,7 +30,7 @@ const isAllowedRoute = (pathname: string) => {
 const Header = () => {
   const pathname = usePathname();
   const showHeaderFooter = pathname ? isAllowedRoute(pathname) : false;
-  
+
   const clientHeaderHeight = useHeaderHeight();
   const isServer = typeof window === 'undefined';
 

@@ -1,4 +1,4 @@
-import { IProperty } from "./property";
+import { IProperty } from './property';
 
 export interface IPropertyRegister {
   title: string;

@@ -1,6 +1,6 @@
 'use client';
 
-export const dynamic = "force-dynamic"; 
+export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -24,7 +24,9 @@ const UserPageComponent = () => {
   const dispatch = useAppDispatch();
   const user = useSelector(getUser);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState<string | ArrayBuffer | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<
+    string | ArrayBuffer | null
+  >(null);
 
   const sexTypes = [
     { label: 'Male', value: 'male' },
@@ -120,12 +122,11 @@ const UserPageComponent = () => {
       email: user.email ?? '',
       password: '',
     };
-    
+
     dispatch(updateUserInfo(userInfo));
     setSelectedAvatar(null);
     reset();
   };
-
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -133,7 +134,7 @@ const UserPageComponent = () => {
 
     const reader = new FileReader();
     reader.onload = () => {
-      const img = document.createElement('img'); 
+      const img = document.createElement('img');
       img.src = reader.result as string;
 
       img.onload = () => {
@@ -167,8 +168,6 @@ const UserPageComponent = () => {
 
     reader.readAsDataURL(file);
   };
-
-
 
   const handleVerify = () => {
     setIsModalOpen(true);

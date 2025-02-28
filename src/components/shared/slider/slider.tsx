@@ -38,7 +38,7 @@ const Slider: React.FC<SliderProps> = ({ images }) => {
         onClick={prevSlide}
         disabled={!isPrevButtonActive}
       >
-        <Image src={left} alt={"Arrow left"} className="w-[50px] h-[50px]" />
+        <Image src={left} alt={'Arrow left'} className="w-[50px] h-[50px]" />
       </button>
 
       {/* Слайдер */}
@@ -63,7 +63,7 @@ const Slider: React.FC<SliderProps> = ({ images }) => {
         onClick={nextSlide}
         disabled={!isNextButtonActive}
       >
-        <Image src={right} alt={"Arrow right"} className="w-[50px] h-[50px]" />
+        <Image src={right} alt={'Arrow right'} className="w-[50px] h-[50px]" />
       </button>
     </div>
   );

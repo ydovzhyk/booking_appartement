@@ -29,23 +29,22 @@ const search = createSlice({
     },
     clearSearchMessage: store => {
       store.message = '';
-      },
-      setSearchConditions: (store, action) => {
-        store.searchConditions.numberAdults =
-          action.payload.numberAdults ?? store.searchConditions.numberAdults;
-        store.searchConditions.numberChildren =
-          action.payload.numberChildren ??
-          store.searchConditions.numberChildren;
-        store.searchConditions.numberRooms =
-          action.payload.numberRooms ?? store.searchConditions.numberRooms;
-        store.searchConditions.petsAllowed =
-          action.payload.petsAllowed ?? store.searchConditions.petsAllowed;
-        store.searchConditions.dateFrom =
-          action.payload.dateFrom ?? store.searchConditions.dateFrom;
-        store.searchConditions.dateTo =
-          action.payload.dateTo ?? store.searchConditions.dateTo;
-        store.searchConditions.city =
-          action.payload.city ?? store.searchConditions.city;
+    },
+    setSearchConditions: (store, action) => {
+      store.searchConditions.numberAdults =
+        action.payload.numberAdults ?? store.searchConditions.numberAdults;
+      store.searchConditions.numberChildren =
+        action.payload.numberChildren ?? store.searchConditions.numberChildren;
+      store.searchConditions.numberRooms =
+        action.payload.numberRooms ?? store.searchConditions.numberRooms;
+      store.searchConditions.petsAllowed =
+        action.payload.petsAllowed ?? store.searchConditions.petsAllowed;
+      store.searchConditions.dateFrom =
+        action.payload.dateFrom ?? store.searchConditions.dateFrom;
+      store.searchConditions.dateTo =
+        action.payload.dateTo ?? store.searchConditions.dateTo;
+      store.searchConditions.city =
+        action.payload.city ?? store.searchConditions.city;
     },
   },
 

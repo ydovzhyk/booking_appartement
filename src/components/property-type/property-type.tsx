@@ -157,7 +157,7 @@ const PropertySlider = () => {
     );
   };
 
-  const handleSearch = (data) => {
+  const handleSearch = data => {
     dispatch(
       searchProperty({ searchConditions: { ...property, propertyType: data } })
     );
@@ -177,7 +177,11 @@ const PropertySlider = () => {
             className="absolute left-[20px] z-10 flex items-center justify-center w-[45px] h-[45px] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
             onClick={handlePrev}
           >
-            <Image src={left} alt={'Arrow left'} className="w-[45px] h-[45px]" />
+            <Image
+              src={left}
+              alt={'Arrow left'}
+              className="w-[45px] h-[45px]"
+            />
           </button>
 
           {/* Карточки */}
@@ -204,7 +208,11 @@ const PropertySlider = () => {
             className="absolute right-[20px] z-10 flex items-center justify-center w-[45px] h-[45px] bg-[#D1D5DB] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
             onClick={handleNext}
           >
-            <Image src={right} alt={'Arrow left'} className="w-[45px] h-[45px]" />
+            <Image
+              src={right}
+              alt={'Arrow left'}
+              className="w-[45px] h-[45px]"
+            />
           </button>
         </div>
       </section>

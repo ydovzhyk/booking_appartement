@@ -8,7 +8,6 @@ import { useLanguage } from './language-context';
 import { lANGUAGE_INDEX } from '@/data/languageIndex';
 
 translate.key = process.env.NEXT_PUBLIC_TRANSLATE_API_KEY || '';
-
 export default function TranslateMe() {
   const { updateLanguageIndex } = useLanguage();
 
@@ -30,12 +29,12 @@ export default function TranslateMe() {
             await fetch('/api/language-settings', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ language: Number(savedLanguageIndex)}),
+              body: JSON.stringify({ language: Number(savedLanguageIndex) }),
             });
           } catch (error) {
             console.error('Error saving language:', error);
           }
-        }
+        };
         fetchLanguage();
       }
     } else {
@@ -61,7 +60,7 @@ export default function TranslateMe() {
       await fetch('/api/language-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ language: selectedOption.value}),
+        body: JSON.stringify({ language: selectedOption.value }),
       });
     } catch (error) {
       console.error('Error saving language:', error);

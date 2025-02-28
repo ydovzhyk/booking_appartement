@@ -5,7 +5,7 @@ const loadAvatar = async () => {
 
     return avatarUrl;
   } catch (error) {
-    console.log("Error loading image:", error);
+    console.log('Error loading image:', error);
   }
 };
 

@@ -17,11 +17,7 @@ export default function RegistrationPage() {
         </div>
       )}
       <div className="container">
-        <Suspense
-          fallback={
-            <LoaderSpinner />
-          }
-        >
+        <Suspense fallback={<LoaderSpinner />}>
           <Registration />
         </Suspense>
       </div>

@@ -1,4 +1,4 @@
-import { IProperty } from "../property/property";
+import { IProperty } from '../property/property';
 
 export interface IPropertyStore {
   propertyDetail: IProperty | null;

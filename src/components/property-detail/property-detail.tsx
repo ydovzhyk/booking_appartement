@@ -65,7 +65,7 @@ const PropertyDetail: React.FC<IProperty> = ({
         setCopied(true);
         setTimeout(() => setCopied(false), 3000);
       })
-      .catch((err) => console.error("Failed to copy link: ", err)); // eslint-disable-line
+      .catch(err => console.error('Failed to copy link: ', err)); // eslint-disable-line
   };
 
   const remainingImagesCount = imagesLink.length - 5;
@@ -116,13 +116,15 @@ const PropertyDetail: React.FC<IProperty> = ({
                       fontSize: '14px',
                     }}
                   >
-                    <Text type="small"
+                    <Text
+                      type="small"
                       as="span"
                       fontWeight="light"
-                      className="text-white">
+                      className="text-white"
+                    >
                       Link copied
                     </Text>
-                </Tooltip>
+                  </Tooltip>
                 )}
               </div>
             </div>
@@ -238,5 +240,3 @@ const PropertyDetail: React.FC<IProperty> = ({
 };
 
 export default PropertyDetail;
-
-

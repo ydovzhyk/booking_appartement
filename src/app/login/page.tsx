@@ -17,11 +17,7 @@ export default function LoginPage() {
         </div>
       )}
       <div className="container">
-        <Suspense
-          fallback={
-            <LoaderSpinner />
-          }
-        >
+        <Suspense fallback={<LoaderSpinner />}>
           <Login />
         </Suspense>
       </div>

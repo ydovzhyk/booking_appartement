@@ -18,11 +18,7 @@ function UserPage() {
   return (
     <div>
       <div className="container">
-        <Suspense
-          fallback={
-            <LoaderSpinner />
-          }
-        >
+        <Suspense fallback={<LoaderSpinner />}>
           <UserPageComponent />
         </Suspense>
       </div>

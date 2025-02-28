@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import Text from '../text/text';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { likeProperty } from '@/redux/property/property-operations';
 import { useAppDispatch } from '@/utils/helpers/hooks';
 import { getUser, getLogin } from '@/redux/auth/auth-selectors';
-import { getCurrency, getExchangeRate } from '@/redux/technical/technical-selectors';
+import {
+  getCurrency,
+  getExchangeRate,
+} from '@/redux/technical/technical-selectors';
 import { IProperty } from '@/types/property/property';
 
 const PropertyCard: React.FC<IProperty> = ({
@@ -49,15 +52,15 @@ const PropertyCard: React.FC<IProperty> = ({
     .replace(/[^a-z0-9-]/g, '')
     .replace(/-+/g, '-');
 
-    const handleNavigate = () => {
-      router.push(`/property/${formattedTitle}/${_id}`);
-    };
+  const handleNavigate = () => {
+    router.push(`/property/${formattedTitle}/${_id}`);
+  };
 
   return (
     <div
       className="relative flex flex-col h-full bg-white shadow-lg overflow-hidden transition-transform cursor-pointer"
       style={{ borderRadius: '5px' }}
-      onClick={handleNavigate }
+      onClick={handleNavigate}
     >
       {/* Лайк */}
       {isLogin && (

@@ -12,8 +12,8 @@ const eslintConfig = [
       'eslint:recommended', // Базові правила ESLint
       'next/core-web-vitals', // Оптимізація для Core Web Vitals
       'next/typescript', // Додаткові правила для TypeScript
-      // 'prettier', // Взаємодія з Prettier
       'plugin:@next/next/recommended', // Рекомендовані правила Next.js
+      'prettier', // Вимикає конфліктувані правила ESLint
     ],
     settings: {
       next: {
@@ -27,6 +27,7 @@ const eslintConfig = [
       '@next/next/no-typos': 'error',
       '@next/next/no-html-link-for-pages': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      'prettier/prettier': 'error',
     },
   }),
 ];

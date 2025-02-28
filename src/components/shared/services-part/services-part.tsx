@@ -28,7 +28,6 @@ import swimmingPool from '../../../../public/images/services_icons/swimming_pool
 import terrace from '../../../../public/images/services_icons/terrace.png';
 import nearSupermarket from '../../../../public/images/services_icons/near_supermarket.png';
 
-
 const services = [
   { icon: freeWiFi, name: 'Free Wi-Fi' },
   { icon: airportShuttle, name: 'Airport Shuttle' },
@@ -85,10 +84,7 @@ const Service = ({ icon, name, isChecked, onToggle }) => {
   );
 };
 
-
-    
 const ServicesPart = ({ selectedServices, setSelectedServices }) => {
-
   const handleToggle = (serviceName: string) => {
     setSelectedServices(prev =>
       prev.includes(serviceName)

@@ -26,15 +26,14 @@ const HeaderText = () => {
     }
   }, [pathname]);
 
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
-      const scrollDiff = Math.min(currentScroll, 200); 
+      const scrollDiff = Math.min(currentScroll, 200);
 
       if (headerRef.current) {
         const initialHeight = headerRef.current.scrollHeight;
-        const newHeight = Math.max(initialHeight - scrollDiff, 0); 
+        const newHeight = Math.max(initialHeight - scrollDiff, 0);
         headerRef.current.style.height = `${newHeight}px`;
         setOpacity(1 - scrollDiff / 200);
       }

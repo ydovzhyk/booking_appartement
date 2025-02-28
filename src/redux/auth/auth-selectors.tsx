@@ -1,7 +1,7 @@
-import { IAuthStore } from '../../types/store/store-auth'; 
+import { IAuthStore } from '../../types/store/store-auth';
 
 interface RootAuthStore {
-    auth: IAuthStore;
+  auth: IAuthStore;
 }
 
 export const getLoadingAuth = (store: RootAuthStore) => store.auth.loading;

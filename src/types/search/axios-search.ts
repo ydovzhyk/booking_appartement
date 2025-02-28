@@ -1,9 +1,9 @@
 import { ISearchConditions } from './search';
 
 export interface ISearchRegister {
-    searchConditions: ISearchConditions;
+  searchConditions: ISearchConditions;
 }
 
 export interface ISearchResponse {
-    message: string;
+  message: string;
 }

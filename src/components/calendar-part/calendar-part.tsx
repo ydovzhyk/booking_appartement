@@ -18,7 +18,7 @@ import Text from '@/components/shared/text/text';
 import { useLanguage } from '@/utils/helpers/translating/language-context';
 import { translateMyText } from '@/utils/helpers/translating/translating';
 import { VscCalendar } from 'react-icons/vsc';
-import { IoMdPeople } from "react-icons/io";
+import { IoMdPeople } from 'react-icons/io';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -28,33 +28,37 @@ const CalendarPart = () => {
   const appDispatch = useAppDispatch();
   const languageIndex = useLanguage();
   const conditions = useSelector(getSearchConditions);
-  const [placeholderText1, setPlaceholderText1] = useState("Date from");
-  const [placeholderText2, setPlaceholderText2] = useState("Date to");
+  const [placeholderText1, setPlaceholderText1] = useState('Date from');
+  const [placeholderText2, setPlaceholderText2] = useState('Date to');
   const [openConditions, setOpenConditions] = useState(false);
 
   const [startDate, setStartDate] = useState<Date | undefined>(
-  conditions.dateFrom ? moment(conditions.dateFrom, 'MM/DD/YYYY').toDate() : undefined
-);
+    conditions.dateFrom
+      ? moment(conditions.dateFrom, 'MM/DD/YYYY').toDate()
+      : undefined
+  );
 
-const [endDate, setEndDate] = useState<Date | undefined>(
-  conditions.dateTo ? moment(conditions.dateTo, 'MM/DD/YYYY').toDate() : undefined
-);
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    conditions.dateTo
+      ? moment(conditions.dateTo, 'MM/DD/YYYY').toDate()
+      : undefined
+  );
 
-    const formDefaultValues = {
-      numberAdults: 1,
-      numberChildren: 0,
-      numberRooms: 1,
-      petsAllowed: false,
-      dateFrom: startDate ? moment(startDate).format('YYYY-MM-DD') : undefined,
-      dateTo: endDate ? moment(endDate).format('YYYY-MM-DD') : undefined,
-      city: '',
-    };
-  
+  const formDefaultValues = {
+    numberAdults: 1,
+    numberChildren: 0,
+    numberRooms: 1,
+    petsAllowed: false,
+    dateFrom: startDate ? moment(startDate).format('YYYY-MM-DD') : undefined,
+    dateTo: endDate ? moment(endDate).format('YYYY-MM-DD') : undefined,
+    city: '',
+  };
+
   useEffect(() => {
     const fetchPlaceholders = async () => {
       // console.log('languageIndex:', languageIndex);
       try {
-        const langIndex = Number(languageIndex) || 0; 
+        const langIndex = Number(languageIndex) || 0;
 
         const [translatedText1, translatedText2] = await Promise.all([
           translateMyText('Date From', langIndex),
@@ -81,13 +85,12 @@ const [endDate, setEndDate] = useState<Date | undefined>(
 ${conditions.numberChildren} ${pluralize(conditions.numberChildren, 'Child', 'Children')}, 
 ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`;
 
-
   const { control, handleSubmit } = useForm<ISearchConditions>({
     defaultValues: {
       ...formDefaultValues,
     },
   });
-    
+
   const onSubmit = (data: ISearchConditions) => {
     const searchData = {
       city: data.city,
@@ -100,9 +103,7 @@ ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`
       propertyType: conditions?.propertyType || '',
     };
 
-    dispatch(
-      setSearchConditions({ ...searchData })
-    );
+    dispatch(setSearchConditions({ ...searchData }));
     appDispatch(searchProperty({ searchConditions: searchData }));
   };
 
@@ -181,8 +182,10 @@ ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`
           className="h-[40px] flex flex-row items-center justify-left bg-white regular-border"
           style={{ width: 'calc(100%/5)', borderRadius: '5px' }}
         >
-          <div className="relative w-full h-full"
-          style={{borderRadius: '5px' }}>
+          <div
+            className="relative w-full h-full"
+            style={{ borderRadius: '5px' }}
+          >
             <button
               type="button"
               className="group flex flex-row items-center justify-between px-[10px] gap-[10px]"

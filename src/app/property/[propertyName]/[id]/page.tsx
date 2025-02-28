@@ -31,7 +31,7 @@ function DetailPropertyPage() {
     return null;
   } else {
     return (
-      <div className='w-full'>
+      <div className="w-full">
         <div className="container">
           <Suspense fallback={<LoaderSpinner />}>
             <PropertyDetail {...property} />

@@ -1,7 +1,13 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from "next/navigation";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
+import { useRouter } from 'next/navigation';
 
 const HeaderContext = createContext<number | null>(null);
 
@@ -75,5 +81,3 @@ export const HeaderProvider = ({ children, value }: HeaderProviderProps) => {
     </HeaderContext.Provider>
   );
 };
-
-
