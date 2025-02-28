@@ -1,12 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/utils/helpers/hooks';
+import { usePathname } from 'next/navigation';
+import { likeProperty } from '@/redux/property/property-operations';
+import { Tooltip } from 'react-tooltip';
 import Image from 'next/image';
 import Text from '../shared/text/text';
 import { IProperty } from '@/types/property/property';
 import { FaLocationDot } from 'react-icons/fa6';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { RxShare1 } from 'react-icons/rx';
+import { getUser, getLogin } from '@/redux/auth/auth-selectors';
+import {
+  getCurrency,
+  getExchangeRate,
+} from '@/redux/technical/technical-selectors';
 
 const PropertyDetail: React.FC<IProperty> = ({
+  _id,
   title,
   mainImage,
   imagesLink,
@@ -16,6 +29,25 @@ const PropertyDetail: React.FC<IProperty> = ({
   description,
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { likedApartments } = useSelector(getUser);
+  const isLogin = useSelector(getLogin);
+  const currency = useSelector(getCurrency);
+  const exchangeRate = useSelector(getExchangeRate);
+  const appDispatch = useAppDispatch();
+  const pathname = usePathname();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [copied, setCopied] = useState(false);
+
+  const convertedPrice = (Number(price.value) * exchangeRate).toFixed(2);
+
+  useEffect(() => {
+    setIsLiked(likedApartments?.includes(_id) || false);
+  }, [likedApartments, _id]);
+
+  const toggleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    appDispatch(likeProperty({ propertyId: _id }));
+  };
 
   const openModalWithImages = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -23,6 +55,17 @@ const PropertyDetail: React.FC<IProperty> = ({
 
   const closeModal = () => {
     setSelectedImage(null);
+  };
+
+  const handleCopyLink = () => {
+    const currentURL = `${window.location.origin}${pathname}`;
+    navigator.clipboard
+      .writeText(currentURL)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      })
+      .catch((err) => console.error("Failed to copy link: ", err)); // eslint-disable-line
   };
 
   const remainingImagesCount = imagesLink.length - 5;
@@ -37,10 +80,51 @@ const PropertyDetail: React.FC<IProperty> = ({
             <Text as="h1" fontWeight="bold">
               {title}
             </Text>
-            <div className="flex items-center gap-2">
-              <Text as="p" fontWeight="bold">
-                {price.value} {price.currency}
-              </Text>
+
+            <div className="flex flex-row items-center gap-[10px] test-border">
+              {/* Лайк */}
+              {isLogin && (
+                <div
+                  className="flex items-center justify-center w-[45px] h-[45px] rounded-full cursor-pointer z-10 hover:scale-110 transition-transform duration-200 ease-in-out backdrop-blur-sm bg-white/20"
+                  onClick={toggleLike}
+                >
+                  {isLiked ? (
+                    <AiFillHeart size={26} color="var(--accent-background)" />
+                  ) : (
+                    <AiOutlineHeart
+                      size={26}
+                      color="var(--accent-background)"
+                    />
+                  )}
+                </div>
+              )}
+              <div
+                className="flex items-center justify-center w-[45px] h-[45px] rounded-full cursor-pointer z-10 hover:scale-110 transition-transform duration-200 ease-in-out backdrop-blur-sm bg-white/20"
+                onClick={handleCopyLink}
+              >
+                <RxShare1 size={26} color="var(--accent-background)" />
+                {copied && (
+                  <Tooltip
+                    id="copy-tooltip"
+                    place="top"
+                    isOpen={copied}
+                    style={{
+                      transform: 'translateY(-10px)',
+                      backgroundColor: '#0f1d2d',
+                      borderRadius: '5px',
+                      padding: '6px 10px',
+                      fontSize: '14px',
+                    }}
+                  >
+                    <Text type="small"
+                      as="span"
+                      fontWeight="light"
+                      className="text-white">
+                      Link copied
+                    </Text>
+                </Tooltip>
+                )}
+              </div>
             </div>
           </div>
 
@@ -86,8 +170,11 @@ const PropertyDetail: React.FC<IProperty> = ({
             {/* Три фото знизу */}
             <div className="w-full flex gap-4 relative">
               {imagesLink.slice(2, 5).map((image, index) => (
-                <div key={index} className="relative"
-                style={{width: 'calc(100%/3)'}}>
+                <div
+                  key={index}
+                  className="relative"
+                  style={{ width: 'calc(100%/3)' }}
+                >
                   <Image
                     src={image}
                     alt={`Додаткове фото ${index + 3}`}
@@ -104,6 +191,11 @@ const PropertyDetail: React.FC<IProperty> = ({
                   )}
                 </div>
               ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <Text as="p" fontWeight="bold">
+                {price.value} {price.currency}
+              </Text>
             </div>
           </div>
         </div>

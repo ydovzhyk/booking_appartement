@@ -5,7 +5,7 @@ import translate from 'translate';
 import languagesAndCodes from './languagesAndCodes';
 import SelectField from '../../../components/shared/select-field/select-field';
 import { useLanguage } from './language-context';
-import { lANGUAGE } from '@/data/languageData';
+import { lANGUAGE_INDEX } from '@/data/languageIndex';
 
 translate.key = process.env.NEXT_PUBLIC_TRANSLATE_API_KEY || '';
 
@@ -24,18 +24,23 @@ export default function TranslateMe() {
         setLanguageIndex(Number(savedLanguageIndex));
       }
 
-      if (lANGUAGE !== Number(savedLanguageIndex)) {
-        fetch('/api/settings-api?settingType=language', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ language: Number(savedLanguageIndex) }),
-        }).catch(error => {
-          console.error('Error saving language preference:', error);
-        });
+      if (lANGUAGE_INDEX !== Number(savedLanguageIndex)) {
+        const fetchLanguage = async () => {
+          try {
+            await fetch('/api/language-settings', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ language: Number(savedLanguageIndex)}),
+            });
+          } catch (error) {
+            console.error('Error saving language:', error);
+          }
+        }
+        fetchLanguage();
       }
     } else {
-      updateLanguageIndex(lANGUAGE);
-      setLanguageIndex(lANGUAGE);
+      updateLanguageIndex(lANGUAGE_INDEX);
+      setLanguageIndex(lANGUAGE_INDEX);
     }
   }, [isServer, languageIndex, updateLanguageIndex]);
 
@@ -44,7 +49,7 @@ export default function TranslateMe() {
     label: language.lang,
   }));
 
-  const handleChange = (selectedOption: any) => {
+  const handleChange = async (selectedOption: any) => {
     setLanguageIndex(Number(selectedOption.value));
     updateLanguageIndex(Number(selectedOption.value));
     localStorage.setItem(
@@ -52,13 +57,15 @@ export default function TranslateMe() {
       Number(selectedOption.value).toString()
     );
 
-    fetch('/api/settings-api?settingType=language', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ language: Number(selectedOption.value) }),
-    }).catch(error => {
-      console.error('Error saving language preference:', error);
-    });
+    try {
+      await fetch('/api/language-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: selectedOption.value}),
+      });
+    } catch (error) {
+      console.error('Error saving language:', error);
+    }
   };
 
   return (

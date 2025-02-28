@@ -12,7 +12,7 @@ const eslintConfig = [
       'eslint:recommended', // Базові правила ESLint
       'next/core-web-vitals', // Оптимізація для Core Web Vitals
       'next/typescript', // Додаткові правила для TypeScript
-      'prettier', // Взаємодія з Prettier
+      // 'prettier', // Взаємодія з Prettier
       'plugin:@next/next/recommended', // Рекомендовані правила Next.js
     ],
     settings: {

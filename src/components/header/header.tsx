@@ -5,7 +5,7 @@ import AuthInfo from './auth-info/auth-info';
 import Logo from '../../components/shared/logo/logo';
 import Navigation from './navigation/navigation';
 import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
-import { HEADER_HEIGHT } from '../../data/headerData';
+import { HEADER_HEIGHT } from '@/data/headerHeight';
 import HeaderText from './header-text/header-text';
 import CalendarPart from '@/components/calendar-part/calendar-part';
 
@@ -34,7 +34,7 @@ const Header = () => {
   const clientHeaderHeight = useHeaderHeight();
   const isServer = typeof window === 'undefined';
 
-  const headerHeight = isServer
+  const height = isServer
     ? HEADER_HEIGHT
     : clientHeaderHeight === 0
       ? HEADER_HEIGHT
@@ -66,7 +66,7 @@ const Header = () => {
           {pathname === '/' && <CalendarPart />}
         </div>
       </header>
-      <div style={{ paddingTop: `${headerHeight}px` }}></div>
+      <div style={{ paddingTop: `${height}px` }}></div>
     </div>
   );
 };

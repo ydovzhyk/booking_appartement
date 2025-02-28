@@ -16,6 +16,19 @@ export const HeaderProvider = ({ children, value }: HeaderProviderProps) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const router = useRouter();
 
+  // ✅ Отримуємо збережену висоту при завантаженні сторінки
+  useEffect(() => {
+    fetch('/api/header-height')
+      .then(res => res.json())
+      .then(data => {
+        if (data.headerHeight) {
+          setHeaderHeight(data.headerHeight);
+        }
+      })
+      .catch(error => console.error('Error fetching header height:', error));
+  }, []);
+
+  // ✅ Оновлення висоти на клієнті
   useEffect(() => {
     const updateHeaderHeight = () => {
       const header = document.getElementById('header');
@@ -23,13 +36,11 @@ export const HeaderProvider = ({ children, value }: HeaderProviderProps) => {
         const height = header.clientHeight;
         setHeaderHeight(height);
 
-        fetch('/api/settings-api?settingType=headerHeight', {
+        fetch('/api/header-height', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ height }),
-        }).catch((error) => {
-          console.error('Error saving header height:', error);
-        });
+        }).catch(error => console.error('Error saving header height:', error));
       }
     };
 
@@ -56,7 +67,7 @@ export const HeaderProvider = ({ children, value }: HeaderProviderProps) => {
       clearTimeout(timeout);
       observer.disconnect();
     };
-  }, [value, router]); 
+  }, [value, router]);
 
   return (
     <HeaderContext.Provider value={headerHeight}>

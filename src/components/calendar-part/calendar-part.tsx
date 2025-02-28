@@ -52,17 +52,19 @@ const [endDate, setEndDate] = useState<Date | undefined>(
   
   useEffect(() => {
     const fetchPlaceholders = async () => {
+      // console.log('languageIndex:', languageIndex);
       try {
         const langIndex = Number(languageIndex) || 0; 
 
-        const translatedText1 = await translateMyText('Date From', langIndex);
-        const translatedText2 = await translateMyText(
-          'Date To',
-          langIndex
-        );
+        const [translatedText1, translatedText2] = await Promise.all([
+          translateMyText('Date From', langIndex),
+          translateMyText('Date To', langIndex),
+        ]);
 
-        setPlaceholderText1(translatedText1);
-        setPlaceholderText2(translatedText2);
+        // console.log(translatedText1, translatedText2);
+
+        // setPlaceholderText1(translatedText1);
+        // setPlaceholderText2(translatedText2);
       } catch (error) {
         console.error('Error translating placeholders:', error);
       }
