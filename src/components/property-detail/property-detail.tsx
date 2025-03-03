@@ -72,16 +72,24 @@ const PropertyDetail: React.FC<IProperty> = ({
   const formattedAddress = `${location.city}, ${location.street}, ${location.building}`;
 
   return (
-    <div className="w-full my-[40px] mx-auto test-border">
+    <section className="w-full my-[40px] mx-auto test-border">
       <div className="w-full flex flex-row items-center justify-between">
         <div className="w-[65%]">
-          {/* Заголовок */}
-          <div className="flex justify-between items-center mb-4">
-            <Text as="h1" fontWeight="bold">
-              {title}
-            </Text>
 
-            <div className="flex flex-row items-center gap-[10px] test-border">
+          <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-col gap-4">
+              <Text as="h1" fontWeight="bold">
+                {title}
+              </Text>
+              <div className="flex items-center gap-2">
+                <FaLocationDot size={22} />
+                <Text type="regular" className="text-gray-600">
+                  {formattedAddress}
+                </Text>
+              </div>
+            </div>
+
+          <div className="flex flex-row items-center gap-[10px]">
               {/* Лайк */}
               {isLogin && (
                 <div
@@ -100,69 +108,56 @@ const PropertyDetail: React.FC<IProperty> = ({
               )}
               <div
                 className="flex items-center justify-center w-[45px] h-[45px] rounded-full cursor-pointer z-10 hover:scale-110 transition-transform duration-200 ease-in-out backdrop-blur-sm bg-white/20"
+                data-tooltip-id="copy-tooltip"
                 onClick={handleCopyLink}
               >
                 <RxShare1 size={26} color="var(--accent-background)" />
-                {copied && (
-                  <Tooltip
-                    id="copy-tooltip"
-                    place="top"
-                    isOpen={copied}
-                    style={{
-                      transform: 'translateY(-10px)',
-                      backgroundColor: '#0f1d2d',
-                      borderRadius: '5px',
-                      padding: '6px 10px',
-                      fontSize: '14px',
-                    }}
-                  >
-                    <Text
-                      type="small"
-                      as="span"
-                      fontWeight="light"
-                      className="text-white"
-                    >
-                      Link copied
-                    </Text>
-                  </Tooltip>
-                )}
               </div>
-            </div>
-          </div>
 
-          {/* Адреса */}
-          <div className="flex items-center gap-2">
-            <FaLocationDot size={22} />
-            <Text type="regular" className="text-gray-600">
-              {formattedAddress}
-            </Text>
+              <Tooltip
+                id="copy-tooltip"
+                place="top"
+                isOpen={copied}
+                style={{
+                  transform: 'translateY(-0px)',
+                  backgroundColor: '#0f1d2d',
+                  borderRadius: '5px',
+                  padding: '6px 10px',
+                  fontSize: '14px',
+                }}
+              >
+                <Text
+                  type="small"
+                  as="span"
+                  fontWeight="light"
+                  className="text-white"
+                >
+                  Link copied
+                </Text>
+              </Tooltip>
+            </div>
           </div>
 
           {/* Фото */}
           <div className="mt-4 flex flex-col gap-4">
             <div className="flex gap-4">
               {/* Головне фото */}
-              <div className="flex-1">
-                <Image
-                  src={mainImage}
-                  alt="Основне фото"
-                  width={555}
-                  height={395}
-                  className="w-full h-[395px] object-cover cursor-pointer rounded-lg"
-                  onClick={() => openModalWithImages(mainImage)}
-                />
-              </div>
+              <div
+                className="flex-1 bg-cover bg-center rounded-lg cursor-pointer"
+                style={{
+                  backgroundImage: `url(${mainImage})`,
+                  borderRadius: '5px',
+                }}
+                onClick={() => openModalWithImages(mainImage)}
+              ></div>
 
               {/* Два додаткових фото праворуч */}
               <div className="flex flex-col gap-4 w-[266px]">
                 {imagesLink.slice(0, 2).map((image, index) => (
-                  <Image
+                  <div
                     key={index}
-                    src={image}
-                    alt={`Додаткове фото ${index + 1}`}
-                    width={266}
-                    height={188}
-                    className="w-[266px] h-[188px] object-cover cursor-pointer rounded-lg"
+                    className="w-[266px] h-[188px] bg-cover bg-center rounded-lg cursor-pointer"
+                    style={{ backgroundImage: `url(${image})` }}
                     onClick={() => openModalWithImages(image)}
                   />
                 ))}
@@ -174,17 +169,14 @@ const PropertyDetail: React.FC<IProperty> = ({
               {imagesLink.slice(2, 5).map((image, index) => (
                 <div
                   key={index}
-                  className="relative"
-                  style={{ width: 'calc(100%/3)' }}
+                  className="relative cursor-pointer rounded-lg bg-cover bg-center"
+                  style={{
+                    width: 'calc(100%/3)',
+                    height: '188px',
+                    backgroundImage: `url(${image})`,
+                  }}
+                  onClick={() => openModalWithImages(image)}
                 >
-                  <Image
-                    src={image}
-                    alt={`Додаткове фото ${index + 3}`}
-                    width={300}
-                    height={188}
-                    className="w-full h-[188px] object-cover cursor-pointer rounded-lg"
-                    onClick={() => openModalWithImages(image)}
-                  />
                   {/* Лічильник, якщо є ще фото */}
                   {index === 2 && remainingImagesCount > 0 && (
                     <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-md text-sm">
@@ -194,6 +186,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                 </div>
               ))}
             </div>
+
             <div className="flex items-center gap-2">
               <Text as="p" fontWeight="bold">
                 {price.value} {price.currency}
@@ -217,7 +210,8 @@ const PropertyDetail: React.FC<IProperty> = ({
 
       {/* Модальне вікно для фото */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div
+        className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="relative p-4">
             <button
               className="absolute top-2 right-2 bg-gray-100 text-black px-2 py-1 rounded"
@@ -235,7 +229,7 @@ const PropertyDetail: React.FC<IProperty> = ({
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

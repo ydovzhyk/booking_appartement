@@ -9,8 +9,18 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ['robohash.org', 'storage.googleapis.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'robohash.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
+    ],
   },
 };
 
 export default nextConfig;
+

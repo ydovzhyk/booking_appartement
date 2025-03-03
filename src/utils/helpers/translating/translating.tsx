@@ -5,43 +5,21 @@ import translate from 'translate';
 import languagesAndCodes from './languagesAndCodes';
 import SelectField from '../../../components/shared/select-field/select-field';
 import { useLanguage } from './language-context';
-import { lANGUAGE_INDEX } from '@/data/languageIndex';
 
 translate.key = process.env.NEXT_PUBLIC_TRANSLATE_API_KEY || '';
 export default function TranslateMe() {
   const { updateLanguageIndex } = useLanguage();
-
   const [languageIndex, setLanguageIndex] = useState(0);
-  const isServer = typeof window === 'undefined';
 
   useEffect(() => {
-    const savedLanguageIndex = localStorage.getItem('languageIndex');
-    if (!isServer) {
-      updateLanguageIndex(Number(savedLanguageIndex));
-
-      if (savedLanguageIndex && Number(savedLanguageIndex) !== languageIndex) {
-        setLanguageIndex(Number(savedLanguageIndex));
-      }
-
-      if (lANGUAGE_INDEX !== Number(savedLanguageIndex)) {
-        const fetchLanguage = async () => {
-          try {
-            await fetch('/api/language-settings', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ language: Number(savedLanguageIndex) }),
-            });
-          } catch (error) {
-            console.error('Error saving language:', error);
-          }
-        };
-        fetchLanguage();
-      }
+    const savedIndex = localStorage.getItem('languageIndex');
+    if(Number(savedIndex) !== Number(languageIndex)) {
+      setLanguageIndex(Number(savedIndex));
+      updateLanguageIndex(Number(savedIndex));
     } else {
-      updateLanguageIndex(lANGUAGE_INDEX);
-      setLanguageIndex(lANGUAGE_INDEX);
+      return;
     }
-  }, [isServer, languageIndex, updateLanguageIndex]);
+  }, [languageIndex, updateLanguageIndex]);
 
   const options = languagesAndCodes.languages.map((language, index) => ({
     value: index.toString(),
@@ -51,20 +29,11 @@ export default function TranslateMe() {
   const handleChange = async (selectedOption: any) => {
     setLanguageIndex(Number(selectedOption.value));
     updateLanguageIndex(Number(selectedOption.value));
+
     localStorage.setItem(
       'languageIndex',
       Number(selectedOption.value).toString()
     );
-
-    try {
-      await fetch('/api/language-settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ language: selectedOption.value }),
-      });
-    } catch (error) {
-      console.error('Error saving language:', error);
-    }
   };
 
   return (
@@ -94,17 +63,25 @@ export async function translateMyText(text = '', languageIndex: number) {
     throw new Error('Language not found');
   }
 }
-
 export const useTranslate = (text: string) => {
   const [translatedText, setTranslatedText] = useState(text);
   const { languageIndex } = useLanguage();
 
-  const normalizeCase = (text: string) => {
-    return text.replace(
+  const normalizeCase = (text: unknown): string => {
+    if (typeof text !== 'string' && text !== null) {
+      if (Array.isArray(text)) {
+        text = text.join('');
+      } else {
+        text = '';
+      }
+    }
+
+    return (text as string).replace(
       /(^|\.\s+)([a-z])/g,
-      (_, prefix, letter) => prefix + letter.toUpperCase()
+      (_: string, prefix: string, letter: string) => prefix + letter.toUpperCase()
     );
   };
+
 
   useEffect(() => {
     translateMyText(text, languageIndex)

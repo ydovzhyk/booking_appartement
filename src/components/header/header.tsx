@@ -1,13 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import AuthInfo from './auth-info/auth-info';
-import Logo from '../../components/shared/logo/logo';
-import Navigation from './navigation/navigation';
-import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
-import { HEADER_HEIGHT } from '@/data/headerHeight';
-import HeaderText from './header-text/header-text';
 import CalendarPart from '@/components/calendar-part/calendar-part';
+import { HEADER_HEIGHT } from '@/data/headerHeight';
+import { usePathname } from 'next/navigation';
+import Logo from '../../components/shared/logo/logo';
+import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
+import AuthInfo from './auth-info/auth-info';
+import HeaderText from './header-text/header-text';
+import Navigation from './navigation/navigation';
 
 const allowedRoutes = [
   '/',

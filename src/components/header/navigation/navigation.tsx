@@ -1,8 +1,7 @@
+import NavLink from '@/components/shared/navLink/navLink';
 import { usePathname } from 'next/navigation';
 import TranslateMe from '../../../utils/helpers/translating/translating';
 import Currencies from '../../currencies/currencies';
-import NavLink from '@/components/shared/navLink/navLink';
-import CalendarPart from '@/components/calendar-part/calendar-part';
 
 const Navigation = () => {
   const pathname = usePathname();

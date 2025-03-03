@@ -33,7 +33,7 @@ const PropertyCard: React.FC<IProperty> = ({
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const router = useRouter();
 
-  const convertedPrice = (Number(price.value) * exchangeRate).toFixed(2);
+  const convertedPrice = (Number(price.value) * exchangeRate).toFixed(0);
 
   useEffect(() => {
     setIsLiked(likedApartments?.includes(_id) || false);
@@ -87,7 +87,7 @@ const PropertyCard: React.FC<IProperty> = ({
         {showInfo && (
           <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center gap-[20px] p-4 text-white transition-opacity duration-300">
             <Text type="tiny" className="text-center">
-              {description.slice(0, 300)}...
+              {description.slice(0, 200)}...
             </Text>
 
             <div className="flex flex-row items-center gap-2">
@@ -104,11 +104,11 @@ const PropertyCard: React.FC<IProperty> = ({
 
       <div className="flex flex-col gap-2 p-4">
         <div className="min-h-[58px]">
-          <Text as="h2" fontWeight="bold">
+          <Text as="h2" type='small' fontWeight="bold">
             {title.slice(0, 60)}
           </Text>
         </div>
-        <Text type="small" className="text-gray-600">
+        <Text type="tiny" className="text-gray-600">
           {location.city}, {location.street}, {location.building}
         </Text>
 

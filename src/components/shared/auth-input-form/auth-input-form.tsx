@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux/store';
-import { usePathname } from 'next/navigation';
-import { register, login } from '../../../redux/auth/auth-operations';
-import loadAvatar from '../../../utils/helpers/load-avatar';
-import TextField from '../text-field/text-field';
-import { fields } from '../text-field/fields';
-import Button from '../button/button';
 import { IAuthUserData } from '@/types/auth/auth';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { login, register } from '../../../redux/auth/auth-operations';
+import { AppDispatch } from '../../../redux/store';
+import loadAvatar from '../../../utils/helpers/load-avatar';
 import { useTranslate } from '../../../utils/helpers/translating/translating';
+import Button from '../button/button';
 import HumanVerification from '../humanVerification/HumanVerification';
+import { fields } from '../text-field/fields';
+import TextField from '../text-field/text-field';
 
 interface AuthInputFormProps {
   typeOperation: 'register' | 'login';

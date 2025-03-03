@@ -1,35 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useAppDispatch } from '../../utils/helpers/hooks';
-import { useForm, Controller } from 'react-hook-form';
-import moment from 'moment';
-import DatePicker from 'react-datepicker';
-import Conditions from './conditions/conditions';
-import Button from '../shared/button/button';
-import { ukrainianCities } from '../../app/add-property/add-property';
-import { ISearchConditions } from '@/types/search/search';
-import { getSearchConditions } from '@/redux/search/search-selectors';
-import { setSearchConditions } from '@/redux/search/search-slice';
-import { searchProperty } from '@/redux/search/search-operations';
 import SelectField from '@/components/shared/select-field/select-field';
 import Text from '@/components/shared/text/text';
+import { searchProperty } from '@/redux/search/search-operations';
+import { getSearchConditions } from '@/redux/search/search-selectors';
+import { setSearchConditions } from '@/redux/search/search-slice';
+import { ISearchConditions } from '@/types/search/search';
 import { useLanguage } from '@/utils/helpers/translating/language-context';
 import { translateMyText } from '@/utils/helpers/translating/translating';
-import { VscCalendar } from 'react-icons/vsc';
-import { IoMdPeople } from 'react-icons/io';
-import { IoIosArrowDown } from 'react-icons/io';
-import { IoIosArrowUp } from 'react-icons/io';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Controller, useForm } from 'react-hook-form';
+import { IoIosArrowDown, IoIosArrowUp, IoMdPeople } from 'react-icons/io';
+import { VscCalendar } from 'react-icons/vsc';
+import { useDispatch, useSelector } from 'react-redux';
+import { ukrainianCities } from '../../app/add-property/add-property';
+import { useAppDispatch } from '../../utils/helpers/hooks';
+import Button from '../shared/button/button';
+import Conditions from './conditions/conditions';
 
 const CalendarPart = () => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
-  const languageIndex = useLanguage();
+  const { languageIndex } = useLanguage();
   const conditions = useSelector(getSearchConditions);
   const [placeholderText1, setPlaceholderText1] = useState('Date from');
   const [placeholderText2, setPlaceholderText2] = useState('Date to');
+  const [placeholderText3, setPlaceholderText3] = useState('Select city');
   const [openConditions, setOpenConditions] = useState(false);
 
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -56,19 +55,17 @@ const CalendarPart = () => {
 
   useEffect(() => {
     const fetchPlaceholders = async () => {
-      // console.log('languageIndex:', languageIndex);
       try {
         const langIndex = Number(languageIndex) || 0;
-
-        const [translatedText1, translatedText2] = await Promise.all([
-          translateMyText('Date From', langIndex),
-          translateMyText('Date To', langIndex),
+        const [text1, text2, text3] = await Promise.all([
+          translateMyText('Date from', langIndex),
+          translateMyText('Date to', langIndex),
+          translateMyText('Select city', langIndex),
         ]);
 
-        // console.log(translatedText1, translatedText2);
-
-        // setPlaceholderText1(translatedText1);
-        // setPlaceholderText2(translatedText2);
+        setPlaceholderText1(text1);
+        setPlaceholderText2(text2);
+        setPlaceholderText3(text3);
       } catch (error) {
         console.error('Error translating placeholders:', error);
       }
@@ -78,12 +75,12 @@ const CalendarPart = () => {
   }, [languageIndex]);
 
   const pluralize = (count: number, singular: string, plural: string) => {
-    return count === 1 ? singular : plural;
+    return count === 1 ? singular : count === 0 ? plural : plural;
   };
 
-  const textConditions: string = `${conditions.numberAdults} ${pluralize(conditions.numberAdults, 'Adult', 'Adults')}, 
-${conditions.numberChildren} ${pluralize(conditions.numberChildren, 'Child', 'Children')}, 
-${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`;
+  const textConditions: string = `${conditions.numberAdults} ${pluralize(conditions.numberAdults, 'Adult', 'Adults')},
+      ${conditions.numberChildren} ${pluralize(conditions.numberChildren, 'Child', 'Children')},
+      ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`;
 
   const { control, handleSubmit } = useForm<ISearchConditions>({
     defaultValues: {
@@ -130,7 +127,7 @@ ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`
                   handleChange={selectedOption =>
                     onChange(selectedOption ? selectedOption.value : '')
                   }
-                  placeholder={value !== '' ? '' : 'Select City'}
+                  placeholder={value !== '' ? '' : placeholderText3}
                   required
                   options={ukrainianCities}
                 />

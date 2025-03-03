@@ -1,18 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useForm, Controller } from 'react-hook-form';
-import { IVerifyEmailData } from '@/types/auth/auth';
-import Text from '@/components/shared/text/text';
 import Button from '@/components/shared/button/button';
-import TextField from '@/components/shared/text-field/text-field';
 import { fields } from '@/components/shared/text-field/fields';
-import { getUser } from '@/redux/auth/auth-selectors';
-import { TfiClose } from 'react-icons/tfi';
-import { useAppDispatch } from '../../../utils/helpers/hooks';
+import TextField from '@/components/shared/text-field/text-field';
+import Text from '@/components/shared/text/text';
 import { verifyEmail } from '@/redux/auth/auth-operations';
+import { getUser } from '@/redux/auth/auth-selectors';
+import { IVerifyEmailData } from '@/types/auth/auth';
 import { useTranslate } from '@/utils/helpers/translating/translating';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { MdOutlineVerifiedUser } from 'react-icons/md';
+import { TfiClose } from 'react-icons/tfi';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../../utils/helpers/hooks';
 
 interface VerifyWindowProps {
   onClose: () => void;
