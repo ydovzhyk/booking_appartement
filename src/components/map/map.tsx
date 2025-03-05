@@ -113,7 +113,7 @@ const Map = ({ address, title }: MapProps) => {
         <GoogleMap
           mapContainerStyle={{ width: '101%', height: '101%' }}
           center={{ lat: coordinates.lat, lng: coordinates.lng }}
-          zoom={isRealCoordinates ? 16 : 12}
+          zoom={isRealCoordinates ? 14 : 12}
           options={{
             mapTypeControl: false,
             styles: [],

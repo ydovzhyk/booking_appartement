@@ -114,7 +114,7 @@ const Currencies = () => {
         required={true}
         options={popularCurrencies}
         width="135px"
-        topPlaceholder={true}
+        topPlaceholder={false}
         showLabelWithValue={true}
       />
     </div>
