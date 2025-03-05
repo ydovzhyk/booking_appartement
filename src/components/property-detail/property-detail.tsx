@@ -8,15 +8,18 @@ import { likeProperty } from '@/redux/property/property-operations';
 import { Tooltip } from 'react-tooltip';
 import Image from 'next/image';
 import Text from '../shared/text/text';
+import Button from '../shared/button/button';
 import { IProperty } from '@/types/property/property';
 import { FaLocationDot } from 'react-icons/fa6';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { RxShare1 } from 'react-icons/rx';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 import { getUser, getLogin } from '@/redux/auth/auth-selectors';
 import {
   getCurrency,
   getExchangeRate,
 } from '@/redux/technical/technical-selectors';
+import Map from '../map/map';
 
 const PropertyDetail: React.FC<IProperty> = ({
   _id,
@@ -73,11 +76,33 @@ const PropertyDetail: React.FC<IProperty> = ({
 
   return (
     <section className="w-full my-[40px] mx-auto test-border">
-      <div className="w-full flex flex-row items-center justify-between">
+      <div className="w-full flex flex-row items-center justify-between gap-[15px]">
         <div className="w-[65%]">
-
           <div className="flex flex-row justify-between items-center">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-[10px]">
+              {/* Рейтинг */}
+              <div className="flex flex-row items-center gap-[20px]">
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, index) =>
+                    index < ranking ? (
+                      <FaStar
+                        key={index}
+                        size={16}
+                        className="text-[var(--accent)]"
+                      />
+                    ) : (
+                      <FaRegStar
+                        key={index}
+                        size={16}
+                        className="text-gray-300"
+                      />
+                    )
+                  )}
+                </div>
+                <Text type="small" className="text-gray-600 mt-[4px]">
+                  {ranking} (10 reviews)
+                </Text>
+              </div>
               <Text as="h1" fontWeight="bold">
                 {title}
               </Text>
@@ -89,7 +114,7 @@ const PropertyDetail: React.FC<IProperty> = ({
               </div>
             </div>
 
-          <div className="flex flex-row items-center gap-[10px]">
+            <div className="flex flex-row items-center gap-[10px]">
               {/* Лайк */}
               {isLogin && (
                 <div
@@ -141,7 +166,6 @@ const PropertyDetail: React.FC<IProperty> = ({
           {/* Фото */}
           <div className="mt-4 flex flex-col gap-4">
             <div className="flex gap-4">
-              {/* Головне фото */}
               <div
                 className="flex-1 bg-cover bg-center rounded-lg cursor-pointer"
                 style={{
@@ -165,7 +189,7 @@ const PropertyDetail: React.FC<IProperty> = ({
             </div>
 
             {/* Три фото знизу */}
-            <div className="w-full flex gap-4 relative">
+            <div className="w-full flex gap-[15px] relative">
               {imagesLink.slice(2, 5).map((image, index) => (
                 <div
                   key={index}
@@ -180,7 +204,9 @@ const PropertyDetail: React.FC<IProperty> = ({
                   {/* Лічильник, якщо є ще фото */}
                   {index === 2 && remainingImagesCount > 0 && (
                     <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-md text-sm">
-                      +{remainingImagesCount} фото
+                      <Text as="span" type="tiny" fontWeight="normal">
+                        +{remainingImagesCount} photos
+                      </Text>
                     </div>
                   )}
                 </div>
@@ -195,7 +221,15 @@ const PropertyDetail: React.FC<IProperty> = ({
           </div>
         </div>
         {/* Права панаель */}
-        <div className="w-[32%] flex flex-col gap-[40px]"></div>
+        <div className="w-[35%] flex flex-col justify-between gap-4">
+          <div className="col-span-full flex justify-center">
+            <Button text="Reserve your stay" btnClass="btnDark" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Map address={formattedAddress} title={title} />
+          </div>
+          <div></div>
+        </div>
       </div>
 
       {/* Опис */}
@@ -210,8 +244,7 @@ const PropertyDetail: React.FC<IProperty> = ({
 
       {/* Модальне вікно для фото */}
       {selectedImage && (
-        <div
-        className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="relative p-4">
             <button
               className="absolute top-2 right-2 bg-gray-100 text-black px-2 py-1 rounded"

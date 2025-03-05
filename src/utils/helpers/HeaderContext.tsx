@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import debounce from 'lodash.debounce';
 
 const HeaderContext = createContext<number | null>(null);
 
@@ -22,7 +23,6 @@ export const HeaderProvider = ({ children, value }: HeaderProviderProps) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const router = useRouter();
 
-  // ✅ Отримуємо збережену висоту при завантаженні сторінки
   useEffect(() => {
     fetch('/api/header-height')
       .then(res => res.json())
@@ -34,44 +34,43 @@ export const HeaderProvider = ({ children, value }: HeaderProviderProps) => {
       .catch(error => console.error('Error fetching header height:', error));
   }, []);
 
-  // ✅ Оновлення висоти на клієнті
   useEffect(() => {
+    let lastHeight = 0;
+
     const updateHeaderHeight = () => {
       const header = document.getElementById('header');
       if (header) {
         const height = header.clientHeight;
-        setHeaderHeight(height);
 
-        fetch('/api/header-height', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ height }),
-        }).catch(error => console.error('Error saving header height:', error));
+        if (height !== lastHeight) {
+          lastHeight = height;
+          setHeaderHeight(height);
+
+          fetch('/api/header-height', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ height }),
+          }).catch(error =>
+            console.error('Error saving header height:', error)
+          );
+        }
       }
     };
 
-    const timeout = setTimeout(() => {
-      updateHeaderHeight();
-    }, 300);
+    const debouncedUpdate = debounce(updateHeaderHeight, 500);
 
-    const observer = new ResizeObserver(() => updateHeaderHeight());
+    const observer = new ResizeObserver(debouncedUpdate);
     const headerElement = document.getElementById('header');
     if (headerElement) {
       observer.observe(headerElement);
     }
 
-    if (value) {
-      updateHeaderHeight();
-    }
-
-    window.addEventListener('load', updateHeaderHeight);
-    window.addEventListener('resize', updateHeaderHeight);
+    window.addEventListener('resize', debouncedUpdate);
 
     return () => {
-      window.removeEventListener('load', updateHeaderHeight);
-      window.removeEventListener('resize', updateHeaderHeight);
-      clearTimeout(timeout);
+      window.removeEventListener('resize', debouncedUpdate);
       observer.disconnect();
+      debouncedUpdate.cancel();
     };
   }, [value, router]);
 

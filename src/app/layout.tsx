@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Metadata } from 'next';
 import { Josefin_Sans, Maven_Pro } from 'next/font/google';
 import { StoreProvider } from '../redux/store-provider';
@@ -23,13 +24,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <StoreProvider>
-        <LanguageProvider>
-          <body className={`${josefin.variable} ${maven.variable}`}>
-            <ClientLayout>{children}</ClientLayout>
-          </body>
-        </LanguageProvider>
-      </StoreProvider>
+        <StoreProvider>
+          <LanguageProvider>
+            <body className={`${josefin.variable} ${maven.variable}`}>
+              <ClientLayout>{children}</ClientLayout>
+            </body>
+          </LanguageProvider>
+        </StoreProvider>
     </html>
   );
 }

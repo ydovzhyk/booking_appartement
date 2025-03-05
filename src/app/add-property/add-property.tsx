@@ -22,37 +22,158 @@ import { resizeImage } from '@/utils/helpers/resize-img';
 import Slider from '@/components/shared/slider/slider';
 
 export const ukrainianCities = [
-  { label: 'Kyiv', value: 'Kyiv' },
-  { label: 'Kharkiv', value: 'Kharkiv' },
-  { label: 'Odesa', value: 'Odesa' },
-  { label: 'Dnipro', value: 'Dnipro' },
-  { label: 'Lviv', value: 'Lviv' },
-  { label: 'Zaporizhzhia', value: 'Zaporizhzhia' },
-  { label: 'Kryvyi Rih', value: 'Kryvyi Rih' },
-  { label: 'Mykolaiv', value: 'Mykolaiv' },
-  { label: 'Mariupol', value: 'Mariupol' },
-  { label: 'Vinnytsia', value: 'Vinnytsia' },
-  { label: 'Kherson', value: 'Kherson' },
-  { label: 'Poltava', value: 'Poltava' },
-  { label: 'Chernihiv', value: 'Chernihiv' },
-  { label: 'Cherkasy', value: 'Cherkasy' },
-  { label: 'Zhytomyr', value: 'Zhytomyr' },
-  { label: 'Sumy', value: 'Sumy' },
-  { label: 'Rivne', value: 'Rivne' },
-  { label: 'Ivano-Frankivsk', value: 'Ivano-Frankivsk' },
-  { label: 'Ternopil', value: 'Ternopil' },
-  { label: 'Lutsk', value: 'Lutsk' },
-  { label: 'Uzhhorod', value: 'Uzhhorod' },
-  { label: 'Chernivtsi', value: 'Chernivtsi' },
-  { label: 'Kropyvnytskyi', value: 'Kropyvnytskyi' },
-  { label: 'Kramatorsk', value: 'Kramatorsk' },
-  { label: 'Bila Tserkva', value: 'Bila Tserkva' },
-  { label: 'Melitopol', value: 'Melitopol' },
-  { label: 'Sloviansk', value: 'Sloviansk' },
-  { label: 'Severodonetsk', value: 'Severodonetsk' },
-  { label: 'Uman', value: 'Uman' },
-  { label: 'Kamianets-Podilskyi', value: 'Kamianets-Podilskyi' },
+  {
+    label: 'Kyiv',
+    value: 'Kyiv',
+    coordinates: { lat: 50.4501, lon: 30.5234 }
+  },
+  {
+    label: 'Kharkiv',
+    value: 'Kharkiv',
+    coordinates: { lat: 49.9935, lon: 36.2304 },
+  },
+  {
+    label: 'Odesa',
+    value: 'Odesa',
+    coordinates: { lat: 46.4825, lon: 30.7233 },
+  },
+  {
+    label: 'Dnipro',
+    value: 'Dnipro',
+    coordinates: { lat: 48.4647, lon: 35.0462 },
+  },
+  {
+    label: 'Lviv',
+    value: 'Lviv',
+    coordinates: { lat: 49.8397, lon: 24.0297 }
+  },
+  {
+    label: 'Zaporizhzhia',
+    value: 'Zaporizhzhia',
+    coordinates: { lat: 47.8388, lon: 35.1396 },
+  },
+  {
+    label: 'Kryvyi Rih',
+    value: 'Kryvyi Rih',
+    coordinates: { lat: 47.9105, lon: 33.3918 },
+  },
+  {
+    label: 'Mykolaiv',
+    value: 'Mykolaiv',
+    coordinates: { lat: 46.975, lon: 31.9946 },
+  },
+  {
+    label: 'Mariupol',
+    value: 'Mariupol',
+    coordinates: { lat: 47.0971, lon: 37.5434 },
+  },
+  {
+    label: 'Vinnytsia',
+    value: 'Vinnytsia',
+    coordinates: { lat: 49.2331, lon: 28.4682 },
+  },
+  {
+    label: 'Kherson',
+    value: 'Kherson',
+    coordinates: { lat: 46.6354, lon: 32.6169 },
+  },
+  {
+    label: 'Poltava',
+    value: 'Poltava',
+    coordinates: { lat: 49.5883, lon: 34.5514 },
+  },
+  {
+    label: 'Chernihiv',
+    value: 'Chernihiv',
+    coordinates: { lat: 51.4982, lon: 31.2893 },
+  },
+  {
+    label: 'Cherkasy',
+    value: 'Cherkasy',
+    coordinates: { lat: 49.4444, lon: 32.0598 },
+  },
+  {
+    label: 'Zhytomyr',
+    value: 'Zhytomyr',
+    coordinates: { lat: 50.2547, lon: 28.6587 },
+  },
+  {
+    label: 'Sumy',
+    value: 'Sumy',
+    coordinates: { lat: 50.9077, lon: 34.7981 }
+  },
+  {
+    label: 'Rivne',
+    value: 'Rivne',
+    coordinates: { lat: 50.6199, lon: 26.2516 },
+  },
+  {
+    label: 'Ivano-Frankivsk',
+    value: 'Ivano-Frankivsk',
+    coordinates: { lat: 48.9226, lon: 24.7103 },
+  },
+  {
+    label: 'Ternopil',
+    value: 'Ternopil',
+    coordinates: { lat: 49.5535, lon: 25.5948 },
+  },
+  {
+    label: 'Lutsk',
+    value: 'Lutsk',
+    coordinates: { lat: 50.7472, lon: 25.3254 },
+  },
+  {
+    label: 'Uzhhorod',
+    value: 'Uzhhorod',
+    coordinates: { lat: 48.6208, lon: 22.2879 },
+  },
+  {
+    label: 'Chernivtsi',
+    value: 'Chernivtsi',
+    coordinates: { lat: 48.2908, lon: 25.9345 },
+  },
+  {
+    label: 'Kropyvnytskyi',
+    value: 'Kropyvnytskyi',
+    coordinates: { lat: 48.5079, lon: 32.2623 },
+  },
+  {
+    label: 'Kramatorsk',
+    value: 'Kramatorsk',
+    coordinates: { lat: 48.7194, lon: 37.6086 },
+  },
+  {
+    label: 'Bila Tserkva',
+    value: 'Bila Tserkva',
+    coordinates: { lat: 49.795, lon: 30.1306 },
+  },
+  {
+    label: 'Melitopol',
+    value: 'Melitopol',
+    coordinates: { lat: 46.8489, lon: 35.3659 },
+  },
+  {
+    label: 'Sloviansk',
+    value: 'Sloviansk',
+    coordinates: { lat: 48.8661, lon: 37.6282 },
+  },
+  {
+    label: 'Severodonetsk',
+    value: 'Severodonetsk',
+    coordinates: { lat: 48.9482, lon: 38.4911 },
+  },
+  {
+    label: 'Uman',
+    value: 'Uman',
+    coordinates: { lat: 48.748, lon: 30.2219 }
+  },
+  {
+    label: 'Kamianets-Podilskyi',
+    value: 'Kamianets-Podilskyi',
+    coordinates: { lat: 48.6845, lon: 26.5854 },
+  },
 ];
+
 
 const AddProperty = () => {
   const dispatch = useAppDispatch();
