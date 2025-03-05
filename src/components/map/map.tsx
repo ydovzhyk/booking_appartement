@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import {
   GoogleMap,
-  LoadScript,
   Marker,
   useJsApiLoader,
   Libraries,
@@ -72,17 +71,16 @@ const Map = ({ address, title }: MapProps) => {
       const dataWeather = await responseWeather.json();
 
       if (dataWeather) {
-        const { main } = dataWeather.weather[0];
         const temperature = dataWeather.main.temp;
         const iconGoogle = `https://openweathermap.org/img/wn/${dataWeather.weather[0]['icon']}@2x.png`;
 
         setWeather({city: city, temperature: temperature, icon: iconGoogle});
-        console.log('🌤️ Отримано погоду:', dataWeather);
+        // console.log('🌤️ Отримано погоду:', dataWeather);
       }
 
       if (dataGeo.results.length > 0) {
         const { lat, lng } = dataGeo.results[0].geometry.location;
-        console.log('🌍 Отримано координати:', lat, lng);
+        // console.log('🌍 Отримано координати:', lat, lng);
         setCoordinates({ lat, lng });
         setIsRealCoordinates(true);
       } else {
@@ -92,7 +90,7 @@ const Map = ({ address, title }: MapProps) => {
         const cityCoords = cityData
           ? { lat: cityData.coordinates.lat, lng: cityData.coordinates.lon }
           : { lat: 50.4501, lng: 30.5234 };
-        console.log('🌍 Координати міста:', cityCoords);
+        // console.log('🌍 Координати міста:', cityCoords);
         setCoordinates(cityCoords);
       }
     } catch (error) {
