@@ -8,6 +8,11 @@ export interface IPropertyRegister {
     building: string;
     apartment?: string;
   };
+  geoCoords: {
+    lat: number;
+    lng: number;
+    comments: string;
+  };
   description: string;
   owner: {
     email: string;

@@ -7,18 +7,13 @@ import {
   useJsApiLoader,
   Libraries,
 } from '@react-google-maps/api';
-import { ukrainianCities } from '@/app/add-property/add-property';
 import Image from 'next/image';
 import Text from '../shared/text/text';
 import markerIcon from '../../images/pin.png';
 
-interface MapProps {
-  address: string;
-  title: string;
-}
-
-const GOOGLE_MAPS_API_KEY = 'AIzaSyAe8LgD2Pc3BC2hmnxfVPEAwRQkRI60Hpk';
-const GOOGLE_MAPS_WEATHER_API_KEY = '1828ad4fcb19ab8b229ab979593d6cc7';
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+const GOOGLE_MAPS_WEATHER_API_KEY =
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_WEATHER_API_KEY || '';
 const LIBRARIES: Libraries = [
   'places', // Автодоповнення місць та пошук
   'geometry', // Робота з геометрією (відстані, площі, тощо)
@@ -27,91 +22,73 @@ const LIBRARIES: Libraries = [
   'maps', // Основна карта (іноді використовується для деяких API)
 ];
 
+interface GeoCoords {
+  lat: number;
+  lng: number;
+  comments: string;
+}
 
+interface MapProps {
+  address: string;
+  title: string;
+  geoCoords?: GeoCoords;
+}
 
-const Map = ({ address, title }: MapProps) => {
+const defaultGeoCoords: GeoCoords = {
+  lat: 50.4501,
+  lng: 30.5234,
+  comments: 'false',
+};
+
+const Map = ({ address, title, geoCoords = defaultGeoCoords }: MapProps) => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries: LIBRARIES,
   });
 
-  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number }>({
-    lat: 50.4501,
-    lng: 30.5234,
-  });
   const [weather, setWeather] = useState({
     city: '',
     temperature: 0,
     icon: '',
   });
-  const [isRealCoordinates, setIsRealCoordinates] = useState(false);
 
-  // Функція отримання координат і погоди
-  const fetchCoordinates = async (fullAddress: string) => {
+  // Функція отримання погоди
+  const fetchWeather = async (fullAddress: string) => {
     const parts = fullAddress.split(',').map(part => part.trim());
     const city = parts[0];
-    const street = parts[1] || '';
-    const houseNumber = parts[2] || '';
-
-    const formattedAddress =
-      `${houseNumber} ${street}, ${city}, Ukraine`.trim();
-
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-      formattedAddress
-    )}&key=${GOOGLE_MAPS_API_KEY}`;
 
     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${GOOGLE_MAPS_WEATHER_API_KEY}`;
 
     try {
-      const responseGeocode = await fetch(geocodeUrl);
       const responseWeather = await fetch(weatherUrl);
-
-      const dataGeo = await responseGeocode.json();
       const dataWeather = await responseWeather.json();
-
       if (dataWeather) {
         const temperature = dataWeather.main.temp;
         const iconGoogle = `https://openweathermap.org/img/wn/${dataWeather.weather[0]['icon']}@2x.png`;
 
-        setWeather({city: city, temperature: temperature, icon: iconGoogle});
+        setWeather({ city: city, temperature: temperature, icon: iconGoogle });
         // console.log('🌤️ Отримано погоду:', dataWeather);
       }
-
-      if (dataGeo.results.length > 0) {
-        const { lat, lng } = dataGeo.results[0].geometry.location;
-        // console.log('🌍 Отримано координати:', lat, lng);
-        setCoordinates({ lat, lng });
-        setIsRealCoordinates(true);
-      } else {
-        const cityData = ukrainianCities.find(
-          c => c.value.toLowerCase() === city.toLowerCase()
-        );
-        const cityCoords = cityData
-          ? { lat: cityData.coordinates.lat, lng: cityData.coordinates.lon }
-          : { lat: 50.4501, lng: 30.5234 };
-        // console.log('🌍 Координати міста:', cityCoords);
-        setCoordinates(cityCoords);
-      }
     } catch (error) {
-      console.error('❌ Error getting google data:', error);
+      console.error('❌ Error getting weather data:', error);
     }
   };
 
   useEffect(() => {
-    const getCoordinates = async () => {
-      await fetchCoordinates(address);
+    const getWeather = async () => {
+      await fetchWeather(address);
     };
-    getCoordinates();
-  }, [coordinates]);
+    getWeather();
+  }, [weather]);
 
   return (
     <div className="relative w-full h-[250px] overflow-hidden rounded-lg">
       {isLoaded && (
         <GoogleMap
           mapContainerStyle={{ width: '101%', height: '101%' }}
-          center={{ lat: coordinates.lat, lng: coordinates.lng }}
-          zoom={isRealCoordinates ? 14 : 12}
+          center={{ lat: geoCoords.lat, lng: geoCoords.lng }}
+          zoom={geoCoords.comments === 'true' ? 14 : 12}
           options={{
             mapTypeControl: false,
             styles: [],
@@ -121,7 +98,7 @@ const Map = ({ address, title }: MapProps) => {
           typeof window.google !== 'undefined' &&
           typeof window.google.maps !== 'undefined' ? (
             <Marker
-              position={{ lat: coordinates.lat, lng: coordinates.lng }}
+              position={{ lat: geoCoords.lat, lng: geoCoords.lng }}
               title={title}
               icon={{
                 url: markerIcon.src,
@@ -131,7 +108,7 @@ const Map = ({ address, title }: MapProps) => {
             />
           ) : (
             <Marker
-              position={{ lat: coordinates.lat, lng: coordinates.lng }}
+              position={{ lat: geoCoords.lat, lng: geoCoords.lng }}
               title={title}
             />
           )}
@@ -146,12 +123,7 @@ const Map = ({ address, title }: MapProps) => {
           backdropFilter: 'blur(30px)',
         }}
       >
-        <Text
-          as="p"
-          type="tiny"
-          fontWeight="bold"
-          className="text-center"
-        >
+        <Text as="p" type="tiny" fontWeight="bold" className="text-center">
           Weather in {weather.city}
         </Text>
         {weather.icon && (
@@ -164,12 +136,7 @@ const Map = ({ address, title }: MapProps) => {
             className="mt-[-10px] mb-[-10px]"
           />
         )}
-        <Text
-          as="p"
-          type="normal"
-          fontWeight="normal"
-          className="text-center"
-        >
+        <Text as="p" type="normal" fontWeight="normal" className="text-center">
           {Math.round(weather.temperature)}°С
         </Text>
       </div>

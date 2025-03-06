@@ -7,6 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../utils/helpers/hooks';
 import TextField from '../../components/shared/text-field/text-field';
+import { fetchCoordinates } from '../../utils/helpers/fetchCoordinates';
 import { fields } from '../../components/shared/text-field/fields';
 import Button from '../../components/shared/button/button';
 import FormInputFile from '../../components/shared/form-input-file/form-input-file';
@@ -233,38 +234,49 @@ const AddProperty = () => {
   }, [property, reset]);
 
   const onSubmit = async (data: IPropertyRegister) => {
-    const dataForUpload = new FormData();
-    dataForUpload.append('title', data.title);
-    dataForUpload.append('location', JSON.stringify(data.location));
-    dataForUpload.append('description', data.description);
-    dataForUpload.append('owner', JSON.stringify(data.owner));
-    dataForUpload.append('accommodation', JSON.stringify(data.accommodation));
-    dataForUpload.append('price', JSON.stringify(data.price));
-    dataForUpload.append('category', data.category);
-    dataForUpload.append('servicesList', selectedServices.join(','));
-    dataForUpload.append(
-      'mainImage',
-      mainImageName ? mainImageName : property?.mainImage || ''
-    );
+    try {
+      const fullAddress = `${data.location.city}, ${data.location.street}, ${data.location.building}`;
 
-    if (imageFiles.length > 0) {
-      imageFiles.forEach(file => {
-        dataForUpload.append('files', file);
-      });
-    } else {
-      dataForUpload.append(
-        'imagesLink',
-        JSON.stringify(property?.imagesLink || [])
-      );
+      const coordinates = await fetchCoordinates(fullAddress);
+
+      const dataForUpload = new FormData();
+      dataForUpload.append('title', data.title);
+      dataForUpload.append('location', JSON.stringify(data.location));
+      dataForUpload.append('description', data.description);
+      dataForUpload.append('owner', JSON.stringify(data.owner));
+      dataForUpload.append('accommodation', JSON.stringify(data.accommodation));
+      dataForUpload.append('price', JSON.stringify(data.price));
+      dataForUpload.append('category', data.category);
+      dataForUpload.append('servicesList', selectedServices.join(','));
+      dataForUpload.append('geoCoords', JSON.stringify(coordinates));
+
+      if (mainImageName) {
+        dataForUpload.append('mainImage', mainImageName);
+      } else if (property?.mainImage) {
+        dataForUpload.append('mainImage', property.mainImage);
+      }
+
+      if (imageFiles.length > 0) {
+        imageFiles.forEach(file => {
+          dataForUpload.append('files', file);
+        });
+      } else if (property?.imagesLink && property.imagesLink.length > 0) {
+        dataForUpload.append('imagesLink', JSON.stringify(property.imagesLink));
+      }
+
+      dispatch(registerProperty(dataForUpload));
+
+      setSelectedServices([]);
+      setMainImageName('');
+      setImageFiles([]);
+      setUrlMainImage('');
+      setUrlImages([]);
+      reset();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      console.error('Error fetching coordinates or submitting form:', error);
     }
-    dispatch(registerProperty(dataForUpload));
-    setSelectedServices([]);
-    setMainImageName('');
-    setImageFiles([]);
-    setUrlMainImage('');
-    setUrlImages([]);
-    reset();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
