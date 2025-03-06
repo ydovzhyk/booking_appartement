@@ -183,8 +183,6 @@ or manually inspect errors in your files. Happy coding! 🚀
 ✅ npm run lint → Запускає ESLint перевірку.
 ____________________________________________________________________________
 Get Started on Google Maps Platform
-You're all set to develop! Here's the API key you would need for your implementation. API key can be referenced in the Credentials section.
-AIzaSyAe8LgD2Pc3BC2hmnxfVPEAwRQkRI60Hpk
 🚀 Кроки для впровадження Google Maps:
 1️⃣ Встановлення бібліотеки @react-google-maps/api
 npm install @react-google-maps/api
