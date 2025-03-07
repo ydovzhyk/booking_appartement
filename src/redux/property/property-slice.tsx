@@ -24,6 +24,11 @@ const initialState: IPropertyStore = {
       building: '',
       apartment: '',
     },
+    geoCoords: {
+      lat: 0,
+      lng: 0,
+      comments: '',
+    },
     description: '',
     owner: {
       email: '',
