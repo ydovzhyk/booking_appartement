@@ -1,3 +1,4 @@
+import { IUpdatedWeather } from '../technical/technical';
 export interface ITechnicalState {
   error: string;
   message: string;
@@ -9,4 +10,5 @@ export interface ITechnicalState {
   exchangeRate: number;
   totalAmountCurrency: number;
   loading: boolean;
+  updatedWeather: IUpdatedWeather[];
 }

@@ -12,12 +12,20 @@ const initialState: ITechnicalState = {
   exchangeRateData: {},
   totalAmountCurrency: 0,
   loading: false,
+  updatedWeather: [],
 };
 
 const technical = createSlice({
   name: 'technical',
   initialState,
   reducers: {
+    setUpdatedWeather: (store, action) => {
+      const { id, ...newWeatherData } = action.payload;
+      store.updatedWeather = store.updatedWeather.filter(
+        weather => weather.id !== id
+      );
+      store.updatedWeather.push({ id, ...newWeatherData });
+    },
     setMessage: (store, action) => {
       store.message = action.payload;
     },
@@ -72,4 +80,5 @@ export const {
   setExchangeRateData,
   setUpdateExchangeRate,
   setMessage,
+  setUpdatedWeather,
 } = technical.actions;

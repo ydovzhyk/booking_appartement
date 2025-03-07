@@ -14,3 +14,6 @@ export const getExchangeRateData = (state: RootState) =>
 export const getLoadingTechnical = (state: RootState) =>
   state.technical.loading;
 export const getCurrency = (state: RootState) => state.technical.currency;
+
+export const getUpdatedWeather = (state: RootState) => state.technical.updatedWeather;
+

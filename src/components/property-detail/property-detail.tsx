@@ -30,6 +30,7 @@ const PropertyDetail: React.FC<IProperty> = ({
   ranking,
   location,
   description,
+  geoCoords
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { likedApartments } = useSelector(getUser);
@@ -221,14 +222,17 @@ const PropertyDetail: React.FC<IProperty> = ({
           </div>
         </div>
         {/* Права панаель */}
-        <div className="w-[35%] flex flex-col justify-between gap-4">
-          <div className="col-span-full flex justify-center">
+        <div className="w-[35%] flex flex-col gap-[20px] items-start">
+          <div className="w-full h-[105px] flex justify-center items-center">
             <Button text="Reserve your stay" btnClass="btnDark" />
           </div>
-          <div className="flex flex-col gap-2">
-            <Map address={formattedAddress} title={title} />
-          </div>
-          <div></div>
+            <Map
+              address={formattedAddress}
+              title={title}
+              id={_id}
+              geoCoords={geoCoords}
+            />
+          <div className="w-full h-[290px] test-border"></div>
         </div>
       </div>
 
