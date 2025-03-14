@@ -14,6 +14,7 @@ const initialState: ISearchState = {
     dateTo: '',
     city: '',
     propertyType: '',
+    propertyId: '',
   },
 };
 
