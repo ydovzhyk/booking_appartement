@@ -667,7 +667,7 @@ const AddProperty = () => {
           <Text type="regular" as="span" fontWeight="normal">
             Specify the price per night of accommodation
           </Text>
-          <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-20 gap-y-0 justify-center">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-20 gap-y-0 justify-center">
             <div className="flex flex-row items-center gap-[5px]">
               <Controller
                 control={control}
@@ -730,6 +730,7 @@ const AddProperty = () => {
         <ServicesPart
           selectedServices={selectedServices}
           setSelectedServices={setSelectedServices}
+          mode='select'
         />
 
         {/* PhotoPart */}

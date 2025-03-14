@@ -7,4 +7,5 @@ export interface ISearchConditions {
   dateTo: string | undefined;
   city: string;
   propertyType: string;
+  propertyId: string;
 }

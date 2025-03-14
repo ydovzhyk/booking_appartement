@@ -9,6 +9,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from 'next/image';
 import Text from '../shared/text/text';
 import Button from '../shared/button/button';
+import CalendarPart from '../calendar-part/calendar-part';
 import { IProperty } from '@/types/property/property';
 import { FaLocationDot } from 'react-icons/fa6';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
@@ -20,6 +21,7 @@ import {
   getExchangeRate,
 } from '@/redux/technical/technical-selectors';
 import Map from '../map/map';
+import ServicesPart from '../shared/services-part/services-part';
 
 const PropertyDetail: React.FC<IProperty> = ({
   _id,
@@ -30,7 +32,8 @@ const PropertyDetail: React.FC<IProperty> = ({
   ranking,
   location,
   description,
-  geoCoords
+  geoCoords,
+  servicesList,
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { likedApartments } = useSelector(getUser);
@@ -42,7 +45,11 @@ const PropertyDetail: React.FC<IProperty> = ({
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
 
-  const convertedPrice = (Number(price.value) * exchangeRate).toFixed(2);
+  const convertedPrice01 = (Number(price.value) * exchangeRate).toFixed(0);
+  const convertedPrice02 = (
+    Number(price.value) * exchangeRate +
+    Number(price.value) * 0.15
+  ).toFixed(0);
 
   useEffect(() => {
     setIsLiked(likedApartments?.includes(_id) || false);
@@ -76,34 +83,11 @@ const PropertyDetail: React.FC<IProperty> = ({
   const formattedAddress = `${location.city}, ${location.street}, ${location.building}`;
 
   return (
-    <section className="w-full my-[40px] mx-auto test-border">
+    <section className="w-full my-[40px] mx-auto flex flex-col gap-[30px] test-border">
       <div className="w-full flex flex-row items-center justify-between gap-[15px]">
-        <div className="w-[65%]">
+        <div className="w-[65%] test-border">
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-col gap-[10px]">
-              {/* Рейтинг */}
-              <div className="flex flex-row items-center gap-[20px]">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, index) =>
-                    index < ranking ? (
-                      <FaStar
-                        key={index}
-                        size={16}
-                        className="text-[var(--accent)]"
-                      />
-                    ) : (
-                      <FaRegStar
-                        key={index}
-                        size={16}
-                        className="text-gray-300"
-                      />
-                    )
-                  )}
-                </div>
-                <Text type="small" className="text-gray-600 mt-[4px]">
-                  {ranking} (10 reviews)
-                </Text>
-              </div>
               <Text as="h1" fontWeight="bold">
                 {title}
               </Text>
@@ -213,37 +197,94 @@ const PropertyDetail: React.FC<IProperty> = ({
                 </div>
               ))}
             </div>
-
-            <div className="flex items-center gap-2">
-              <Text as="p" fontWeight="bold">
-                {price.value} {price.currency}
+          </div>
+        </div>
+        {/* Права панаель */}
+        <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between test-border">
+          <div className="w-full h-[65px] flex justify-center items-center test-border">
+            <Button text="Reserve your stay" btnClass="btnDark" />
+          </div>
+          <Map
+            address={formattedAddress}
+            title={title}
+            id={_id}
+            geoCoords={geoCoords}
+          />
+          <div className="w-full h-[240px] test-border">
+            {/* Рейтинг */}
+            <div className="flex flex-row items-center">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, index) =>
+                  index < ranking ? (
+                    <FaStar
+                      key={index}
+                      size={16}
+                      className="text-[var(--accent)]"
+                    />
+                  ) : (
+                    <FaRegStar
+                      key={index}
+                      size={16}
+                      className="text-gray-300"
+                    />
+                  )
+                )}
+              </div>
+              <Text type="small" className="text-gray-600 mt-[4px]">
+                {ranking} (10 reviews)
               </Text>
             </div>
           </div>
         </div>
-        {/* Права панаель */}
-        <div className="w-[35%] flex flex-col gap-[20px] items-start">
-          <div className="w-full h-[105px] flex justify-center items-center">
-            <Button text="Reserve your stay" btnClass="btnDark" />
-          </div>
-            <Map
-              address={formattedAddress}
-              title={title}
-              id={_id}
-              geoCoords={geoCoords}
-            />
-          <div className="w-full h-[290px] test-border"></div>
-        </div>
       </div>
 
-      {/* Опис */}
-      <div className="mt-6">
-        <Text as="h2" fontWeight="bold">
-          Опис
-        </Text>
-        <Text type="small" className="text-gray-700 mt-2">
-          {description}
-        </Text>
+      <div className="w-full flex flex-row items-center justify-between gap-[15px]">
+        <div className="w-[65%] test-border flex flex-col gap-[30px]">
+          <ServicesPart mode="view" servicesArray={servicesList} />
+          {/* Опис */}
+          <div className="flex flex-col gap-[15px]">
+            <Text as="h2" fontWeight="bold">
+              Description:
+            </Text>
+            <Text type="small" className="text-gray-700">
+              {description}
+            </Text>
+          </div>
+        </div>
+        <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between test-border">
+          <div className="flex flex-col gap-[15px]">
+            <Text as="h2" fontWeight="bold">
+              Your Stay:
+            </Text>
+            <CalendarPart
+              type="vertical"
+              btnText="check availability"
+              city={location.city}
+              propertyId={_id}
+            />
+          </div>
+          <div className="flex flex-col gap-[15px]">
+            <Text as="h2" fontWeight="bold">
+              Price:
+            </Text>
+            <div className="flex flex-row items-center justify-between pr-[60px]">
+              <Text type="regular" className="text-gray-600 ">
+                Non-refundable:
+              </Text>
+              <Text as="p" type="small" fontWeight="bold">
+                from {convertedPrice01} {currency}
+              </Text>
+            </div>
+            <div className="flex flex-row items-center justify-between pr-[60px]">
+              <Text type="regular" className="text-green-600 ">
+                Refundable:
+              </Text>
+              <Text as="p" type="small" fontWeight="bold">
+                from {convertedPrice02} {currency}
+              </Text>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Модальне вікно для фото */}

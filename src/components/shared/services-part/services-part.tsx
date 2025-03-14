@@ -57,26 +57,41 @@ const services = [
   { icon: nearSupermarket, name: 'Near Supermarket' },
 ];
 
-const Service = ({ icon, name, isChecked, onToggle }) => {
+interface ServiceProps {
+  icon: any;
+  name: string;
+  isChecked: boolean;
+  onToggle?: (name: string) => void;
+  mode: 'select' | 'view';
+}
+
+const Service: React.FC<ServiceProps> = ({
+  icon,
+  name,
+  isChecked,
+  onToggle,
+  mode,
+}) => {
   return (
     <div
-      className="flex flex-row items-center gap-[20px] border p-[10px] rounded-[5px] cursor-pointer"
-      onClick={() => onToggle(name)}
+      className={`flex flex-row items-center gap-[20px] border rounded-[5px]
+      ${mode === 'select' ? 'cursor-pointer p-[10px]' : 'p-[5px]'}
+      ${isChecked ? 'border-[#0f1d2d]' : 'border-gray-300'}`}
+      onClick={() => mode === 'select' && onToggle && onToggle(name)}
     >
-      <input
-        type="checkbox"
-        checked={isChecked}
-        readOnly
-        className="peer hidden"
+      {mode === 'select' && (
+        <div
+          className={`w-5 h-5 border border-gray-400 flex items-center justify-center transition-all
+            ${isChecked ? 'bg-[#0f1d2d] border-[#0f1d2d] text-white' : 'bg-white'}`}
+        >
+          {isChecked && <span className="text-white text-sm font-bold">✓</span>}
+        </div>
+      )}
+      <img
+        src={icon.src}
+        alt={name}
+        className={`${mode === 'select' ? 'w-10 h-10' : 'w-6 h-6'}`}
       />
-
-      <div
-        className={`w-5 h-5 border border-gray-400 flex items-center justify-center transition-all 
-          ${isChecked ? 'bg-[#0f1d2d] border-[#0f1d2d] text-white' : 'bg-white'}`}
-      >
-        {isChecked && <span className="text-white text-sm font-bold">✓</span>}
-      </div>
-      <img src={icon.src} alt={name} className="w-10 h-10" />
       <Text type="small" fontWeight="normal" className="text-center">
         {name}
       </Text>
@@ -84,30 +99,62 @@ const Service = ({ icon, name, isChecked, onToggle }) => {
   );
 };
 
-const ServicesPart = ({ selectedServices, setSelectedServices }) => {
+interface ServicesPartProps {
+  selectedServices?: string[];
+  setSelectedServices?: React.Dispatch<React.SetStateAction<string[]>>;
+  mode: 'select' | 'view';
+  servicesArray?: string[];
+}
+
+const ServicesPart: React.FC<ServicesPartProps> = ({
+  selectedServices = [],
+  setSelectedServices,
+  mode,
+  servicesArray = [],
+}) => {
   const handleToggle = (serviceName: string) => {
-    setSelectedServices(prev =>
-      prev.includes(serviceName)
-        ? prev.filter(name => name !== serviceName)
-        : [...prev, serviceName]
-    );
+    if (mode === 'select' && setSelectedServices) {
+      setSelectedServices((prev: string[]) =>
+        prev.includes(serviceName)
+          ? prev.filter((name: string) => name !== serviceName)
+          : [...prev, serviceName]
+      );
+    }
   };
 
   return (
     <div className="w-full flex flex-col gap-[20px]">
-      <Text type="regular" as="span" fontWeight="normal">
-        Select the service options that are relevant to your accommodation:
-      </Text>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {services.map((service, index) => (
-          <Service
-            key={index}
-            icon={service.icon}
-            name={service.name}
-            isChecked={selectedServices.includes(service.name)}
-            onToggle={handleToggle}
-          />
-        ))}
+      {mode === 'select' ? (
+        <Text type="regular" as="span" fontWeight="normal">
+          Select the service options that are relevant to your accommodation:
+        </Text>
+      ) : (
+        <Text type="regular" as="span" fontWeight="bold">
+          Available Services:
+        </Text>
+      )}
+
+      <div
+        className={`grid grid-cols-2 md:grid-cols-3 ${mode === 'view' ? 'lg:grid-cols-3 px-[20px] gap-[15px]' : 'lg:grid-cols-4 gap-[20px]'}`}
+      >
+        {services
+          .filter(service =>
+            mode === 'select' ? true : servicesArray.includes(service.name)
+          )
+          .map((service, index) => (
+            <Service
+              key={index}
+              icon={service.icon}
+              name={service.name}
+              isChecked={
+                mode === 'select'
+                  ? selectedServices.includes(service.name)
+                  : true
+              }
+              onToggle={mode === 'select' ? handleToggle : undefined}
+              mode={mode}
+            />
+          ))}
       </div>
     </div>
   );

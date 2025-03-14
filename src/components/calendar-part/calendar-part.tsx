@@ -21,7 +21,14 @@ import { useAppDispatch } from '../../utils/helpers/hooks';
 import Button from '../shared/button/button';
 import Conditions from './conditions/conditions';
 
-const CalendarPart = () => {
+interface CalendarPartProps {
+  type?: 'horizontal' | 'vertical';
+  btnText?: string;
+  propertyId?: string;
+  city?: string;
+}
+
+const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnText = 'search', propertyId = '', city = ''}) => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const { languageIndex } = useLanguage();
@@ -50,7 +57,8 @@ const CalendarPart = () => {
     petsAllowed: false,
     dateFrom: startDate ? moment(startDate).format('YYYY-MM-DD') : undefined,
     dateTo: endDate ? moment(endDate).format('YYYY-MM-DD') : undefined,
-    city: '',
+    city: city,
+    propertyId: propertyId ? propertyId : '',
   };
 
   useEffect(() => {
@@ -82,11 +90,15 @@ const CalendarPart = () => {
       ${conditions.numberChildren} ${pluralize(conditions.numberChildren, 'Child', 'Children')},
       ${conditions.numberRooms} ${pluralize(conditions.numberRooms, 'Room', 'Rooms')}`;
 
-  const { control, handleSubmit } = useForm<ISearchConditions>({
+  const { control, handleSubmit, setValue } = useForm<ISearchConditions>({
     defaultValues: {
       ...formDefaultValues,
     },
   });
+
+  useEffect(() => {
+    setValue('city', city);
+  }, [city, setValue]);
 
   const onSubmit = (data: ISearchConditions) => {
     const searchData = {
@@ -98,19 +110,27 @@ const CalendarPart = () => {
       dateFrom: startDate ? moment(startDate).format('MM/DD/YYYY') : undefined,
       dateTo: endDate ? moment(endDate).format('MM/DD/YYYY') : undefined,
       propertyType: conditions?.propertyType || '',
+      propertyId: data.propertyId || propertyId || '',
     };
 
     dispatch(setSearchConditions({ ...searchData }));
+    
     appDispatch(searchProperty({ searchConditions: searchData }));
   };
 
   return (
-    <div className="w-fll flex flex-row items-center justify-center mr-[auto] ml-[auto] py-[40px]">
+    <div
+      className={`w-full flex ${type === 'vertical' ? 'px-[20px] first-letter:flex-row items-center justify-center test-border' : 'flex-row items-center justify-center mr-[auto] ml-[auto] py-[40px]'}`}
+    >
       <form
-        className="w-[70%] flex flex-row items-center justify-center gap-[5px]"
+        className={`flex ${type === 'vertical' ? 'w-full flex-col gap-[10px]' : 'w-[70%] flex flex-row items-center justify-center gap-[5px]'}`}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div style={{ width: 'calc(100%/5)' }}>
+        <div
+          style={{
+            width: type === 'vertical' ? '100%' : 'calc(100%/5)',
+          }}
+        >
           <Controller
             control={control}
             name={'city'}
@@ -138,7 +158,10 @@ const CalendarPart = () => {
 
         <div
           className="relative h-[40px] flex flex-row items-center justify-left bg-white regular-border"
-          style={{ width: 'calc(100%/5)', borderRadius: '5px' }}
+          style={{
+            width: type === 'vertical' ? '100%' : 'calc(100%/5)',
+            borderRadius: '5px',
+          }}
         >
           <DatePicker
             selected={startDate}
@@ -157,7 +180,10 @@ const CalendarPart = () => {
         </div>
         <div
           className="relative h-[40px] flex flex-row items-center justify-left bg-white regular-border"
-          style={{ width: 'calc(100%/5)', borderRadius: '5px' }}
+          style={{
+            width: type === 'vertical' ? '100%' : 'calc(100%/5)',
+            borderRadius: '5px',
+          }}
         >
           <DatePicker
             selected={endDate}
@@ -177,10 +203,13 @@ const CalendarPart = () => {
         </div>
         <div
           className="h-[40px] flex flex-row items-center justify-left bg-white regular-border"
-          style={{ width: 'calc(100%/5)', borderRadius: '5px' }}
+          style={{
+            width: type === 'vertical' ? '100%' : 'calc(100%/5)',
+            borderRadius: '5px',
+          }}
         >
           <div
-            className="relative w-full h-full"
+            className="relative w-full h-full flex flex-row items-center justify-center"
             style={{ borderRadius: '5px' }}
           >
             <button
@@ -217,7 +246,9 @@ const CalendarPart = () => {
             )}
           </div>
         </div>
-        <Button text="Search" btnClass="btnDark" />
+        <div className='flex flex-row items-center justify-center'>
+        <Button text={btnText} btnClass="btnDark" />
+        </div>
       </form>
     </div>
   );
