@@ -45,7 +45,7 @@ const Header = () => {
       <header id="header" className="fixed top-0 left-0 w-full z-50">
         <div className="w-full flex flex-col bg-[var(--accent-background)] transition-all duration-300 ease-in-out">
           <div className="container">
-            <div className="flex justify-between items-center py-[30px]">
+            <div className="flex justify-between items-center py-[20px]">
               <div className="flex flex-row file items-center">
                 <Logo width={170} height={40} />
                 <span className="text-left text-white ml-[20px]">

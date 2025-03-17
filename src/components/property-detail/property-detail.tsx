@@ -20,8 +20,11 @@ import {
   getCurrency,
   getExchangeRate,
 } from '@/redux/technical/technical-selectors';
+import { getSearchConditions } from '@/redux/search/search-selectors';
 import Map from '../map/map';
 import ServicesPart from '../shared/services-part/services-part';
+import { FaInfo } from 'react-icons/fa6';
+import { ISearchConditions } from '@/types/search/search';
 
 const PropertyDetail: React.FC<IProperty> = ({
   _id,
@@ -44,12 +47,64 @@ const PropertyDetail: React.FC<IProperty> = ({
   const pathname = usePathname();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
+  const [showed, setShowed] = useState(false);
+  const priceTextConditions = useSelector(
+    getSearchConditions
+  );
+  const [priceText, setPriceText] = useState<string>('');
 
   const convertedPrice01 = (Number(price.value) * exchangeRate).toFixed(0);
   const convertedPrice02 = (
     Number(price.value) * exchangeRate +
-    Number(price.value) * 0.15
+    Number(price.value) * 0.1
   ).toFixed(0);
+
+  useEffect(() => {
+    setPriceText(generatePriceSentence(priceTextConditions));
+  }, [priceTextConditions]);
+
+  function generatePriceSentence(searchConditions: ISearchConditions): string {
+    const {
+      numberAdults,
+      numberChildren,
+      numberRooms,
+      petsAllowed,
+      dateFrom,
+      dateTo,
+    } = searchConditions;
+    const fromDate = dateFrom ? new Date(dateFrom) : null;
+    const toDate = dateTo ? new Date(dateTo) : null;
+
+    let nightsText = 'per night';
+    
+    if (
+      fromDate &&
+      toDate &&
+      !isNaN(fromDate.getTime()) &&
+      !isNaN(toDate.getTime())
+    ) {
+      const nights = Math.max(
+        Math.floor(
+          (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)
+        ),
+        1
+      );
+      nightsText = `for ${nights} ${nights === 1 ? 'night' : 'nights'}`;
+    }
+    const adultsText = `${numberAdults} ${numberAdults === 1 ? 'adult' : 'adults'}`;
+    const childrenText =
+      numberChildren > 0
+        ? ` ${numberChildren} ${numberChildren === 1 ? 'child' : 'children'}`
+        : '';
+    const roomsText = `${numberRooms} ${numberRooms === 1 ? 'room' : 'rooms'}`;
+    const petsText = petsAllowed ? ' with a pet' : '';
+
+    return `(${nightsText}, including accommodation for ${adultsText}${childrenText} in ${roomsText}${petsText})`.replace(
+      /\s+/g,
+      ' '
+    );
+  }
+
 
   useEffect(() => {
     setIsLiked(likedApartments?.includes(_id) || false);
@@ -264,9 +319,23 @@ const PropertyDetail: React.FC<IProperty> = ({
             />
           </div>
           <div className="flex flex-col gap-[15px]">
-            <Text as="h2" fontWeight="bold">
-              Price:
-            </Text>
+            <div className="flex flex-col">
+              <div className="w-full inline">
+                <Text as="h2" fontWeight="bold" className="inline">
+                  Price:
+                </Text>
+                <Text
+                  as="span"
+                  type="small"
+                  lineHeight="none"
+                  fontWeight="normal"
+                  className="inline break-words"
+                >
+                  {` ${priceText}`}
+                </Text>
+              </div>
+            </div>
+
             <div className="flex flex-row items-center justify-between pr-[60px]">
               <Text type="regular" className="text-gray-600 ">
                 Non-refundable:
@@ -276,9 +345,42 @@ const PropertyDetail: React.FC<IProperty> = ({
               </Text>
             </div>
             <div className="flex flex-row items-center justify-between pr-[60px]">
-              <Text type="regular" className="text-green-600 ">
-                Refundable:
-              </Text>
+              <div className="flex flex-row items-center gap-2">
+                <Text type="regular" className="text-green-600 ">
+                  Refundable:
+                </Text>
+                <div
+                  className="flex items-center justify-center mb-[15px] w-[20px] h-[20px] rounded-full bg-[#f0f0f0] regular-border cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
+                  data-tooltip-id="info-tooltip"
+                  onMouseEnter={() => setShowed(true)}
+                  onMouseLeave={() => setShowed(false)}
+                >
+                  <FaInfo size={14} />
+                </div>
+                <Tooltip
+                  id="info-tooltip"
+                  place="top"
+                  isOpen={showed}
+                  style={{
+                    maxWidth: '200px',
+                    backgroundColor: '#0f1d2d',
+                    borderRadius: '5px',
+                    padding: '6px 10px',
+                    fontSize: '14px',
+                  }}
+                >
+                  <Text
+                    type="small"
+                    as="span"
+                    fontWeight="light"
+                    className="text-white"
+                  >
+                    If you cancel the reservation with this option selected, you
+                    will receive a full refund.
+                  </Text>
+                </Tooltip>
+              </div>
+
               <Text as="p" type="small" fontWeight="bold">
                 from {convertedPrice02} {currency}
               </Text>

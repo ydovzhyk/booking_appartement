@@ -114,13 +114,13 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
     };
 
     dispatch(setSearchConditions({ ...searchData }));
-    
+
     appDispatch(searchProperty({ searchConditions: searchData }));
   };
 
   return (
     <div
-      className={`w-full flex ${type === 'vertical' ? 'px-[20px] first-letter:flex-row items-center justify-center test-border' : 'flex-row items-center justify-center mr-[auto] ml-[auto] py-[40px]'}`}
+      className={`w-full flex ${type === 'vertical' ? 'px-[20px] first-letter:flex-row items-center justify-center test-border' : 'flex-row items-center justify-center mr-[auto] ml-[auto] py-[20px]'}`}
     >
       <form
         className={`flex ${type === 'vertical' ? 'w-full flex-col gap-[10px]' : 'w-[70%] flex flex-row items-center justify-center gap-[5px]'}`}
