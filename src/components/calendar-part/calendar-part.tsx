@@ -1,7 +1,6 @@
 'use client';
 
 import SelectField from '@/components/shared/select-field/select-field';
-import Text from '@/components/shared/text/text';
 import { searchProperty } from '@/redux/search/search-operations';
 import { getSearchConditions } from '@/redux/search/search-selectors';
 import { setSearchConditions } from '@/redux/search/search-slice';
@@ -19,7 +18,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ukrainianCities } from '../../app/add-property/add-property';
 import { useAppDispatch } from '../../utils/helpers/hooks';
 import Button from '../shared/button/button';
+import Text from '@/components/shared/text/text';
 import Conditions from './conditions/conditions';
+import { FaInfo } from 'react-icons/fa6';
 
 interface CalendarPartProps {
   type?: 'horizontal' | 'vertical';
@@ -37,6 +38,7 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
   const [placeholderText2, setPlaceholderText2] = useState('Date to');
   const [placeholderText3, setPlaceholderText3] = useState('Select city');
   const [openConditions, setOpenConditions] = useState(false);
+  const [warning, setWarning] = useState(false);
 
   const [startDate, setStartDate] = useState<Date | undefined>(
     conditions.dateFrom
@@ -109,18 +111,23 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
       petsAllowed: conditions?.petsAllowed || data.petsAllowed,
       dateFrom: startDate ? moment(startDate).format('MM/DD/YYYY') : undefined,
       dateTo: endDate ? moment(endDate).format('MM/DD/YYYY') : undefined,
+      days: conditions?.days || 1,
       propertyType: conditions?.propertyType || '',
       propertyId: data.propertyId || propertyId || '',
     };
 
+    if (!searchData.dateFrom || !searchData.dateTo) {
+      setWarning(true);
+      return;
+    }
+    setWarning(false);
     dispatch(setSearchConditions({ ...searchData }));
-
     appDispatch(searchProperty({ searchConditions: searchData }));
   };
 
   return (
     <div
-      className={`w-full flex ${type === 'vertical' ? 'px-[20px] first-letter:flex-row items-center justify-center test-border' : 'flex-row items-center justify-center mr-[auto] ml-[auto] py-[20px]'}`}
+      className={`w-full flex ${type === 'vertical' ? 'px-[20px] flex-col items-left justify-center gap-[15px]' : 'flex-col items-center justify-center gap-[15px] mr-[auto] ml-[auto] py-[20px]'}`}
     >
       <form
         className={`flex ${type === 'vertical' ? 'w-full flex-col gap-[10px]' : 'w-[70%] flex flex-row items-center justify-center gap-[5px]'}`}
@@ -246,10 +253,19 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
             )}
           </div>
         </div>
-        <div className='flex flex-row items-center justify-center'>
-        <Button text={btnText} btnClass="btnDark" />
+        <div className="flex flex-row items-center justify-center">
+          <Button text={btnText} btnClass="btnDark" />
         </div>
       </form>
+      {warning && (<div className="flex flex-row items-center justify-center gap-[15px]">
+        <div className="flex items-center justify-center w-[20px] h-[20px] mb-[5px] rounded-full bg-[#ffffff] border border-red-500 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out">
+          <FaInfo size={14} color="red" />
+        </div>
+        <Text type="small" as="p" fontWeight="light" className="text-red-500">
+          Please fill in the Date fields.
+        </Text>
+      </div>
+      )}
     </div>
   );
 };

@@ -140,7 +140,7 @@ const Map = ({
       {!isFullScreen && (
         <div
           id="MAP"
-          className="relative w-full h-[340px] overflow-hidden rounded-lg flex flex-row items-center justify-center"
+          className="relative w-full h-[340px] overflow-hidden rounded-lg shadow-md flex flex-row items-center justify-center"
         >
           <iframe
             ref={iframeRef}
@@ -160,8 +160,7 @@ const Map = ({
             allowFullScreen
             aria-hidden="false"
             tabIndex={0}
-          >
-          </iframe>
+          ></iframe>
           <button
             onClick={handleFullScreen}
             aria-label={

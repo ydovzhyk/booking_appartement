@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useAppDispatch } from '@/utils/helpers/hooks';
 import { usePathname } from 'next/navigation';
 import { likeProperty } from '@/redux/property/property-operations';
@@ -20,8 +20,11 @@ import {
   getCurrency,
   getExchangeRate,
 } from '@/redux/technical/technical-selectors';
-import { getSearchConditions } from '@/redux/search/search-selectors';
+import { getSearchConditions, getAvailable } from '@/redux/search/search-selectors';
+import { clearAvailable } from '@/redux/search/search-slice';
+import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
 import Map from '../map/map';
+import ReviewsSection from '../shared/slider-review/slider-review';
 import ServicesPart from '../shared/services-part/services-part';
 import { FaInfo } from 'react-icons/fa6';
 import { ISearchConditions } from '@/types/search/search';
@@ -38,30 +41,50 @@ const PropertyDetail: React.FC<IProperty> = ({
   geoCoords,
   servicesList,
 }) => {
+  const headerHeight = useHeaderHeight();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { likedApartments } = useSelector(getUser);
   const isLogin = useSelector(getLogin);
   const currency = useSelector(getCurrency);
   const exchangeRate = useSelector(getExchangeRate);
   const appDispatch = useAppDispatch();
+  const dispatch= useDispatch()
   const pathname = usePathname();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
   const [showed, setShowed] = useState(false);
+  const isAvailable = useSelector(getAvailable);
   const priceTextConditions = useSelector(
     getSearchConditions
   );
   const [priceText, setPriceText] = useState<string>('');
+  const [convertedPrice01, setConvertedPrice01] = useState<string>(
+    (
+      Number(price.value) *
+      exchangeRate *
+      priceTextConditions.days
+    ).toFixed(0)
+  );
+  const [convertedPrice02, setConvertedPrice02] = useState<string>(((Number(price.value) * exchangeRate * priceTextConditions.days) +
+        (Number(price.value) * exchangeRate * priceTextConditions.days * 0.1)
+  ).toFixed(0));
 
-  const convertedPrice01 = (Number(price.value) * exchangeRate).toFixed(0);
-  const convertedPrice02 = (
-    Number(price.value) * exchangeRate +
-    Number(price.value) * 0.1
-  ).toFixed(0);
+  useEffect(() => {
+    dispatch(clearAvailable());
+  }, [dispatch]);
 
   useEffect(() => {
     setPriceText(generatePriceSentence(priceTextConditions));
-  }, [priceTextConditions]);
+    setConvertedPrice01(
+      (Number(price.value) * exchangeRate * priceTextConditions.days).toFixed(0)
+    );
+    setConvertedPrice02(
+      (
+        Number(price.value) * exchangeRate * priceTextConditions.days +
+        Number(price.value) * exchangeRate * priceTextConditions.days * 0.1
+      ).toFixed(0)
+    );
+  }, [priceTextConditions, exchangeRate]);
 
   function generatePriceSentence(searchConditions: ISearchConditions): string {
     const {
@@ -69,28 +92,9 @@ const PropertyDetail: React.FC<IProperty> = ({
       numberChildren,
       numberRooms,
       petsAllowed,
-      dateFrom,
-      dateTo,
+      days,
     } = searchConditions;
-    const fromDate = dateFrom ? new Date(dateFrom) : null;
-    const toDate = dateTo ? new Date(dateTo) : null;
-
-    let nightsText = 'per night';
-    
-    if (
-      fromDate &&
-      toDate &&
-      !isNaN(fromDate.getTime()) &&
-      !isNaN(toDate.getTime())
-    ) {
-      const nights = Math.max(
-        Math.floor(
-          (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)
-        ),
-        1
-      );
-      nightsText = `for ${nights} ${nights === 1 ? 'night' : 'nights'}`;
-    }
+    const nightsText = `for ${days} ${days === 1 ? 'night' : 'nights'}`;
     const adultsText = `${numberAdults} ${numberAdults === 1 ? 'adult' : 'adults'}`;
     const childrenText =
       numberChildren > 0
@@ -104,7 +108,6 @@ const PropertyDetail: React.FC<IProperty> = ({
       ' '
     );
   }
-
 
   useEffect(() => {
     setIsLiked(likedApartments?.includes(_id) || false);
@@ -136,6 +139,21 @@ const PropertyDetail: React.FC<IProperty> = ({
 
   const remainingImagesCount = imagesLink.length - 5;
   const formattedAddress = `${location.city}, ${location.street}, ${location.building}`;
+
+  const handleScrollToYourStay = () => {
+    const element = document.getElementById('your-stay-section');
+
+    if (element && headerHeight !== undefined && headerHeight !== null) {
+      const offsetTop =
+        element.getBoundingClientRect().top + window.scrollY - headerHeight + 92;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+
 
   return (
     <section className="w-full my-[40px] mx-auto flex flex-col gap-[30px] test-border">
@@ -255,9 +273,13 @@ const PropertyDetail: React.FC<IProperty> = ({
           </div>
         </div>
         {/* Права панаель */}
-        <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between test-border">
-          <div className="w-full h-[65px] flex justify-center items-center test-border">
-            <Button text="Reserve your stay" btnClass="btnDark" />
+        <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between">
+          <div className="w-full h-[65px] flex justify-center items-center">
+            <Button
+              text="Reserve your stay"
+              btnClass="btnDark"
+              onClick={handleScrollToYourStay}
+            />
           </div>
           <Map
             address={formattedAddress}
@@ -265,7 +287,7 @@ const PropertyDetail: React.FC<IProperty> = ({
             id={_id}
             geoCoords={geoCoords}
           />
-          <div className="w-full h-[240px] test-border">
+          <div className="w-full h-[240px] flex flex-col gap-[10px]">
             {/* Рейтинг */}
             <div className="flex flex-row items-center">
               <div className="flex items-center gap-1">
@@ -289,26 +311,27 @@ const PropertyDetail: React.FC<IProperty> = ({
                 {ranking} (10 reviews)
               </Text>
             </div>
+            <ReviewsSection />
           </div>
         </div>
       </div>
 
-      <div className="w-full flex flex-row items-center justify-between gap-[15px]">
+      <div className="w-full flex flex-row items-start justify-between gap-[15px]">
         <div className="w-[65%] test-border flex flex-col gap-[30px]">
           <ServicesPart mode="view" servicesArray={servicesList} />
           {/* Опис */}
           <div className="flex flex-col gap-[15px]">
-            <Text as="h2" fontWeight="bold">
+            <Text type="regular" as="h2" fontWeight="bold">
               Description:
             </Text>
-            <Text type="small" className="text-gray-700">
+            <Text type="small" className="text-gray-700 whitespace-pre-wrap">
               {description}
             </Text>
           </div>
         </div>
-        <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between test-border">
-          <div className="flex flex-col gap-[15px]">
-            <Text as="h2" fontWeight="bold">
+        <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between">
+          <div id="your-stay-section" className="flex flex-col gap-[15px]">
+            <Text type="regular" as="h2" fontWeight="bold">
               Your Stay:
             </Text>
             <CalendarPart
@@ -319,9 +342,41 @@ const PropertyDetail: React.FC<IProperty> = ({
             />
           </div>
           <div className="flex flex-col gap-[15px]">
+            <div style={{ display: isAvailable === 'none' ? 'none' : 'block' }}>
+              {isAvailable === 'false' && (
+                <Text
+                  as="span"
+                  type="small"
+                  lineHeight="none"
+                  fontWeight="normal"
+                  className="text-red-600"
+                >
+                  Unfortunately, it is not possible to book an apartment based
+                  on the selected criteria. Please try choosing different
+                  criteria or another apartment.
+                </Text>
+              )}
+              {isAvailable === 'true' && (
+                <Text
+                  as="span"
+                  type="small"
+                  lineHeight="none"
+                  fontWeight="normal"
+                  className="text-green-600"
+                >
+                  This apartment can be booked and meets the selected criteria
+                  for accommodation.
+                </Text>
+              )}
+            </div>
             <div className="flex flex-col">
               <div className="w-full inline">
-                <Text as="h2" fontWeight="bold" className="inline">
+                <Text
+                  type="regular"
+                  as="h2"
+                  fontWeight="bold"
+                  className="inline"
+                >
                   Price:
                 </Text>
                 <Text
@@ -336,55 +391,83 @@ const PropertyDetail: React.FC<IProperty> = ({
               </div>
             </div>
 
-            <div className="flex flex-row items-center justify-between pr-[60px]">
-              <Text type="regular" className="text-gray-600 ">
-                Non-refundable:
-              </Text>
-              <Text as="p" type="small" fontWeight="bold">
-                from {convertedPrice01} {currency}
-              </Text>
-            </div>
-            <div className="flex flex-row items-center justify-between pr-[60px]">
-              <div className="flex flex-row items-center gap-2">
-                <Text type="regular" className="text-green-600 ">
-                  Refundable:
+            <div className="w-full flex flex-col gap-[10px] regular-border rounded-[5px] p-[15px]">
+              <div className="flex flex-row items-center justify-between">
+                <Text type="regular" className="text-gray-600 ">
+                  Non-refundable:
                 </Text>
-                <div
-                  className="flex items-center justify-center mb-[15px] w-[20px] h-[20px] rounded-full bg-[#f0f0f0] regular-border cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
-                  data-tooltip-id="info-tooltip"
-                  onMouseEnter={() => setShowed(true)}
-                  onMouseLeave={() => setShowed(false)}
-                >
-                  <FaInfo size={14} />
-                </div>
-                <Tooltip
-                  id="info-tooltip"
-                  place="top"
-                  isOpen={showed}
-                  style={{
-                    maxWidth: '200px',
-                    backgroundColor: '#0f1d2d',
-                    borderRadius: '5px',
-                    padding: '6px 10px',
-                    fontSize: '14px',
-                  }}
-                >
-                  <Text
-                    type="small"
-                    as="span"
-                    fontWeight="light"
-                    className="text-white"
-                  >
-                    If you cancel the reservation with this option selected, you
-                    will receive a full refund.
-                  </Text>
-                </Tooltip>
+                <Text as="p" type="small" fontWeight="bold">
+                  from {convertedPrice01} {currency}
+                </Text>
               </div>
-
-              <Text as="p" type="small" fontWeight="bold">
-                from {convertedPrice02} {currency}
-              </Text>
+              <div className="w-full flex justify-center items-center">
+                <Button
+                  text="Book now"
+                  btnClass="btnDark"
+                  disabled={isAvailable !== 'true' ? true : false}
+                />
+              </div>
             </div>
+
+            <div className="w-full flex flex-col gap-[10px] regular-border rounded-[5px] p-[15px]">
+              <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center gap-2">
+                  <Text type="regular" className="text-green-600 ">
+                    Refundable:
+                  </Text>
+                  <div
+                    className="flex items-center justify-center mb-[15px] w-[20px] h-[20px] rounded-full bg-[#f0f0f0] regular-border cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
+                    data-tooltip-id="info-tooltip"
+                    onMouseEnter={() => setShowed(true)}
+                    onMouseLeave={() => setShowed(false)}
+                  >
+                    <FaInfo size={14} />
+                  </div>
+                  <Tooltip
+                    id="info-tooltip"
+                    place="top"
+                    isOpen={showed}
+                    style={{
+                      maxWidth: '200px',
+                      backgroundColor: '#0f1d2d',
+                      borderRadius: '5px',
+                      padding: '6px 10px',
+                      fontSize: '14px',
+                    }}
+                  >
+                    <Text
+                      type="small"
+                      as="span"
+                      fontWeight="light"
+                      className="text-white"
+                    >
+                      If you cancel the reservation with this option selected,
+                      you will receive a full refund.
+                    </Text>
+                  </Tooltip>
+                </div>
+                <Text as="p" type="small" fontWeight="bold">
+                  from {convertedPrice02} {currency}
+                </Text>
+              </div>
+              <div className="w-full flex justify-center items-center">
+                <Button
+                  text="Book now"
+                  btnClass="btnDark"
+                  disabled={isAvailable !== 'true' ? true : false}
+                />
+              </div>
+            </div>
+
+            {currency !== 'UAH' && (
+              <div className="w-full m-b-[15px]">
+                <Text type="small" className="text-gray-600">
+                  The price is converted to show you the approximate cost in{' '}
+                  {currency}. Your card will be charged in {currency} or UAH.
+                  The exchange rate may change before you pay.
+                </Text>
+              </div>
+            )}
           </div>
         </div>
       </div>

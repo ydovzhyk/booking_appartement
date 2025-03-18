@@ -5,6 +5,7 @@ export interface ISearchConditions {
   petsAllowed: boolean;
   dateFrom: string | undefined;
   dateTo: string | undefined;
+  days: number;
   city: string;
   propertyType: string;
   propertyId: string;
