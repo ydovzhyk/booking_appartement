@@ -23,7 +23,7 @@ const Registration = () => {
   }, []);
 
   useEffect(() => {
-    if (!errorRegister && user.id) {
+    if (!errorRegister && user._id) {
       router.replace(`/login`);
     }
   }, [errorRegister, router, user]);
