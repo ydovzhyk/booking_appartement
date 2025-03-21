@@ -12,7 +12,7 @@ import { ILoginResponse } from '../../types/auth/axios-auth';
 
 const initialState: IAuthStore = {
   user: {
-    id: null as string | null,
+    _id: null as string | null,
     username: null as string | null,
     email: null as string | null,
     userAvatar: null as string | null,
@@ -27,6 +27,7 @@ const initialState: IAuthStore = {
     sex: null as string | null,
     aboutUser: null as string | null,
     likedApartments: null as string[] | null,
+    chats: null as string[] | null,
   },
   sid: null,
   accessToken: null,
@@ -79,7 +80,7 @@ const auth = createSlice({
       store.refreshToken = '';
       store.user.username = action.payload.username;
       store.user.email = action.payload.email;
-      store.user.id = action.payload.id;
+      store.user._id = action.payload.id;
       store.user.userAvatar = action.payload.userAvatar;
     });
     builder.addCase(register.rejected, (store, action: any) => {
