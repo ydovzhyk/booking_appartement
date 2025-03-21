@@ -28,6 +28,8 @@ import {
   getTechnicalMessage,
   getModalVindowSttus,
 } from '../../../redux/technical/technical-selectors';
+import { getSearchError, getSearchMessage } from '@/redux/search/search-selectors';
+import { clearSearchError, clearSearchMessage } from '@/redux/search/search-slice';
 import { setModalWindowStatus } from '../../../redux/technical/technical-slice';
 import { TfiClose } from 'react-icons/tfi';
 import Text from '../text/text';
@@ -38,9 +40,11 @@ const ModalWindow = () => {
   const messageAuth = useSelector(getAuthMessage);
   const messageTechnical = useSelector(getTechnicalMessage);
   const messageProperty = useSelector(getPropertyMessage);
+  const messageSearch = useSelector(getSearchMessage);
   const errorAuth = useSelector(getAuthError);
   const errorTechnical = useSelector(getTechnicalError);
   const errorProperty = useSelector(getPropertyError);
+  const errorSearch = useSelector(getSearchError);
   const modalWindowStatus = useSelector(getModalVindowSttus);
 
   const [isError, setIsError] = useState(false);
@@ -53,6 +57,8 @@ const ModalWindow = () => {
     dispatch(clearUserMessage());
     dispatch(clearPropertyError());
     dispatch(clearPropertyMessage());
+    dispatch(clearSearchError());
+    dispatch(clearSearchMessage());
     setIsError(false);
   }, [dispatch]);
 
@@ -61,12 +67,14 @@ const ModalWindow = () => {
       messageAuth ||
       messageTechnical ||
       messageProperty ||
+      messageSearch ||
       errorAuth ||
       errorTechnical ||
-      errorProperty
+      errorProperty ||
+      errorSearch
     ) {
       dispatch(setModalWindowStatus(true));
-      if (errorAuth || errorTechnical || errorProperty) {
+      if (errorAuth || errorTechnical || errorProperty || errorSearch) {
         setIsError(true);
       }
     } else {
@@ -77,9 +85,11 @@ const ModalWindow = () => {
     messageAuth,
     messageTechnical,
     messageProperty,
+    messageSearch,
     errorAuth,
     errorTechnical,
     errorProperty,
+    errorSearch,
   ]);
 
   useEffect(() => {
@@ -110,8 +120,8 @@ const ModalWindow = () => {
     clearAllState();
   };
 
-  const errorMessage = `${errorAuth ? errorAuth : errorTechnical ? errorTechnical : errorProperty}`;
-  const infoMessage = `${messageAuth ? messageAuth : messageTechnical ? messageTechnical : messageProperty}`;
+  const errorMessage = `${errorAuth ? errorAuth : errorTechnical ? errorTechnical : errorProperty ? errorProperty : errorSearch}`;
+  const infoMessage = `${messageAuth ? messageAuth : messageTechnical ? messageTechnical : messageProperty ? messageProperty : messageSearch}`;
 
   return (
     <div
@@ -128,7 +138,7 @@ const ModalWindow = () => {
         >
           <TfiClose color="var(--text-color)" size={15} />
         </button>
-        {(errorAuth || errorTechnical || errorProperty) && (
+        {(errorAuth || errorTechnical || errorProperty || errorSearch) && (
           <>
             <Text type="small" as="p" fontWeight="normal">
               We got an error:
@@ -138,7 +148,7 @@ const ModalWindow = () => {
             </Text>
           </>
         )}
-        {(messageAuth || messageTechnical || messageProperty) && (
+        {(messageAuth || messageTechnical || messageProperty || messageSearch) && (
           <>
             <Text type="small" as="p" fontWeight="normal">
               We got a message:

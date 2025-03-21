@@ -25,11 +25,16 @@ import { FaInfo } from 'react-icons/fa6';
 interface CalendarPartProps {
   type?: 'horizontal' | 'vertical';
   btnText?: string;
-  propertyId?: string;
+  apartmentId?: string;
   city?: string;
 }
 
-const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnText = 'search', propertyId = '', city = ''}) => {
+const CalendarPart: React.FC<CalendarPartProps> = ({
+  type = 'horizontal',
+  btnText = 'search',
+  apartmentId = '',
+  city = '',
+}) => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const { languageIndex } = useLanguage();
@@ -60,7 +65,7 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
     dateFrom: startDate ? moment(startDate).format('YYYY-MM-DD') : undefined,
     dateTo: endDate ? moment(endDate).format('YYYY-MM-DD') : undefined,
     city: city,
-    propertyId: propertyId ? propertyId : '',
+    apartmentId: apartmentId ? apartmentId : '',
   };
 
   useEffect(() => {
@@ -113,7 +118,7 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
       dateTo: endDate ? moment(endDate).format('MM/DD/YYYY') : undefined,
       days: conditions?.days || 1,
       propertyType: conditions?.propertyType || '',
-      propertyId: data.propertyId || propertyId || '',
+      apartmentId: data.apartmentId || apartmentId || '',
     };
 
     if (!searchData.dateFrom || !searchData.dateTo) {
@@ -257,14 +262,15 @@ const CalendarPart: React.FC<CalendarPartProps> = ({ type = 'horizontal', btnTex
           <Button text={btnText} btnClass="btnDark" />
         </div>
       </form>
-      {warning && (<div className="flex flex-row items-center justify-center gap-[15px]">
-        <div className="flex items-center justify-center w-[20px] h-[20px] mb-[5px] rounded-full bg-[#ffffff] border border-red-500 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out">
-          <FaInfo size={14} color="red" />
+      {warning && (
+        <div className="flex flex-row items-center justify-center gap-[15px]">
+          <div className="flex items-center justify-center w-[20px] h-[20px] mb-[5px] rounded-full bg-[#ffffff] border border-red-500 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out">
+            <FaInfo size={14} color="red" />
+          </div>
+          <Text type="small" as="p" fontWeight="light" className="text-red-500">
+            Please fill in the Date fields.
+          </Text>
         </div>
-        <Text type="small" as="p" fontWeight="light" className="text-red-500">
-          Please fill in the Date fields.
-        </Text>
-      </div>
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import LoaderSpinner from '@/components/shared/loader/loader';
 import { getDetailProperty } from '@/redux/property/property-operations';
 import { getPropertyDetail } from '@/redux/property/property-selectors';
+import { clearPropertyDetail } from '@/redux/property/property-slice';
 import PropertyDetail from '@/components/property-detail/property-detail';
 
 function DetailPropertyPage() {
@@ -24,6 +25,7 @@ function DetailPropertyPage() {
       router.replace('/404');
       return;
     }
+    dispatch(clearPropertyDetail());
     dispatch(getDetailProperty(id));
   }, [dispatch, id, propertyName, router]);
 

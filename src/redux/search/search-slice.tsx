@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ISearchState } from '../../types/store/store-search';
+import { searchProperty } from './search-operations';
 
 const initialState: ISearchState = {
   error: '',
@@ -15,7 +16,7 @@ const initialState: ISearchState = {
     days: 1,
     city: '',
     propertyType: '',
-    propertyId: '',
+    apartmentId: '',
   },
   available: 'false',
 };
@@ -82,8 +83,32 @@ const search = createSlice({
     },
   },
 
-  // extraReducers: (builder) => {
-  // }
+  extraReducers: (builder) => {
+    // *Check property availability
+        builder.addCase(searchProperty.pending, store => {
+          store.loading = true;
+          store.error = '';
+        });
+        builder.addCase(searchProperty.fulfilled, (store, action) => {
+          store.loading = false;
+          store.available = 'true';
+          if (action.payload.status) {
+            store.available = 'true';
+            console.log('action.payload.message', action.payload.message);
+            store.message = action.payload.message;
+          } else {
+            store.available = 'false';
+            console.log('action.payload.message', action.payload.message);
+            store.error = action.payload.message;
+          }
+        });
+        builder.addCase(searchProperty.rejected, (store, action: any) => {
+          store.loading = false;
+          store.error =
+            action.payload.data?.message ||
+            'Oops, something went wrong, try again';
+        });
+  }
 });
 
 export default search.reducer;

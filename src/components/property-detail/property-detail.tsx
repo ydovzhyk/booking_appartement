@@ -28,6 +28,7 @@ import ReviewsSection from '../shared/slider-review/slider-review';
 import ServicesPart from '../shared/services-part/services-part';
 import { FaInfo } from 'react-icons/fa6';
 import { ISearchConditions } from '@/types/search/search';
+import Chat from '../chat/chat';
 
 const PropertyDetail: React.FC<IProperty> = ({
   _id,
@@ -40,10 +41,11 @@ const PropertyDetail: React.FC<IProperty> = ({
   description,
   geoCoords,
   servicesList,
+  owner,
 }) => {
   const headerHeight = useHeaderHeight();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const { likedApartments } = useSelector(getUser);
+  const user = useSelector(getUser);
   const isLogin = useSelector(getLogin);
   const currency = useSelector(getCurrency);
   const exchangeRate = useSelector(getExchangeRate);
@@ -71,6 +73,7 @@ const PropertyDetail: React.FC<IProperty> = ({
 
   useEffect(() => {
     dispatch(clearAvailable());
+    // dispatch(clearPropertyDetail());
   }, [dispatch]);
 
   useEffect(() => {
@@ -110,8 +113,8 @@ const PropertyDetail: React.FC<IProperty> = ({
   }
 
   useEffect(() => {
-    setIsLiked(likedApartments?.includes(_id) || false);
-  }, [likedApartments, _id]);
+    setIsLiked(user.likedApartments?.includes(_id) || false);
+  }, [user.likedApartments, _id]);
 
   const toggleLike = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -328,6 +331,7 @@ const PropertyDetail: React.FC<IProperty> = ({
               {description}
             </Text>
           </div>
+          <Chat userId={user._id} ownerId={owner.id} apartmentId={_id} />
         </div>
         <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between">
           <div id="your-stay-section" className="flex flex-col gap-[15px]">
@@ -338,7 +342,7 @@ const PropertyDetail: React.FC<IProperty> = ({
               type="vertical"
               btnText="check availability"
               city={location.city}
-              propertyId={_id}
+              apartmentId={_id}
             />
           </div>
           <div className="flex flex-col gap-[15px]">

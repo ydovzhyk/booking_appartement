@@ -7,7 +7,7 @@ import {
 import { axiosSearchProperty } from '../../api/property';
 
 export const searchProperty = createAsyncThunk(
-  '/apartments/search',
+  '/apartments/check',
   async (userData: ISearchRegister, { rejectWithValue }) => {
     try {
       const data: ISearchResponse = await axiosSearchProperty(userData);

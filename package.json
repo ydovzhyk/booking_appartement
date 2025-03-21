@@ -37,6 +37,8 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "sass": "^1.80.3",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "translate": "^3.0.1"
   },
   "devDependencies": {
@@ -48,6 +50,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/socket.io": "^3.0.1",
+    "@types/socket.io-client": "^1.4.36",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.19.0",
     "eslint-config-next": "^15.1.6",

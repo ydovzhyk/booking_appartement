@@ -36,7 +36,7 @@ export interface IVerifyResponse {
 }
 
 export interface IUser {
-  id: string | null;
+  _id: string | null;
   username: string | null;
   email: string | null;
   userAvatar: string | null;
@@ -51,4 +51,5 @@ export interface IUser {
   sex: string | null;
   aboutUser: string | null;
   likedApartments: string[] | null;
+  chats: string[] | null;
 }

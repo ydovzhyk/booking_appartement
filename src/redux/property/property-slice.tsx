@@ -65,6 +65,9 @@ const property = createSlice({
     clearPropertyMessage: store => {
       store.message = '';
     },
+    clearPropertyDetail: store => {
+      store.propertyDetail = null;
+    }
   },
 
   extraReducers: builder => {
@@ -128,4 +131,5 @@ const property = createSlice({
 });
 
 export default property.reducer;
-export const { clearPropertyError, clearPropertyMessage } = property.actions;
+export const { clearPropertyError, clearPropertyMessage, clearPropertyDetail } =
+  property.actions;

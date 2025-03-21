@@ -8,5 +8,5 @@ export interface ISearchConditions {
   days: number;
   city: string;
   propertyType: string;
-  propertyId: string;
+  apartmentId: string;
 }

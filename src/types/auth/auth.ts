@@ -12,6 +12,7 @@ export interface IAuthUserData {
   sex?: string;
   aboutUser?: string;
   likedApartments?: string[];
+  chats?: string[];
 }
 
 export interface IVerifyEmailData {

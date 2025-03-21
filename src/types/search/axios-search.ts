@@ -6,4 +6,5 @@ export interface ISearchRegister {
 
 export interface ISearchResponse {
   message: string;
+  status: boolean
 }

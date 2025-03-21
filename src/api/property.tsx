@@ -31,9 +31,10 @@ export const axiosRegisterProperty = async (
 export const axiosSearchProperty = async (
   searchData: ISearchRegister
 ): Promise<ISearchResponse> => {
+  // console.log('searchData', {...searchData.searchConditions});
   const { data }: { data: ISearchResponse } = await instance.post(
-    '/apartments/search',
-    searchData
+    '/apartments/check',
+    { ...searchData.searchConditions }
   );
   return data;
 };
