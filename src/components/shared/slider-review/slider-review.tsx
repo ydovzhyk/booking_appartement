@@ -28,7 +28,7 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
   };
 
   return (
-    <div className="w-[427px] h-[170px] border rounded-lg p-[10px] shadow-md bg-white flex flex-col justify-between">
+    <div className="w-full h-[170px] border rounded-lg p-[10px] shadow-md bg-white flex flex-col justify-between">
       <div className="flex flex-row items-center gap-[15px]">
         <img
           src={reviewOwnerPhoto}
