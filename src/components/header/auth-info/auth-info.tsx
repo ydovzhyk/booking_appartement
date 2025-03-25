@@ -9,6 +9,7 @@ import { logout } from '../../../redux/auth/auth-operations';
 import Text from '@/components/shared/text/text';
 import Image from 'next/image';
 import Button from '@/components/shared/button/button';
+import AddUserPanel from '@/components/add-user-panel/add-user-panel';
 
 const AuthInfo = () => {
   const router = useRouter();
@@ -60,7 +61,7 @@ const AuthInfo = () => {
       )}
       {isUserLogin && screenType !== 'isMobile' && (
         <div className="flex flex-row items-center justify-between gap-[15px]">
-          <div className="mr-[30px]">
+          <div className="mr-[20px]">
             <Button
               text="List your property"
               btnClass="btnLight"
@@ -68,6 +69,7 @@ const AuthInfo = () => {
               onClick={navigateToAddProperty}
             />
           </div>
+          <AddUserPanel />
           <div className="flex flex-row items-center justify-between gap-[10px] w-[45px] h-[45px] bg-white rounded-full">
             {user.userAvatar !== null && (
               <Image

@@ -1,18 +1,30 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import useSocket from '../../hooks/useSocket';
 import { useSocketRef } from '../../hooks/useSocket';
 import Image from 'next/image';
 import Text from '../shared/text/text';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { MdOutlineFiberNew } from 'react-icons/md';
 
 interface Message {
+  _id: string;
   senderId: string;
   text: string;
   senderAvatar: string;
   senderName: string;
   createdAt: string;
+}
+
+export interface Chat {
+  chatId: string;
+  users: [string, string];
+  propertyId: string;
+  lastMessage: string;
+  newMessagesUserOne: string[];
+  newMessagesUserTwo: string[];
+  lastMessageAt: string;
 }
 
 interface ChatProps {
@@ -25,10 +37,10 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
   const [chatId, setChatId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState('');
+  const [chat, setChat] = useState<any | null>(null);
   const [ownerAvatar, setOwnerAvatar] = useState('');
   const [ownerName, setOwnerName] = useState('');
   const isOwnerOnline = useOnlineStatus(ownerId);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const {
     sendMessage,
@@ -37,6 +49,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
     getConversation,
     getOwnerInfo,
     initialize,
+    clearNewMessages,
   } = useSocket();
 
   const formattedDate = (createdAt: string) => {
@@ -63,8 +76,10 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
       if (error || !response) return;
       if (response?.chatId) {
         setChatId(response.chatId);
-        getConversation(response.chatId, messages => {
+        getConversation(response.chatId, (messages, chatData) => {
           setMessages(messages);
+          setChat(chatData);
+          clearMessages(response?.chatId, chatData);
         });
       }
     });
@@ -79,8 +94,10 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
       checkChat(userId, ownerId, apartmentId, (error, response) => {
         if (error || !response) return;
         if (response?.chatId) {
-          getConversation(response.chatId, messages => {
+          getConversation(response.chatId, (messages, chatData) => {
             setMessages(messages);
+            setChat(chatData);
+            clearMessages(response?.chatId, chatData);
           });
         }
       });
@@ -116,6 +133,34 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
         }
       });
     }
+  };
+
+  const isNewMessage = (msgId: string): boolean => {
+    const userIndex = chat.users.indexOf(userId);
+    if (userIndex === -1) return false;
+    const newMessages =
+      userIndex === 0 ? chat.newMessagesUserOne : chat.newMessagesUserTwo;
+    return newMessages.includes(msgId);
+  };
+
+  const clearMessages = (chatId: string | undefined, chat: Chat ) => {
+    if (!userId || !chat) return;
+    const userIndex = chat.users.indexOf(userId);
+    if (userIndex === -1) return;
+    const field = userIndex === 0 ? 'newMessagesUserOne' : 'newMessagesUserTwo';
+
+    setTimeout(() => {
+      if(!chatId) return;
+      clearNewMessages(chatId, field, (error, response) => {
+        if (error || !response) return;
+        if (response.message === 'Success') {
+          getConversation(chatId, (messages, chatData) => {
+            setMessages(messages);
+            setChat(chatData);
+          });
+        }
+      });
+    }, 30000);
   };
 
   return (
@@ -155,10 +200,12 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
         {messages
           .slice()
           .reverse()
-          .map((msg, i) => (
-            <div className="w-full flex flex-row gap-[10px]" key={i}>
-              {msg.senderId === userId && msg.senderAvatar && (
-                <div className="flex flex-row items-center justify-center2">
+          .map((msg, i) => {
+            const isNew = isNewMessage(msg._id);
+            return (
+              <div className="w-full flex flex-row gap-[10px]" key={i}>
+                {msg.senderId === userId && msg.senderAvatar && (
+                  <div className="flex flex-row items-center justify-center2">
                     <Image
                       src={msg.senderAvatar}
                       alt="Userphoto"
@@ -166,41 +213,49 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
                       height={45}
                       className="rounded-full"
                     />
-                </div>
-              )}
-              <div
-                className="w-full flex flex-col gap-1 border p-2"
-                style={{ borderRadius: '5px' }}
-              >
-                <p
-                  key={i}
-                  className={` ${msg.senderId === userId ? 'text-blue-500' : 'text-gray-700'}`}
-                  style={{ fontSize: '16px', fontWeight: 'normal' }}
+                  </div>
+                )}
+                <div
+                  className="w-full flex flex-col gap-1 border p-2"
+                  style={{ borderRadius: '5px' }}
                 >
-                  {msg.text}
-                </p>
-                <div className="w-full flex flex-row justify-end">
                   <p
-                    style={{ fontSize: '14px', fontWeight: 'light' }}
-                    className="text-gray-500"
+                    key={i}
+                    className={` ${msg.senderId === userId ? 'text-blue-500' : 'text-gray-700'}`}
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: isNew ? 'bold' : 'normal',
+                    }}
                   >
-                    {formattedDate(msg.createdAt)}
+                    {msg.text}
                   </p>
+                  <div className="w-full flex flex-row al justify-end">
+                    <div className='flex flex-row items-center gap-2'>
+                      {isNew && <MdOutlineFiberNew size={25} />}
+                      <p
+                        style={{ fontSize: '14px', fontWeight: 'light' }}
+                        className="text-gray-500 mt-[3px]"
+                      >
+                        {formattedDate(msg.createdAt)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
+                {msg.senderId !== userId && msg.senderAvatar && (
+                  <div className="flex flex-row items-center justify-center2">
+                    <Image
+                      src={msg.senderAvatar}
+                      alt="Userphoto"
+                      width={45}
+                      height={45}
+                      className="rounded-full"
+                    />
+                  </div>
+                )}
               </div>
-              {msg.senderId !== userId && msg.senderAvatar && (
-                <div className="flex flex-row items-center justify-center2">
-                  <Image
-                    src={msg.senderAvatar}
-                    alt="Userphoto"
-                    width={45}
-                    height={45}
-                    className="rounded-full"
-                  />
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          }
+        )}
       </div>
       <div className="mt-2 flex">
         <input

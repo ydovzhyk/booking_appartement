@@ -5,11 +5,22 @@ import io from 'socket.io-client';
 const serverURL = 'wss://test-task-backend-34db7d47d9c8.herokuapp.com';
 
 interface Message {
+  _id: string;
   senderId: string;
   text: string;
   senderAvatar: string;
   senderName: string;
   createdAt: string;
+}
+
+export interface Chat {
+  chatId: string;
+  users: [string, string];
+  propertyId: string;
+  lastMessage: string;
+  newMessagesUserOne: string[];
+  newMessagesUserTwo: string[];
+  lastMessageAt: string;
 }
 
 export let socketRef: ReturnType<typeof io> | null = null;
@@ -120,14 +131,17 @@ const useSocket = () => {
 
   const getConversation = (
     chatId: string,
-    callback: (messages: Message[]) => void
+    callback: (messages: Message[], chat: Chat) => void
   ) => {
     socketRef?.emit(
       'conversation',
       { chatId },
-      (error: string | null, response: { messages?: Message[] } | null) => {
-        if (error || !response || !response.messages) return;
-        callback(response.messages);
+      (
+        error: string | null,
+        response: { messages?: Message[]; chat?: Chat } | null
+      ) => {
+        if (error || !response || !response.messages || !response.chat) return;
+        callback(response.messages, response.chat);
       }
     );
   };
@@ -152,6 +166,25 @@ const useSocket = () => {
     );
   };
 
+  const clearNewMessages = (
+    chatId: string,
+    field: string,
+    callback: (
+      error: string | null,
+      response: { message: string } | null
+    ) => void
+  ) => {
+    socketRef?.emit('clear-new-messages', { chatId, field },
+      (
+        error: string | null,
+        response: { message: string } | null
+      ) => {
+        if (error || !response || !response.message) return;
+        callback(error, response);
+      }
+    );
+  };
+
   return {
     initialize,
     disconnect,
@@ -160,6 +193,7 @@ const useSocket = () => {
     checkChat,
     getConversation,
     getOwnerInfo,
+    clearNewMessages,
   };
 };
 
