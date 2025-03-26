@@ -18,10 +18,19 @@ const AddUserPanel: React.FC = () => {
 
   useEffect(() => {
     const socket = useSocketRef();
-    if (!socket) return;
+    console.log('🔌 useSocketRef result:', socket);
+
+    if (!socket) {
+      console.warn('⚠️ Socket not available');
+      return;
+    }
+
+    console.log('📡 Subscribing to user-new-message event');
 
     const handleNewUserMessage = () => {
+      console.log('📨 Received user-new-message event');
       if (authData.accessToken && authData.refreshToken && authData.sid) {
+        console.log('🔁 Dispatching getCurrentUser');
         dispatch(
           getCurrentUser({
             accessToken: authData.accessToken,
@@ -29,15 +38,41 @@ const AddUserPanel: React.FC = () => {
             sid: authData.sid,
           })
         );
+      } else {
+        console.warn('⚠️ Missing auth tokens, skipping getCurrentUser');
       }
     };
 
     socket.on('user-new-message', handleNewUserMessage);
 
     return () => {
+      console.log('❌ Cleaning up user-new-message listener');
       socket.off('user-new-message', handleNewUserMessage);
     };
   }, [dispatch, authData.accessToken, authData.refreshToken, authData.sid]);
+
+  // useEffect(() => {
+  //   const socket = useSocketRef();
+  //   if (!socket) return;
+
+  //   const handleNewUserMessage = () => {
+  //     if (authData.accessToken && authData.refreshToken && authData.sid) {
+  //       dispatch(
+  //         getCurrentUser({
+  //           accessToken: authData.accessToken,
+  //           refreshToken: authData.refreshToken,
+  //           sid: authData.sid,
+  //         })
+  //       );
+  //     }
+  //   };
+
+  //   socket.on('user-new-message', handleNewUserMessage);
+
+  //   return () => {
+  //     socket.off('user-new-message', handleNewUserMessage);
+  //   };
+  // }, [dispatch, authData.accessToken, authData.refreshToken, authData.sid]);
 
   return (
     <div className="flex flex-row items-center gap-[15px] mr-[20px]">

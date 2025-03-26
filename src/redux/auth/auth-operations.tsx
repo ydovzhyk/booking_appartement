@@ -77,6 +77,7 @@ export const getCurrentUser = createAsyncThunk(
   'auth/current',
   async (userData: IAuth, { rejectWithValue }) => {
     try {
+      console.log('Відправляємо на оновлення користувача', userData);
       const data: ILoginResponse = await axiosGetCurrentUser(userData);
       return data;
     } catch (error) {
