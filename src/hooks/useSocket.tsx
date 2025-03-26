@@ -26,12 +26,17 @@ export interface Chat {
 export let socketRef: ReturnType<typeof io> | null = null;
 export const useSocketRef = () => socketRef;
 
-const subscriptions = ['new-message', 'user-online', 'user-offline'];
+const subscriptions = [
+  'new-message',
+  'user-online',
+  'user-offline',
+  'user-new-message',
+];
 
 const useSocket = () => {
   const isInitialized = useRef(false);
 
-  const initialize = (userId: string) => {
+  const initialize = (userId: string, onUserNewMessage?: () => void) => {
     if (isInitialized.current || !userId) return;
 
     socketRef = io(serverURL, {
@@ -51,6 +56,13 @@ const useSocket = () => {
         console.log(`📥 Event: ${event}`, payload);
       });
     });
+
+    // ✅ Слухаємо нові повідомлення для користувача
+    if (onUserNewMessage) {
+      socketRef.on('user-new-message', () => {
+        onUserNewMessage();
+      });
+    }
 
     isInitialized.current = true;
   };
