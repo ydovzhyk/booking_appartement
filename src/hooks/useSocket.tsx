@@ -169,12 +169,13 @@ const useSocket = () => {
   const clearNewMessages = (
     chatId: string,
     field: string,
+    userId: string,
     callback: (
       error: string | null,
       response: { message: string } | null
     ) => void
   ) => {
-    socketRef?.emit('clear-new-messages', { chatId, field },
+    socketRef?.emit('clear-new-messages', { chatId, field, userId },
       (
         error: string | null,
         response: { message: string } | null

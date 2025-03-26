@@ -79,7 +79,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
         getConversation(response.chatId, (messages, chatData) => {
           setMessages(messages);
           setChat(chatData);
-          clearMessages(response?.chatId, chatData);
+          clearMessages(response?.chatId, chatData, userId);
         });
       }
     });
@@ -97,7 +97,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
           getConversation(response.chatId, (messages, chatData) => {
             setMessages(messages);
             setChat(chatData);
-            clearMessages(response?.chatId, chatData);
+            clearMessages(response?.chatId, chatData, userId);
           });
         }
       });
@@ -143,7 +143,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
     return newMessages.includes(msgId);
   };
 
-  const clearMessages = (chatId: string | undefined, chat: Chat ) => {
+  const clearMessages = (chatId: string | undefined, chat: Chat, userId: string ) => {
     if (!userId || !chat) return;
     const userIndex = chat.users.indexOf(userId);
     if (userIndex === -1) return;
@@ -151,7 +151,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
 
     setTimeout(() => {
       if(!chatId) return;
-      clearNewMessages(chatId, field, (error, response) => {
+      clearNewMessages(chatId, field, userId, (error, response) => {
         if (error || !response) return;
         if (response.message === 'Success') {
           getConversation(chatId, (messages, chatData) => {
@@ -193,7 +193,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
       </div>
       <div
         className={`overflow-y-auto regular-border p-2 flex flex-col gap-2 ${
-          messages.length > 3 ? 'h-[235px]' : 'h-[120px]'
+          messages.length > 1 ? 'h-[235px]' : 'h-[120px]'
         }`}
         style={{ borderRadius: '5px' }}
       >

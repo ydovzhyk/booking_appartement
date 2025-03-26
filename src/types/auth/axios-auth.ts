@@ -52,4 +52,5 @@ export interface IUser {
   aboutUser: string | null;
   likedApartments: string[] | null;
   chats: string[] | null;
+  newMessages: string[] | null;
 }

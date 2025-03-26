@@ -127,7 +127,7 @@ export const verifyEmail = createAsyncThunk(
   }
 );
 
-export const verifyConfirmation = message => ({
+export const verifyConfirmation = (message: string) => ({
   type: 'auth/verifyConfirmation',
   payload: { message },
 });

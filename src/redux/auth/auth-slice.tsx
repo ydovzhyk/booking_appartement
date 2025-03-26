@@ -28,6 +28,7 @@ const initialState: IAuthStore = {
     aboutUser: null as string | null,
     likedApartments: null as string[] | null,
     chats: null as string[] | null,
+    newMessages: null as string[] | null,
   },
   sid: null,
   accessToken: null,
