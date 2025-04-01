@@ -29,6 +29,8 @@ import {
   getModalVindowSttus,
 } from '../../../redux/technical/technical-selectors';
 import { getSearchError, getSearchMessage } from '@/redux/search/search-selectors';
+import { getChatError, getChatMessage } from '@/redux/chat/chat-selectors';
+import { clearChatError, clearChatMessage } from '@/redux/chat/chat-slice';
 import { clearSearchError, clearSearchMessage } from '@/redux/search/search-slice';
 import { setModalWindowStatus } from '../../../redux/technical/technical-slice';
 import { TfiClose } from 'react-icons/tfi';
@@ -41,10 +43,12 @@ const ModalWindow = () => {
   const messageTechnical = useSelector(getTechnicalMessage);
   const messageProperty = useSelector(getPropertyMessage);
   const messageSearch = useSelector(getSearchMessage);
+  const messageChat = useSelector(getChatMessage);
   const errorAuth = useSelector(getAuthError);
   const errorTechnical = useSelector(getTechnicalError);
   const errorProperty = useSelector(getPropertyError);
   const errorSearch = useSelector(getSearchError);
+  const errorChat = useSelector(getChatError);
   const modalWindowStatus = useSelector(getModalVindowSttus);
 
   const [isError, setIsError] = useState(false);
@@ -59,6 +63,8 @@ const ModalWindow = () => {
     dispatch(clearPropertyMessage());
     dispatch(clearSearchError());
     dispatch(clearSearchMessage());
+    dispatch(clearChatError());
+    dispatch(clearChatMessage());
     setIsError(false);
   }, [dispatch]);
 
@@ -68,13 +74,15 @@ const ModalWindow = () => {
       messageTechnical ||
       messageProperty ||
       messageSearch ||
+      messageChat ||
       errorAuth ||
       errorTechnical ||
       errorProperty ||
-      errorSearch
+      errorSearch ||
+      errorChat
     ) {
       dispatch(setModalWindowStatus(true));
-      if (errorAuth || errorTechnical || errorProperty || errorSearch) {
+      if (errorAuth || errorTechnical || errorProperty || errorSearch || errorChat) {
         setIsError(true);
       }
     } else {

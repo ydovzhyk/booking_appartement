@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import useSocket from '../../hooks/useSocket';
+import { useAppDispatch } from '@/utils/helpers/hooks';
+import { useSelector } from 'react-redux';
+import { getAuthData } from '@/redux/auth/auth-selectors';
+import { getCurrentUser } from '@/redux/auth/auth-operations';
 import { useSocketRef } from '../../hooks/useSocket';
-import Image from 'next/image';
-import Text from '../shared/text/text';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { MdOutlineFiberNew } from 'react-icons/md';
+import Image from 'next/image';
+import Text from '../shared/text/text';
 
 interface Message {
   _id: string;
@@ -41,6 +45,8 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
   const [ownerAvatar, setOwnerAvatar] = useState('');
   const [ownerName, setOwnerName] = useState('');
   const isOwnerOnline = useOnlineStatus(ownerId);
+  const dispatch = useAppDispatch();
+  const authData = useSelector(getAuthData);
 
   const {
     sendMessage,
@@ -62,6 +68,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
     });
   };
 
+  // При вході в чат перевіряємо чи є діалог
   useEffect(() => {
     if (!userId) return;
     initialize(userId);
@@ -79,13 +86,23 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
         getConversation(response.chatId, (messages, chatData) => {
           setMessages(messages);
           setChat(chatData);
-          clearMessages(response?.chatId, chatData, userId);
+
+          // 🔎 Перевіряємо, чи є нові повідомлення для користувача
+          const userIndex = chatData.users.indexOf(userId);
+          const newMessages =
+            userIndex === 0
+              ? chatData.newMessagesUserOne
+              : chatData.newMessagesUserTwo;
+
+          if (newMessages.length > 0) {
+            clearMessages(response.chatId, chatData, userId);
+          }
         });
       }
     });
   }, [userId, message]);
 
-  // оновлюємо коли приходять нові повідомлення в чат
+  // Оновлюємо чат коли приходять нові повідомлення
   useEffect(() => {
     const socket = useSocketRef();
     if (!socket || !chatId || !userId) return;
@@ -158,13 +175,29 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
             setMessages(messages);
             setChat(chatData);
           });
+          if (authData.accessToken && authData.refreshToken && authData.sid) {
+            dispatch(
+              getCurrentUser({
+                accessToken: authData.accessToken,
+                refreshToken: authData.refreshToken,
+                sid: authData.sid,
+              })
+            );
+          }
         }
       });
-    }, 30000);
+    }, 20000);
+  };
+
+  const chatTitleText = () => {
+    if (!chat || !chat.users || !userId) return '';
+    if (chat.users[0] === userId)
+      return `You can chat with ${ownerName}, the apartment manager.`;
+    return `You can chat with our client ${ownerName}.`;
   };
 
   return (
-    <div className="p-4 border ">
+    <div className="p-4 border border-gray-200 shadow rounded-lg">
       <div className="w-full flex flex-row items-center gap-2 mb-[15px]">
         <div className="flex flex-col items-center gap-2">
           <div className="flex flex-row items-center justify-between gap-[10px] w-[45px] h-[45px] bg-white rounded-full">
@@ -188,12 +221,20 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
           </div>
         </div>
         <Text type="small" as="p" fontWeight="normal">
-          You can chat with {ownerName}, the apartment manager.
+          {chatTitleText()}
         </Text>
       </div>
       <div
         className={`overflow-y-auto regular-border p-2 flex flex-col gap-2 ${
-          messages.length > 1 ? 'h-[235px]' : 'h-[120px]'
+          messages.length === 0
+            ? 'h-[90px]'
+            : messages.length === 1
+              ? 'h-[90px]'
+              : messages.length === 2
+                ? 'h-[180px]'
+                : messages.length > 2
+                  ? 'h-[240px]'
+                  : 'h-[240px]'
         }`}
         style={{ borderRadius: '5px' }}
       >
@@ -230,7 +271,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
                     {msg.text}
                   </p>
                   <div className="w-full flex flex-row al justify-end">
-                    <div className='flex flex-row items-center gap-2'>
+                    <div className="flex flex-row items-center gap-2">
                       {isNew && <MdOutlineFiberNew size={25} />}
                       <p
                         style={{ fontSize: '14px', fontWeight: 'light' }}
@@ -254,8 +295,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
                 )}
               </div>
             );
-          }
-        )}
+          })}
       </div>
       <div className="mt-2 flex">
         <input

@@ -27,8 +27,11 @@ import Map from '../map/map';
 import ReviewsSection from '../shared/slider-review/slider-review';
 import ServicesPart from '../shared/services-part/services-part';
 import { FaInfo } from 'react-icons/fa6';
+import { IoMdClose } from 'react-icons/io';
 import { ISearchConditions } from '@/types/search/search';
 import Chat from '../chat/chat';
+import left from '@/images/left_inactive.png';
+import right from '@/images/right_inactive.png';
 
 const PropertyDetail: React.FC<IProperty> = ({
   _id,
@@ -44,7 +47,7 @@ const PropertyDetail: React.FC<IProperty> = ({
   owner,
 }) => {
   const headerHeight = useHeaderHeight();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const user = useSelector(getUser);
   const isLogin = useSelector(getLogin);
   const currency = useSelector(getCurrency);
@@ -56,6 +59,7 @@ const PropertyDetail: React.FC<IProperty> = ({
   const [copied, setCopied] = useState(false);
   const [showed, setShowed] = useState(false);
   const isAvailable = useSelector(getAvailable);
+  const allImages = [mainImage, ...imagesLink];
   const priceTextConditions = useSelector(
     getSearchConditions
   );
@@ -70,6 +74,8 @@ const PropertyDetail: React.FC<IProperty> = ({
   const [convertedPrice02, setConvertedPrice02] = useState<string>(((Number(price.value) * exchangeRate * priceTextConditions.days) +
         (Number(price.value) * exchangeRate * priceTextConditions.days * 0.1)
   ).toFixed(0));
+  const selectedImage =
+    selectedIndex !== null ? allImages[selectedIndex] : null;
 
   useEffect(() => {
     dispatch(clearAvailable());
@@ -88,6 +94,20 @@ const PropertyDetail: React.FC<IProperty> = ({
       ).toFixed(0)
     );
   }, [priceTextConditions, exchangeRate]);
+
+  const handlePrev = () => {
+    setSelectedIndex(prev => {
+      if (prev === null) return 0;
+      return (prev - 1 + allImages.length) % allImages.length;
+    });
+  };
+
+  const handleNext = () => {
+    setSelectedIndex(prev => {
+      if (prev === null) return 0;
+      return (prev + 1) % allImages.length;
+    });
+  };
 
   function generatePriceSentence(searchConditions: ISearchConditions): string {
     const {
@@ -122,11 +142,12 @@ const PropertyDetail: React.FC<IProperty> = ({
   };
 
   const openModalWithImages = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+    const index = allImages.findIndex(img => img === imageUrl);
+    setSelectedIndex(index);
   };
 
   const closeModal = () => {
-    setSelectedImage(null);
+    setSelectedIndex(null);
   };
 
   const handleCopyLink = () => {
@@ -140,7 +161,7 @@ const PropertyDetail: React.FC<IProperty> = ({
       .catch(err => console.error('Failed to copy link: ', err)); // eslint-disable-line
   };
 
-  const remainingImagesCount = imagesLink.length - 5;
+  const remainingImagesCount = allImages.length - 5;
   const formattedAddress = `${location.city}, ${location.street}, ${location.building}`;
 
   const handleScrollToYourStay = () => {
@@ -238,7 +259,7 @@ const PropertyDetail: React.FC<IProperty> = ({
 
               {/* Два додаткових фото праворуч */}
               <div className="flex flex-col gap-4 w-[266px]">
-                {imagesLink.slice(0, 2).map((image, index) => (
+                {allImages.slice(1, 3).map((image, index) => (
                   <div
                     key={index}
                     className="w-[266px] h-[188px] bg-cover bg-center rounded-lg cursor-pointer"
@@ -251,7 +272,7 @@ const PropertyDetail: React.FC<IProperty> = ({
 
             {/* Три фото знизу */}
             <div className="w-full flex gap-[15px] relative">
-              {imagesLink.slice(2, 5).map((image, index) => (
+              {allImages.slice(3, 6).map((image, index) => (
                 <div
                   key={index}
                   className="relative cursor-pointer rounded-lg bg-cover bg-center"
@@ -331,7 +352,9 @@ const PropertyDetail: React.FC<IProperty> = ({
               {description}
             </Text>
           </div>
-          <Chat userId={user._id} ownerId={owner.id} apartmentId={_id} />
+          {user._id !== owner.id && (
+            <Chat userId={user._id} ownerId={owner.id} apartmentId={_id} />
+          )}
         </div>
         <div className="w-[35%] h-full flex flex-col gap-[15px] justify-between">
           <div id="your-stay-section" className="flex flex-col gap-[15px]">
@@ -478,21 +501,55 @@ const PropertyDetail: React.FC<IProperty> = ({
 
       {/* Модальне вікно для фото */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="relative p-4">
+        <div className="fixed inset-0 w-screen h-screen flex items-center justify-center backdrop-blur-[3px] bg-white/70 z-50">
+          <div className="relative w-[80vw] h-[85vh] bg-white rounded-lg shadow-lg p-4 flex">
+            {/* Кнопка закриття */}
             <button
-              className="absolute top-2 right-2 bg-gray-100 text-black px-2 py-1 rounded"
               onClick={closeModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl"
+              aria-label="Close dialog"
             >
-              ✕
+              <IoMdClose />
             </button>
-            <Image
-              src={selectedImage}
-              alt="Перегляд фото"
-              width={800}
-              height={600}
-              className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
-            />
+
+            <div className="w-full h-full flex flex-col gap-[10px]">
+              <Text type="regular" as="h2" fontWeight="bold" className="inline">
+                {title}
+              </Text>
+              <div className="w-full h-full flex flex-row items-center justify-between test-border">
+                <div>
+                  <button
+                    type="button"
+                    className="absolute left-[20px] z-10 flex items-center justify-center w-[45px] h-[45px] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
+                    onClick={handlePrev}
+                  >
+                    <Image
+                      src={left}
+                      alt={'Arrow left'}
+                      className="w-[45px] h-[45px]"
+                    />
+                  </button>
+                </div>
+                <div
+                  className="w-[70%] h-full bg-center bg-no-repeat bg-white rounded-lg test-border"
+                  style={{ backgroundImage: `url(${selectedImage})` }}
+                ></div>
+                <div>
+                  <button
+                    type="button"
+                    className="absolute right-[20px] z-10 flex items-center justify-center w-[45px] h-[45px] bg-[#D1D5DB] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
+                    onClick={handleNext}
+                  >
+                    <Image
+                      src={right}
+                      alt={'Arrow left'}
+                      className="w-[45px] h-[45px]"
+                    />
+                  </button>
+                </div>
+                <div className="w-[40%]">щось треба написати</div>
+              </div>
+            </div>
           </div>
         </div>
       )}

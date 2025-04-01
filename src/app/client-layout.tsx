@@ -5,6 +5,7 @@ import { getLoadingAuth } from '@/redux/auth/auth-selectors';
 import { getLoadingTechnical } from '@/redux/technical/technical-selectors';
 import { getLoadingSearch } from '@/redux/search/search-selectors';
 import { getLoadingProperty } from '@/redux/property/property-selectors';
+import { getLoadingChat } from '@/redux/chat/chat-selectors';
 import { getLogin } from '@/redux/auth/auth-selectors';
 import { getUser } from '@/redux/auth/auth-selectors';
 import useSocket from '@/hooks/useSocket';
@@ -23,14 +24,15 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   const loadingTechnical = useSelector(getLoadingTechnical);
   const loadingSearch = useSelector(getLoadingSearch);
   const loadingProperty = useSelector(getLoadingProperty);
+  const loadingChat = useSelector(getLoadingChat);
   const [loading, setLoading] = useState(false);
   const isLogin = useSelector(getLogin);
   const user = useSelector(getUser);
   const { initialize, disconnect } = useSocket();
 
   useEffect(() => {
-    setLoading(loadingAuth || loadingTechnical || loadingSearch || loadingProperty);
-  }, [loadingAuth, loadingTechnical, loadingSearch, loadingProperty]);
+    setLoading(loadingAuth || loadingTechnical || loadingSearch || loadingProperty || loadingChat);
+  }, [loadingAuth, loadingTechnical, loadingSearch, loadingProperty, loadingChat]);
 
   useEffect(() => {
     if (isLogin && user && user._id) {

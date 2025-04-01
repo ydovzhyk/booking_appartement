@@ -56,13 +56,14 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Uncomment this to enable dark mode */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --accent-background: #0f1d2d;
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
