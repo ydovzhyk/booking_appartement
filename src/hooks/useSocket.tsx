@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import io from 'socket.io-client';
 
-const serverURL = 'http://localhost:4000';
-// const serverURL = 'wss://test-task-backend-34db7d47d9c8.herokuapp.com';
+// const serverURL = 'http://localhost:4000';
+const serverURL = 'wss://test-task-backend-34db7d47d9c8.herokuapp.com';
 
 interface Message {
   _id: string;
