@@ -193,7 +193,14 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
       </div>
       <div
         className={`overflow-y-auto regular-border p-2 flex flex-col gap-2 ${
-          messages.length > 1 ? 'h-[235px]' : 'h-[120px]'
+          messages.length === 0
+            ? 'h-[90px]'
+            : messages.length === 1
+              ? 'h-[90px]'
+              : messages.length === 2
+                ? 'h-[180px]'
+                : messages.length > 2
+                  ? 'h-[240px]' : 'h-[240px]'
         }`}
         style={{ borderRadius: '5px' }}
       >
@@ -230,7 +237,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
                     {msg.text}
                   </p>
                   <div className="w-full flex flex-row al justify-end">
-                    <div className='flex flex-row items-center gap-2'>
+                    <div className="flex flex-row items-center gap-2">
                       {isNew && <MdOutlineFiberNew size={25} />}
                       <p
                         style={{ fontSize: '14px', fontWeight: 'light' }}
@@ -254,8 +261,7 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
                 )}
               </div>
             );
-          }
-        )}
+          })}
       </div>
       <div className="mt-2 flex">
         <input
