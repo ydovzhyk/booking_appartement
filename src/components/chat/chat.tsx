@@ -233,8 +233,12 @@ const Chat: React.FC<ChatProps> = ({ userId, ownerId, apartmentId }) => {
               : messages.length === 2
                 ? 'h-[180px]'
                 : messages.length > 2
+<<<<<<< HEAD
                   ? 'h-[240px]'
                   : 'h-[240px]'
+=======
+                  ? 'h-[240px]' : 'h-[240px]'
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
         }`}
         style={{ borderRadius: '5px' }}
       >

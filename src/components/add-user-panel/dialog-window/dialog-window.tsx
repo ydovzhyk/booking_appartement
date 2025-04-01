@@ -22,11 +22,17 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
   const currentUserId = user?._id || null;
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null);
 
+<<<<<<< HEAD
 
   useEffect(() => {
     // оновлюємо список чатів користувача, якщо щось змінюється в його повідомленнях
     dispatch(getUserChats());
   }, [dispatch, user.newMessages]);
+=======
+  useEffect(() => {
+    dispatch(getUserChats());
+  }, [dispatch]);
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
 
   useEffect(() => {
     if (userChats.length && !selectedChat) {
@@ -36,6 +42,7 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
 
   const renderChatsList = () => {
     if (!userChats.length) {
+<<<<<<< HEAD
       return (
         <Text
           as="p"
@@ -46,6 +53,9 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
           No active chats
         </Text>
       );
+=======
+      return <p className="text-gray-500 text-sm">Немає активних чатів</p>;
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
     }
 
     return userChats.map(chat => {
@@ -86,6 +96,7 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
             <p className="text-[15px] font-semibold truncate">
               {chat.propertyTitle}
             </p>
+<<<<<<< HEAD
             <Text
               as="p"
               type="small"
@@ -95,6 +106,13 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
               {lastMsg || 'No messages yet'}
             </Text>
           </div>
+=======
+            <p className="text-sm text-gray-600 truncate">
+              {lastMsg || 'Ще немає повідомлень'}
+            </p>
+          </div>
+
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
           <div className="flex-shrink-0 text-[12px] text-gray-400 ml-2 whitespace-nowrap">
             {new Date(chat.lastMessageAt).toLocaleDateString('uk-UA', {
               day: '2-digit',
@@ -115,7 +133,11 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="fixed inset-0 w-screen h-screen flex items-center justify-center backdrop-blur-[3px] bg-white/70 z-50">
+=======
+    <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center backdrop-blur-[3px] bg-white/70 z-50">
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
       <div className="relative w-[80vw] h-[80vh] bg-white rounded-lg shadow-lg p-4 flex">
         {/* Кнопка закриття */}
         <button
@@ -136,7 +158,11 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
 
         {/* Права частина — сам чат */}
         <div className="w-[70%] h-full pl-4 flex items-center justify-center">
+<<<<<<< HEAD
           <div className="w-full h-full overflow-y-auto mt-[75px]">
+=======
+          <div className="w-full">
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
             {selectedChat && currentUserId ? (
               <Chat
                 key={selectedChat._id}
@@ -145,6 +171,7 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
                 apartmentId={selectedChat.propertyId}
               />
             ) : userChats.length === 0 ? (
+<<<<<<< HEAD
               <Text
                 as="p"
                 type="small"
@@ -153,6 +180,11 @@ const DialogWindow: React.FC<DialogWindowProps> = ({ onClose }) => {
               >
                 You don't have any chats yet
               </Text>
+=======
+              <div className="text-gray-500 text-center px-4">
+                У вас ще немає чатів
+              </div>
+>>>>>>> 586b8f6a551bbdba588d36c89d78d7f2e7839c5a
             ) : null}
           </div>
         </div>
