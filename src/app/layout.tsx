@@ -4,7 +4,6 @@ import { Josefin_Sans, Maven_Pro } from 'next/font/google';
 import { StoreProvider } from '../redux/store-provider';
 import { LanguageProvider } from '../utils/helpers/translating/language-context';
 import ClientLayout from './client-layout';
-
 import '../styles/globals.css';
 
 const josefin = Josefin_Sans({

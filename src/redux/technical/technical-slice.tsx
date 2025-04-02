@@ -13,12 +13,17 @@ const initialState: ITechnicalState = {
   totalAmountCurrency: 0,
   loading: false,
   updatedWeather: [],
+  paymentStage: 'stage-1',
+  paymentData: {},
 };
 
 const technical = createSlice({
   name: 'technical',
   initialState,
   reducers: {
+    setPaymentData: (store, action) => {
+      store.paymentData = action.payload;
+    },
     setUpdatedWeather: (store, action) => {
       const { id, ...newWeatherData } = action.payload;
       store.updatedWeather = store.updatedWeather.filter(
@@ -62,6 +67,9 @@ const technical = createSlice({
       store.currency = action.payload;
       store.exchangeRate = store.exchangeRateData[action.payload];
     },
+    setPaymentStage: (store, action) => {
+      store.paymentStage = action.payload;
+    },
   },
 
   // extraReducers: (builder) => {
@@ -81,4 +89,6 @@ export const {
   setUpdateExchangeRate,
   setMessage,
   setUpdatedWeather,
+  setPaymentStage,
+  setPaymentData,
 } = technical.actions;

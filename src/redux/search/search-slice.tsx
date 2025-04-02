@@ -94,11 +94,9 @@ const search = createSlice({
           store.available = 'true';
           if (action.payload.status) {
             store.available = 'true';
-            console.log('action.payload.message', action.payload.message);
             store.message = action.payload.message;
           } else {
             store.available = 'false';
-            console.log('action.payload.message', action.payload.message);
             store.error = action.payload.message;
           }
         });

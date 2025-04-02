@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAppDispatch } from '@/utils/helpers/hooks';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { likeProperty } from '@/redux/property/property-operations';
 import { Tooltip } from 'react-tooltip';
 import Image from 'next/image';
@@ -20,6 +21,7 @@ import {
   getCurrency,
   getExchangeRate,
 } from '@/redux/technical/technical-selectors';
+import { setPaymentData } from '@/redux/technical/technical-slice';
 import { getSearchConditions, getAvailable } from '@/redux/search/search-selectors';
 import { clearAvailable } from '@/redux/search/search-slice';
 import { useHeaderHeight } from '../../utils/helpers/HeaderContext';
@@ -45,35 +47,34 @@ const PropertyDetail: React.FC<IProperty> = ({
   geoCoords,
   servicesList,
   owner,
+  usersFeedback,
 }) => {
   const headerHeight = useHeaderHeight();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const appDispatch = useAppDispatch();
+  const dispatch = useDispatch();
+  const pathname = usePathname();
+  const router = useRouter();
   const user = useSelector(getUser);
   const isLogin = useSelector(getLogin);
   const currency = useSelector(getCurrency);
   const exchangeRate = useSelector(getExchangeRate);
-  const appDispatch = useAppDispatch();
-  const dispatch= useDispatch()
-  const pathname = usePathname();
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
   const [showed, setShowed] = useState(false);
   const isAvailable = useSelector(getAvailable);
   const allImages = [mainImage, ...imagesLink];
-  const priceTextConditions = useSelector(
-    getSearchConditions
-  );
+  const priceTextConditions = useSelector(getSearchConditions);
   const [priceText, setPriceText] = useState<string>('');
   const [convertedPrice01, setConvertedPrice01] = useState<string>(
+    (Number(price.value) * exchangeRate * priceTextConditions.days).toFixed(0)
+  );
+  const [convertedPrice02, setConvertedPrice02] = useState<string>(
     (
-      Number(price.value) *
-      exchangeRate *
-      priceTextConditions.days
+      Number(price.value) * exchangeRate * priceTextConditions.days +
+      Number(price.value) * exchangeRate * priceTextConditions.days * 0.1
     ).toFixed(0)
   );
-  const [convertedPrice02, setConvertedPrice02] = useState<string>(((Number(price.value) * exchangeRate * priceTextConditions.days) +
-        (Number(price.value) * exchangeRate * priceTextConditions.days * 0.1)
-  ).toFixed(0));
   const selectedImage =
     selectedIndex !== null ? allImages[selectedIndex] : null;
 
@@ -110,13 +111,8 @@ const PropertyDetail: React.FC<IProperty> = ({
   };
 
   function generatePriceSentence(searchConditions: ISearchConditions): string {
-    const {
-      numberAdults,
-      numberChildren,
-      numberRooms,
-      petsAllowed,
-      days,
-    } = searchConditions;
+    const { numberAdults, numberChildren, numberRooms, petsAllowed, days } =
+      searchConditions;
     const nightsText = `for ${days} ${days === 1 ? 'night' : 'nights'}`;
     const adultsText = `${numberAdults} ${numberAdults === 1 ? 'adult' : 'adults'}`;
     const childrenText =
@@ -165,11 +161,20 @@ const PropertyDetail: React.FC<IProperty> = ({
   const formattedAddress = `${location.city}, ${location.street}, ${location.building}`;
 
   const handleScrollToYourStay = () => {
+    let correctionScroll = 92;
+    if (selectedImage) {
+      setSelectedIndex(null);
+      correctionScroll = 0;
+    }
+
     const element = document.getElementById('your-stay-section');
 
     if (element && headerHeight !== undefined && headerHeight !== null) {
       const offsetTop =
-        element.getBoundingClientRect().top + window.scrollY - headerHeight + 92;
+        element.getBoundingClientRect().top +
+        window.scrollY -
+        headerHeight +
+        correctionScroll;
       window.scrollTo({
         top: offsetTop,
         behavior: 'smooth',
@@ -177,12 +182,26 @@ const PropertyDetail: React.FC<IProperty> = ({
     }
   };
 
+  const handleNavigate = async (typePayment: string) => {
+    await dispatch(
+      setPaymentData({
+        propertyId: _id,
+        typePayment,
+        price: price.value,
+        currency: price.currency,
+        conditions: {},
+      })
+    );
 
+    const currentPath = window.location.pathname;
+    await localStorage.setItem('lastPropertyPage', currentPath);
+    router.push('/payment/stage-1');
+  };
 
   return (
-    <section className="w-full my-[40px] mx-auto flex flex-col gap-[30px] test-border">
+    <section className="w-full my-[40px] mx-auto flex flex-col gap-[30px]">
       <div className="w-full flex flex-row items-center justify-between gap-[15px]">
-        <div className="w-[65%] test-border">
+        <div className="w-[65%]">
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-col gap-[10px]">
               <Text as="h1" fontWeight="bold">
@@ -313,7 +332,7 @@ const PropertyDetail: React.FC<IProperty> = ({
           />
           <div className="w-full h-[240px] flex flex-col gap-[10px]">
             {/* Рейтинг */}
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center gap-[10px]">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, index) =>
                   index < ranking ? (
@@ -331,17 +350,20 @@ const PropertyDetail: React.FC<IProperty> = ({
                   )
                 )}
               </div>
-              <Text type="small" className="text-gray-600 mt-[4px]">
-                {ranking} (10 reviews)
+              <p className="text-gray-600 mt-[4px] text-xl font-medium">
+                {ranking}
+              </p>
+              <Text type="small" className="text-gray-400 mt-[4px]">
+                ({usersFeedback?.length} reviews)
               </Text>
             </div>
-            <ReviewsSection />
+            <ReviewsSection reviews={usersFeedback} />
           </div>
         </div>
       </div>
 
       <div className="w-full flex flex-row items-start justify-between gap-[15px]">
-        <div className="w-[65%] test-border flex flex-col gap-[30px]">
+        <div className="w-[65%] flex flex-col gap-[30px]">
           <ServicesPart mode="view" servicesArray={servicesList} />
           {/* Опис */}
           <div className="flex flex-col gap-[15px]">
@@ -432,6 +454,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                   text="Book now"
                   btnClass="btnDark"
                   disabled={isAvailable !== 'true' ? true : false}
+                  onClick={() => handleNavigate('Non-refundable')}
                 />
               </div>
             </div>
@@ -482,6 +505,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                   text="Book now"
                   btnClass="btnDark"
                   disabled={isAvailable !== 'true' ? true : false}
+                  onClick={() => handleNavigate('Refundable')}
                 />
               </div>
             </div>
@@ -502,12 +526,12 @@ const PropertyDetail: React.FC<IProperty> = ({
       {/* Модальне вікно для фото */}
       {selectedImage && (
         <div className="fixed inset-0 w-screen h-screen flex items-center justify-center backdrop-blur-[3px] bg-white/70 z-50">
-          <div className="relative w-[80vw] h-[85vh] bg-white rounded-lg shadow-lg p-4 flex">
+          <div className="relative w-[80vw] h-[90vh] bg-white rounded-lg shadow-lg p-4 flex">
             {/* Кнопка закриття */}
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl"
-              aria-label="Close dialog"
+              aria-label="Close modal window"
             >
               <IoMdClose />
             </button>
@@ -516,38 +540,94 @@ const PropertyDetail: React.FC<IProperty> = ({
               <Text type="regular" as="h2" fontWeight="bold" className="inline">
                 {title}
               </Text>
-              <div className="w-full h-full flex flex-row items-center justify-between test-border">
-                <div>
-                  <button
-                    type="button"
-                    className="absolute left-[20px] z-10 flex items-center justify-center w-[45px] h-[45px] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
-                    onClick={handlePrev}
-                  >
-                    <Image
-                      src={left}
-                      alt={'Arrow left'}
-                      className="w-[45px] h-[45px]"
-                    />
-                  </button>
+              <div className="w-full h-full flex flex-row items-center justify-between gap-[20px]">
+                <div className="relative w-[70%] h-full flex flex-row align-ceter">
+                  <div className="absolute top-0 left-0 z-10 h-full flex justify-center items-center">
+                    <button
+                      type="button"
+                      className="ml-[20px] flex items-center justify-center w-[45px] h-[45px] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
+                      onClick={handlePrev}
+                    >
+                      <Image
+                        src={left}
+                        alt={'Arrow left'}
+                        className="w-[45px] h-[45px]"
+                      />
+                    </button>
+                  </div>
+                  <div
+                    className="w-full h-full bg-center bg-no-repeat bg-white rounded-lg border border-gray-200 shadow"
+                    style={{ backgroundImage: `url(${selectedImage})` }}
+                  ></div>
+                  <div className="absolute top-0 right-0 z-10 h-full flex justify-center items-center">
+                    <button
+                      type="button"
+                      className="mr-[20px] flex items-center justify-center w-[45px] h-[45px] bg-[#D1D5DB] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
+                      onClick={handleNext}
+                    >
+                      <Image
+                        src={right}
+                        alt={'Arrow left'}
+                        className="w-[45px] h-[45px]"
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div
-                  className="w-[70%] h-full bg-center bg-no-repeat bg-white rounded-lg test-border"
-                  style={{ backgroundImage: `url(${selectedImage})` }}
-                ></div>
-                <div>
-                  <button
-                    type="button"
-                    className="absolute right-[20px] z-10 flex items-center justify-center w-[45px] h-[45px] bg-[#D1D5DB] rounded-full shadow-md disabled:opacity-50 hover:scale-110 transition-transform duration-200 ease-in-out"
-                    onClick={handleNext}
-                  >
-                    <Image
-                      src={right}
-                      alt={'Arrow left'}
-                      className="w-[45px] h-[45px]"
+
+                <div className="w-[30%] h-full p-[20px] flex flex-row justify-center items-center bg-white rounded-lg border border-gray-200 shadow">
+                  <div className="w-full">
+                  <div className="w-full flex flex-col gap-[20px] justify-center items-center">
+                    <Button
+                      text="Reserve your stay"
+                      btnClass="btnDark"
+                      onClick={handleScrollToYourStay}
                     />
-                  </button>
+                    <div className="p-[10px] w-full flex flex-col gap-[5px] border bg-gray-100 rounded-lg">
+                      <Text type="small" className="text-gray-900 text-left">
+                        Owner Information:
+                      </Text>
+                      <Text type="small" className="text-gray-600  text-left">
+                        Name: {user.username}
+                      </Text>
+                      <Text type="small" className="text-gray-600  text-left">
+                        email: {user.email}
+                      </Text>
+                      <Text type="small" className="text-gray-600  text-left">
+                        tel: {user.phone}
+                      </Text>
+                    </div>
+                    <div className="w-full flex flex-col gap-[5px]">
+                      {/* Рейтинг */}
+                      <div className="flex flex-row items-center gap-[10px]">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, index) =>
+                            index < ranking ? (
+                              <FaStar
+                                key={index}
+                                size={16}
+                                className="text-[var(--accent)]"
+                              />
+                            ) : (
+                              <FaRegStar
+                                key={index}
+                                size={16}
+                                className="text-gray-300"
+                              />
+                            )
+                          )}
+                        </div>
+                        <p className="text-gray-600 mt-[4px] text-xl font-medium">
+                          {ranking}
+                        </p>
+                        <Text type="small" className="text-gray-400 mt-[4px]">
+                          ({usersFeedback?.length} reviews)
+                        </Text>
+                      </div>
+                      <ReviewsSection reviews={usersFeedback} />
+                    </div>
+                  </div>
+                  </div>
                 </div>
-                <div className="w-[40%]">щось треба написати</div>
               </div>
             </div>
           </div>

@@ -11,4 +11,6 @@ export interface ITechnicalState {
   totalAmountCurrency: number;
   loading: boolean;
   updatedWeather: IUpdatedWeather[];
+  paymentStage: string;
+  paymentData: object;
 }

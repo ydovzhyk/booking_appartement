@@ -4,8 +4,17 @@ import React, { useState } from 'react';
 import { CiFaceFrown, CiFaceMeh, CiFaceSmile } from 'react-icons/ci';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { countries } from '@/data/countries';
-import { Review, reviews } from '@/data/reviews';
+// import { Review, reviews } from '@/data/reviews';
 import Text from '../text/text';
+
+export interface Review {
+  reviewOwnerName: string;
+  reviewOwnerCountry: string;
+  reviewData: string;
+  reviewDate: string;
+  reviewOwnerPhoto: string;
+  ranking: string;
+}
 
 const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
   const {
@@ -80,7 +89,9 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
 };
 
 const SliderReview: React.FC<{ reviews: Review[] }> = ({ reviews }) => {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(() =>
+    Math.floor(Math.random() * reviews.length)
+  );
 
   const nextReview = () => {
     setIndex(prevIndex => (prevIndex + 1) % reviews.length);
@@ -114,7 +125,17 @@ const SliderReview: React.FC<{ reviews: Review[] }> = ({ reviews }) => {
     </div>
   );
 };
+export default function ReviewsSection({ reviews }: { reviews?: Review[] }) {
+  if (!reviews || reviews.length === 0) {
+    return (
+      <div className="w-full">
+        <Text type="small" className="text-gray-900 text-left">
+          This type of listing is brand new on the site, and we don't have any
+          reviews yet.
+        </Text>
+      </div>
+    );
+  }
 
-export default function ReviewsSection() {
   return <SliderReview reviews={reviews} />;
 }

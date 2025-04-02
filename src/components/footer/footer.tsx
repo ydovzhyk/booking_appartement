@@ -20,6 +20,9 @@ const allowedRoutes = [
   '/user',
   '/add-property',
   '/property',
+  'payment/stage-1',
+  'payment/stage-2',
+  'payment/stage-3',
 ];
 
 const isAllowedRoute = (pathname: string) => {
@@ -27,7 +30,8 @@ const isAllowedRoute = (pathname: string) => {
     route =>
       route === pathname ||
       pathname.startsWith('/articles') ||
-      pathname.startsWith('/property')
+      pathname.startsWith('/property') ||
+      pathname.startsWith('/payment')
   );
 };
 

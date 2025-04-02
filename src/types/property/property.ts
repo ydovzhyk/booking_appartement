@@ -1,3 +1,4 @@
+import { Review } from '@/components/shared/slider-review/slider-review';
 export interface IProperty {
   _id: string;
   dateCreated: string;
@@ -35,5 +36,5 @@ export interface IProperty {
   imagesLink: string[];
   bookingDates?: string[];
   ranking: number;
-  usersFeedback?: string[];
+  usersFeedback?: Review[] | undefined;
 }
