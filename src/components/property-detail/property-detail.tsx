@@ -182,14 +182,13 @@ const PropertyDetail: React.FC<IProperty> = ({
     }
   };
 
-  const handleNavigate = async (typePayment: string) => {
+  const handleNavigate = async (typePayment: string, totalAmount: string) => {
     await dispatch(
       setPaymentData({
         propertyId: _id,
         typePayment,
-        price: price.value,
-        currency: price.currency,
-        conditions: {},
+        totalAmount,
+        owner,
       })
     );
 
@@ -440,7 +439,7 @@ const PropertyDetail: React.FC<IProperty> = ({
               </div>
             </div>
 
-            <div className="w-full flex flex-col gap-[10px] regular-border rounded-[5px] p-[15px]">
+            <div className="w-full flex flex-col gap-[10px] border border-gray-200 shadow rounded-lg p-[15px]">
               <div className="flex flex-row items-center justify-between">
                 <Text type="regular" className="text-gray-600 ">
                   Non-refundable:
@@ -454,12 +453,14 @@ const PropertyDetail: React.FC<IProperty> = ({
                   text="Book now"
                   btnClass="btnDark"
                   disabled={isAvailable !== 'true' ? true : false}
-                  onClick={() => handleNavigate('Non-refundable')}
+                  onClick={() =>
+                    handleNavigate('Non-refundable', convertedPrice01)
+                  }
                 />
               </div>
             </div>
 
-            <div className="w-full flex flex-col gap-[10px] regular-border rounded-[5px] p-[15px]">
+            <div className="w-full flex flex-col gap-[10px] border border-gray-200 shadow rounded-lg p-[15px]">
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-2">
                   <Text type="regular" className="text-green-600 ">
@@ -505,7 +506,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                   text="Book now"
                   btnClass="btnDark"
                   disabled={isAvailable !== 'true' ? true : false}
-                  onClick={() => handleNavigate('Refundable')}
+                  onClick={() => handleNavigate('Refundable', convertedPrice02)}
                 />
               </div>
             </div>
@@ -576,56 +577,78 @@ const PropertyDetail: React.FC<IProperty> = ({
 
                 <div className="w-[30%] h-full p-[20px] flex flex-row justify-center items-center bg-white rounded-lg border border-gray-200 shadow">
                   <div className="w-full">
-                  <div className="w-full flex flex-col gap-[20px] justify-center items-center">
-                    <Button
-                      text="Reserve your stay"
-                      btnClass="btnDark"
-                      onClick={handleScrollToYourStay}
-                    />
-                    <div className="p-[10px] w-full flex flex-col gap-[5px] border bg-gray-100 rounded-lg">
-                      <Text type="small" className="text-gray-900 text-left">
-                        Owner Information:
-                      </Text>
-                      <Text type="small" className="text-gray-600  text-left">
-                        Name: {user.username}
-                      </Text>
-                      <Text type="small" className="text-gray-600  text-left">
-                        email: {user.email}
-                      </Text>
-                      <Text type="small" className="text-gray-600  text-left">
-                        tel: {user.phone}
-                      </Text>
-                    </div>
-                    <div className="w-full flex flex-col gap-[5px]">
-                      {/* Рейтинг */}
-                      <div className="flex flex-row items-center gap-[10px]">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, index) =>
-                            index < ranking ? (
-                              <FaStar
-                                key={index}
-                                size={16}
-                                className="text-[var(--accent)]"
-                              />
-                            ) : (
-                              <FaRegStar
-                                key={index}
-                                size={16}
-                                className="text-gray-300"
-                              />
-                            )
-                          )}
-                        </div>
-                        <p className="text-gray-600 mt-[4px] text-xl font-medium">
-                          {ranking}
-                        </p>
-                        <Text type="small" className="text-gray-400 mt-[4px]">
-                          ({usersFeedback?.length} reviews)
+                    <div className="w-full flex flex-col gap-[20px] justify-center items-center">
+                      <Button
+                        text="Reserve your stay"
+                        btnClass="btnDark"
+                        onClick={handleScrollToYourStay}
+                      />
+                      <div className="p-[10px] w-full flex flex-col gap-[5px] border bg-gray-100 rounded-lg">
+                        <Text type="small" className="text-gray-900 text-left">
+                          Owner Information:
                         </Text>
+                        <Text type="small" className="text-gray-600  text-left">
+                          Name: {owner.name}
+                        </Text>
+                        <div className="flex flex-row items-center gap-[5px]">
+                          <Text
+                            type="small"
+                            className="text-gray-600  text-left"
+                          >
+                            email:
+                          </Text>
+                          <a
+                            href={`mailto:${owner.email}`}
+                            className=" text-gray-600 hover:text-gray-900"
+                          >
+                            {owner.email}
+                          </a>
+                        </div>
+                        <div className="flex flex-row items-center gap-[5px]">
+                          <Text
+                            type="small"
+                            className="text-gray-600  text-left"
+                          >
+                            tel:
+                          </Text>
+                          <a
+                            href={`tel:${owner.phone}`}
+                            className=" text-gray-600 hover:text-gray-900"
+                          >
+                            {owner.phone}
+                          </a>
+                        </div>
                       </div>
-                      <ReviewsSection reviews={usersFeedback} />
+                      <div className="w-full flex flex-col gap-[5px]">
+                        {/* Рейтинг */}
+                        <div className="flex flex-row items-center gap-[10px]">
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, index) =>
+                              index < ranking ? (
+                                <FaStar
+                                  key={index}
+                                  size={16}
+                                  className="text-[var(--accent)]"
+                                />
+                              ) : (
+                                <FaRegStar
+                                  key={index}
+                                  size={16}
+                                  className="text-gray-300"
+                                />
+                              )
+                            )}
+                          </div>
+                          <p className="text-gray-600 mt-[4px] text-xl font-medium">
+                            {ranking}
+                          </p>
+                          <Text type="small" className="text-gray-400 mt-[4px]">
+                            ({usersFeedback?.length} reviews)
+                          </Text>
+                        </div>
+                        <ReviewsSection reviews={usersFeedback} />
+                      </div>
                     </div>
-                  </div>
                   </div>
                 </div>
               </div>

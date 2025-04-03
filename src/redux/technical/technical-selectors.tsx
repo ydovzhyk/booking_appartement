@@ -15,4 +15,6 @@ export const getLoadingTechnical = (state: RootState) =>
 export const getCurrency = (state: RootState) => state.technical.currency;
 export const getUpdatedWeather = (state: RootState) => state.technical.updatedWeather;
 export const getPaymentData = (state: RootState) => state.technical.paymentData;
+export const getPaymentStage = (state: RootState) =>
+  state.technical.paymentStage;
 

@@ -41,7 +41,7 @@ const Navigation = () => {
         </li>
       </ul>
       <div className="absolute bottom-[8px] right-0 flex flex-row items-center gap-[10px]">
-        <Currencies />
+        <Currencies showLabelWithValue={true} />
         <TranslateMe />
       </div>
     </nav>

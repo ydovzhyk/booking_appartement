@@ -8,7 +8,6 @@ export interface ITechnicalState {
   currency: string;
   exchangeRateData: object;
   exchangeRate: number;
-  totalAmountCurrency: number;
   loading: boolean;
   updatedWeather: IUpdatedWeather[];
   paymentStage: string;

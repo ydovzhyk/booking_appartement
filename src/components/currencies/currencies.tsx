@@ -8,7 +8,13 @@ import {
 } from '@/redux/technical/technical-slice';
 import { getExchangeRateData } from '@/redux/technical/technical-selectors';
 
-const Currencies = () => {
+interface CurrenciesProps {
+  showLabelWithValue?: boolean;
+}
+
+const Currencies: React.FC<CurrenciesProps> = ({
+  showLabelWithValue = false,
+}) => {
   const dispatch = useDispatch();
   const exchangeRateDate = useSelector(getExchangeRateData);
 
@@ -115,7 +121,7 @@ const Currencies = () => {
         options={popularCurrencies}
         width="135px"
         topPlaceholder={false}
-        showLabelWithValue={true}
+        showLabelWithValue={showLabelWithValue}
       />
     </div>
   );

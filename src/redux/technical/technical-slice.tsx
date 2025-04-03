@@ -10,11 +10,15 @@ const initialState: ITechnicalState = {
   currency: '',
   exchangeRate: 0,
   exchangeRateData: {},
-  totalAmountCurrency: 0,
   loading: false,
   updatedWeather: [],
   paymentStage: 'stage-1',
-  paymentData: {},
+  paymentData: {
+    propertyId: null,
+    typePayment: null,
+    totalAmount: null,
+    owner: null,
+  },
 };
 
 const technical = createSlice({

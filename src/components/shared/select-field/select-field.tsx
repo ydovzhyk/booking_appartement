@@ -80,7 +80,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
 
   return (
     <label className="relative w-full flex flex-col items-center gap-[0px]">
-      {(topPlaceholder || value) && (
+      {topPlaceholder && (
         <div
           className="absolute top-[-23px] left-0 w-full flex items-center"
           style={{ justifyContent: dynamicValue }}

@@ -74,8 +74,8 @@ const Service: React.FC<ServiceProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-row items-center gap-[20px] border rounded-[5px]
-      ${mode === 'select' ? 'cursor-pointer p-[10px]' : 'p-[5px]'}
+      className={`flex flex-row items-center gap-[20px]
+      ${mode === 'select' ? 'p-[10px] cursor-pointer border rounded-[5px] ' : 'p-[5px] border border-gray-200 shadow rounded-lg'}
       ${isChecked ? 'border-[#0f1d2d]' : 'border-gray-300'}`}
       onClick={() => mode === 'select' && onToggle && onToggle(name)}
     >
@@ -92,7 +92,7 @@ const Service: React.FC<ServiceProps> = ({
         alt={name}
         className={`${mode === 'select' ? 'w-10 h-10' : 'w-6 h-6'}`}
       />
-      <Text type="small" fontWeight="normal" className="text-center">
+      <Text type="small" fontWeight="normal" className="text-center mt-[3px]">
         {name}
       </Text>
     </div>
