@@ -17,11 +17,18 @@ const YourSelection = () => {
   const conditions = useSelector(getSearchConditions);
   const currency = useSelector(getCurrency);
 
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   function generateBookingText(rooms: number, nights: number): string {
-  const roomText = `${rooms} ${rooms === 1 ? 'room' : 'rooms'}`;
-  const nightText = `${nights} ${nights === 1 ? 'night' : 'nights'}`;
-  return `${roomText} x ${nightText}`;
-  };
+    const roomText = `${rooms} ${rooms === 1 ? 'room' : 'rooms'}`;
+    const nightText = `${nights} ${nights === 1 ? 'night' : 'nights'}`;
+    return `${roomText} x ${nightText}`;
+  }
+
   function generateGuestsText(
     currency: string,
     numberAdults: number,
@@ -36,7 +43,9 @@ const YourSelection = () => {
     const petsText = petsAllowed ? ' with pet' : '';
 
     return `(in ${currency} for ${adultsText}${childrenText}${petsText})`;
-  };
+  }
+
+  if (!hasMounted) return null;
 
   const text01 = generateBookingText(conditions.numberRooms, conditions.days);
   const text02 = generateGuestsText(
