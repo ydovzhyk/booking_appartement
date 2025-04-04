@@ -28,7 +28,7 @@ import swimmingPool from '../../../../public/images/services_icons/swimming_pool
 import terrace from '../../../../public/images/services_icons/terrace.png';
 import nearSupermarket from '../../../../public/images/services_icons/near_supermarket.png';
 
-const services = [
+export const services = [
   { icon: freeWiFi, name: 'Free Wi-Fi' },
   { icon: airportShuttle, name: 'Airport Shuttle' },
   { icon: bathRoom, name: 'Private Bathroom' },

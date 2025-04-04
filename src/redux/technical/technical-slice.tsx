@@ -15,8 +15,14 @@ const initialState: ITechnicalState = {
   paymentStage: 'stage-1',
   paymentData: {
     propertyId: null,
+    propertyName: null,
+    propertyImg: null,
+    location: {},
+    ranking: 0,
+    usersFeedback: [],
+    servicesList: [],
+    pricePerNight: 0,
     typePayment: null,
-    totalAmount: null,
     owner: null,
   },
 };

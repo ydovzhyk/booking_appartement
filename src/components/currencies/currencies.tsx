@@ -10,10 +10,12 @@ import { getExchangeRateData } from '@/redux/technical/technical-selectors';
 
 interface CurrenciesProps {
   showLabelWithValue?: boolean;
+  initialCurrency?: string;
 }
 
 const Currencies: React.FC<CurrenciesProps> = ({
   showLabelWithValue = false,
+  initialCurrency = 'UAH',
 }) => {
   const dispatch = useDispatch();
   const exchangeRateDate = useSelector(getExchangeRateData);
@@ -45,7 +47,10 @@ const Currencies: React.FC<CurrenciesProps> = ({
   type CurrencyOption = { value: string; label: string };
 
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyOption>(
-    popularCurrencies[0]
+    () => {
+      const found = popularCurrencies.find(c => c.value === initialCurrency);
+      return found || popularCurrencies[0];
+    }
   );
 
   const API_KEY01 = 'c387761eefc91005f40db998'; // 1500 free requests per month https://app.exchangerate-api.com

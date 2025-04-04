@@ -186,8 +186,14 @@ const PropertyDetail: React.FC<IProperty> = ({
     await dispatch(
       setPaymentData({
         propertyId: _id,
+        propertyName: title,
+        propertyImg: mainImage,
+        location,
+        ranking,
+        servicesList,
+        pricePerNight: price.value,
+        usersFeedback,
         typePayment,
-        totalAmount,
         owner,
       })
     );
@@ -557,7 +563,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                     </button>
                   </div>
                   <div
-                    className="w-full h-full bg-center bg-no-repeat bg-white rounded-lg border border-gray-200 shadow"
+                    className="w-[45%] h-[170px] bg-center bg-cover bg-no-repeat bg-white rounded-lg border border-gray-200 shadow"
                     style={{ backgroundImage: `url(${selectedImage})` }}
                   ></div>
                   <div className="absolute top-0 right-0 z-10 h-full flex justify-center items-center">
