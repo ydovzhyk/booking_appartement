@@ -563,7 +563,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                     </button>
                   </div>
                   <div
-                    className="w-[45%] h-[170px] bg-center bg-cover bg-no-repeat bg-white rounded-lg border border-gray-200 shadow"
+                    className="w-full bg-center bg-cover bg-no-repeat bg-white rounded-lg border border-gray-200 shadow"
                     style={{ backgroundImage: `url(${selectedImage})` }}
                   ></div>
                   <div className="absolute top-0 right-0 z-10 h-full flex justify-center items-center">
@@ -574,7 +574,7 @@ const PropertyDetail: React.FC<IProperty> = ({
                     >
                       <Image
                         src={right}
-                        alt={'Arrow left'}
+                        alt={'Arrow right'}
                         className="w-[45px] h-[45px]"
                       />
                     </button>

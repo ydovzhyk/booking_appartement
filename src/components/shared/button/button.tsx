@@ -24,7 +24,7 @@ const Button: React.FC<IButtonProps> = ({
   disabled = false,
 }) => {
   const baseClasses =
-    'flex items-center justify-center gap-2.5 hover-transition group w-[150px] h-[40px] md:w-[170px] ';
+    'flex items-center justify-center gap-2.5 hover-transition group w-[150px] h-[40px] md:w-[170px] px-[5px]';
 
   const btnDarkClasses = 'regular-border bg-white';
   const btnLightClasses = 'accent-border bg-[var(--accent)] text-white';

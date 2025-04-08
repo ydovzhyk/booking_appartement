@@ -1,24 +1,34 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import {
   getPaymentData,
   getCurrency,
   getExchangeRate,
 } from '@/redux/technical/technical-selectors';
+import {
+  getAvailable,
+} from '@/redux/search/search-selectors';
+import { setPaymentStage } from '@/redux/technical/technical-slice';
 import { getSearchConditions } from '@/redux/search/search-selectors';
+import { clearAvailable } from '@/redux/search/search-slice';
 import Text from '@/components/shared/text/text';
 import Currencies from '@/components/currencies/currencies';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { services } from '@/components/shared/services-part/services-part';
+import CalendarPart from '@/components/calendar-part/calendar-part';
+import Button from '@/components/shared/button/button';
 
 const YourSelection = () => {
   const paymentData = useSelector(getPaymentData) as {
-    propertyId: string | null;
+    propertyId: string;
     propertyName: string | null;
     propertyImg: string | null;
-    location: {};
+    location: {
+      city: string;
+    };
     ranking: number;
     usersFeedback: [] | null;
     servicesList: [] | null;
@@ -26,15 +36,37 @@ const YourSelection = () => {
     typePayment: string | null;
     owner: any;
   };
+  const dispatch = useDispatch();
+  const router = useRouter();
   const conditions = useSelector(getSearchConditions);
+  const isAvailable = useSelector(getAvailable);
   const currency = useSelector(getCurrency);
   const exchangeRate = useSelector(getExchangeRate);
   const [hasMounted, setHasMounted] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [changeConditions, setChangeConditions] = useState(false);
+  const [prevAvailable, setPrevAvailable] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (changeConditions && !prevAvailable && isAvailable === 'true') {
+      setPrevAvailable(true);
+      dispatch(clearAvailable());
+      return;
+    }
+    if (changeConditions && prevAvailable && isAvailable === 'true') {
+      setTimeout(() => {
+        setChangeConditions(false);
+        setPrevAvailable(false);
+      }, 5000);
+    }
+    if (changeConditions && prevAvailable && isAvailable === 'false') {
+      return;
+    }
+  }, [isAvailable, changeConditions]);
 
   useEffect(() => {
     const calculateNewPrice = () => {
@@ -135,6 +167,11 @@ const YourSelection = () => {
     return shuffled.slice(0, count);
   }
 
+  const proceedToPayment = () => {
+    dispatch(setPaymentStage('stage-2'));
+    router.push('/payment/stage-2');
+  }
+
   return (
     <div className="w-full flex flex-col justify-between gap-[40px] test-border">
       <Text type="regular" as="h2" fontWeight="bold" className="inline">
@@ -226,13 +263,66 @@ const YourSelection = () => {
             <Text as="p" type="small" fontWeight="bold">
               Your Booking Details
             </Text>
-            <div className="flex flex-col gap-[5px]">
-              <Text as="p" type="small" fontWeight="bold">
-                Your stay conditions:
-              </Text>
-              <Text as="p" type="small" fontWeight="normal">
-                {text03}
-              </Text>
+            <div className="relative flex flex-row items-center justify-between">
+              <div className="flex flex-col gap-[5px]">
+                <Text as="p" type="small" fontWeight="bold">
+                  Your stay conditions:
+                </Text>
+                <Text as="p" type="small" fontWeight="normal">
+                  {text03}
+                </Text>
+              </div>
+              <button
+                onClick={() => {
+                  setChangeConditions(!changeConditions);
+                }}
+              >
+                <Text as="p" type="small" fontWeight="normal">
+                  Change conditions
+                </Text>
+              </button>
+              {changeConditions && (
+                <div className="w-[50%] absolute top-[50px] right-0 bg-white py-[20px] border border-gray-200 shadow rounded-lg z-10 flex flex-col gap-[20px]">
+                  <CalendarPart
+                    type="vertical"
+                    btnText="check availability"
+                    city={paymentData.location.city}
+                    apartmentId={paymentData.propertyId}
+                  />
+                  <div
+                    className="px-[20px]"
+                    style={{
+                      display: isAvailable === 'none' ? 'none' : 'block',
+                    }}
+                  >
+                    {isAvailable === 'false' && (
+                      <Text
+                        as="span"
+                        type="small"
+                        lineHeight="none"
+                        fontWeight="normal"
+                        className="text-red-600"
+                      >
+                        Unfortunately, it is not possible to book an apartment
+                        based on the selected criteria. Please try choosing
+                        different criteria or another apartment.
+                      </Text>
+                    )}
+                    {isAvailable === 'true' && (
+                      <Text
+                        as="span"
+                        type="small"
+                        lineHeight="none"
+                        fontWeight="normal"
+                        className="text-green-600"
+                      >
+                        This apartment can be booked and meets the selected
+                        criteria for accommodation.
+                      </Text>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex flex-row items-stretch justify-center gap-[70px]">
               <div className="flex flex-col items-center gap-[5px]">
@@ -323,6 +413,14 @@ const YourSelection = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="col-span-full flex justify-center">
+        <Button
+          text="Proceed to Payment"
+          btnClass="btnDark"
+          onClick={() => proceedToPayment()}
+          disabled={isAvailable !== 'true'}
+        />
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ import technicalReducer from './technical/technical-slice';
 import propertyReducer from './property/property-slice';
 import searchReducer from './search/search-slice';
 import cahatReducer from './chat/chat-slice';
+import orderReducer from './order/order-slice';
 import { IAuthStore } from '../types/store/store-auth';
 import { setupInterceptors } from '../api/auth';
 import logger from 'redux-logger';
@@ -46,6 +47,7 @@ export const store = configureStore({
     property: propertyReducer,
     search: searchReducer,
     chat: cahatReducer,
+    order: orderReducer,
   },
   middleware: getDefaultMiddleware => {
     const middlewares = getDefaultMiddleware({
