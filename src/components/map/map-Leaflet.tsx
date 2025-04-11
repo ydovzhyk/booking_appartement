@@ -141,7 +141,7 @@ const Map = ({ address, title }: MapProps) => {
             onClick={() => setOverlayVisible(true)}
           ></div>
 
-          <div className="absolute bottom-2 left-2 test-border">
+          <div className="absolute bottom-2 left-2">
             <Text as="h2" fontWeight="bold">
               Не коректні координати
             </Text>

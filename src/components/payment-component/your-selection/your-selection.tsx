@@ -173,7 +173,7 @@ const YourSelection = () => {
   }
 
   return (
-    <div className="w-full flex flex-col justify-between gap-[40px] test-border">
+    <div className="w-full flex flex-col justify-between gap-[40px]">
       <Text type="regular" as="h2" fontWeight="bold" className="inline">
         Your selection:
       </Text>

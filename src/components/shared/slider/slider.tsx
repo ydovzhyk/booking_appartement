@@ -34,7 +34,7 @@ const Slider: React.FC<SliderProps> = ({ images }) => {
       {/* Кнопка назад */}
       <button
         type="button"
-        className="absolute left-[20px] z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full shadow-md disabled:opacity-50 test-border"
+        className="absolute left-[20px] z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full shadow-md disabled:opacity-50"
         onClick={prevSlide}
         disabled={!isPrevButtonActive}
       >
@@ -59,7 +59,7 @@ const Slider: React.FC<SliderProps> = ({ images }) => {
       {/* Кнопка вперед */}
       <button
         type="button"
-        className="absolute right-[20px] z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full shadow-md disabled:opacity-50 test-border"
+        className="absolute right-[20px] z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full shadow-md disabled:opacity-50"
         onClick={nextSlide}
         disabled={!isNextButtonActive}
       >

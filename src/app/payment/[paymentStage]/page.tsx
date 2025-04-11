@@ -52,7 +52,7 @@ function PaymentPage() {
     <div className="w-full">
       <div className="container">
         <Suspense fallback={<LoaderSpinner />}>
-          <div className="w-full flex flex-col justify-between gap-[40px] my-[40px] test-border">
+          <div className="w-full flex flex-col justify-between gap-[40px] my-[40px]">
             <StageBar />
             {stage === 1 && <YourSelection />}
             {stage === 2 && <PaymentDetails />}
