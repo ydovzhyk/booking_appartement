@@ -16,6 +16,7 @@ export interface IOrder {
     country: string;
     postalCode: string;
     specialRequests: string;
+    arrivalTime: string;
   };
   paymentData: {
     paymentComment: string;
