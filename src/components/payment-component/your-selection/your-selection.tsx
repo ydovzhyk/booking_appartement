@@ -418,6 +418,7 @@ const YourSelection = () => {
         <Button
           text="Proceed to Payment"
           btnClass="btnDark"
+          width='200px'
           onClick={() => proceedToPayment()}
           disabled={isAvailable !== 'true'}
         />

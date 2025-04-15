@@ -11,6 +11,7 @@ interface IButtonProps {
   id?: string;
   image?: string;
   disabled?: boolean;
+  width?: string;
 }
 
 const Button: React.FC<IButtonProps> = ({
@@ -22,9 +23,10 @@ const Button: React.FC<IButtonProps> = ({
   id = '',
   image = null,
   disabled = false,
+  width = '150px',
 }) => {
   const baseClasses =
-    'flex items-center justify-center gap-2.5 hover-transition group w-[150px] h-[40px] md:w-[170px] px-[5px]';
+    'flex items-center justify-center gap-2.5 hover-transition group h-[40px] md:w-[170px] px-[5px]';
 
   const btnDarkClasses = 'regular-border bg-white';
   const btnLightClasses = 'accent-border bg-[var(--accent)] text-white';
@@ -48,7 +50,7 @@ const Button: React.FC<IButtonProps> = ({
       onClick={onClick}
       type={type}
       disabled={disabled}
-      style={{ borderRadius: '5px' }}
+      style={{ width, borderRadius: '5px' }}
     >
       {image && (
         <Image

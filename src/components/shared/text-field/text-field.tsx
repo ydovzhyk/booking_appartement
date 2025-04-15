@@ -16,6 +16,7 @@ export interface ITextFieldProps {
   className?: string;
   error?: FieldError;
   autoComplete?: string;
+  icon?: React.ReactNode;
 }
 
 const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
@@ -31,6 +32,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
       className,
       error,
       autoComplete,
+      icon,
     },
     ref
   ) => {
@@ -57,14 +59,16 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
           autoComplete={autoComplete}
         />
         {value && (
-          <Text
-            type="small"
-            as="span"
-            fontWeight="normal"
-            className="absolute top-[-23px] left-0.2"
-          >
-            {placeholder}
-          </Text>
+          <div className="absolute top-[-26px] left-0.2 flex flex-row items-center gap-[10px]">
+            <Text type="small" as="span" fontWeight="normal">
+              {placeholder}
+            </Text>
+            {icon && (
+              <div className="relative first-letter:w-[40px] flex flex-row items-center justify-center">
+                <div className='absolute top-[-19px] left-0'>{icon}</div>
+              </div>
+            )}
+          </div>
         )}
         {!value && (
           <Text
@@ -83,7 +87,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
             fontWeight="normal"
             className="absolute top-10 text-red-500"
           >
-            {title || ''}
+            {error.message ? error.message : title ? title : ''}
           </Text>
         )}
       </label>

@@ -19,6 +19,8 @@ import { SlPaypal } from 'react-icons/sl';
 import { BsCreditCard2BackFill } from 'react-icons/bs';
 import { arrivalTimes } from './arrivalTimes';
 import { setTechnicalError } from '@/redux/technical/technical-slice';
+import { SiVisa } from 'react-icons/si';
+import { FaCcMastercard } from 'react-icons/fa';
 
 const PaymentDetails = () => {
   const dispatch = useAppDispatch();
@@ -74,7 +76,36 @@ const PaymentDetails = () => {
     },
   });
 
-  const onSubmit = (data: IOrder) => {
+    const getCardType = (
+      cardNumber: string
+    ): 'visa' | 'mastercard' | 'unknown' => {
+      const cleaned = cardNumber.replace(/\s/g, '');
+      if (/^4\d{0,15}$/.test(cleaned)) return 'visa';
+      if (
+        /^5[1-5]\d{0,14}$/.test(cleaned) || // MasterCard old range
+        /^2(2[2-9]\d{0,13}|[3-6]\d{0,14}|7[01]\d{0,13}|720\d{0,12})$/.test(
+          cleaned
+        ) // New 2221–2720 range
+      ) {
+        return 'mastercard';
+      }
+      return 'unknown';
+    };
+
+  const cardNumber = watch('paymentData.paymentMethod.creditCard.cardNumber');
+  const rawDigits = cardNumber?.replace(/\s/g, '') || '';
+  const cardType = rawDigits.length >= 4 ? getCardType(cardNumber) : 'unknown';
+
+  const cardIcon =
+    cardType === 'visa' ? (
+      <SiVisa size={35} />
+    ) : cardType === 'mastercard' ? (
+      <FaCcMastercard size={32} />
+    ) : null;
+
+
+  const onSubmit = (data: IOrder, event?: React.BaseSyntheticEvent) => {
+    event?.preventDefault();
     if (isFilled) {
       data.orderCriteria = searchConditions;
       console.log('Form submitted:', data);
@@ -474,17 +505,26 @@ const PaymentDetails = () => {
                         name="paymentData.paymentMethod.creditCard.cardNumber"
                         rules={{
                           required: 'Card number is required',
-                          validate: value =>
-                            isValidCardNumber(value) || 'Invalid card number',
+                          validate: value => {
+                            const digits = value.replace(/\s/g, '');
+                            if (digits.length < 16) return true;
+                            const valid = isValidCardNumber(value);
+                            return valid || 'Invalid card number';
+                          },
                         }}
                         render={({ field, fieldState }) => (
                           <TextField
                             value={field.value}
-                            handleChange={e =>
-                              field.onChange(formatCardNumber(e.target.value))
-                            }
+                            handleChange={e => {
+                              const formatted = formatCardNumber(
+                                e.target.value
+                              );
+                              field.onChange(formatted);
+                            }}
                             error={fieldState.error}
                             placeholder="Card Number"
+                            autoComplete="off"
+                            icon={cardIcon}
                           />
                         )}
                       />
@@ -507,6 +547,7 @@ const PaymentDetails = () => {
                               }
                               error={fieldState.error}
                               placeholder="MM/YY"
+                              autoComplete="off"
                             />
                           )}
                         />
@@ -529,6 +570,7 @@ const PaymentDetails = () => {
                               }}
                               error={fieldState.error}
                               placeholder="CVV"
+                              autoComplete="off"
                             />
                           )}
                         />
@@ -548,6 +590,7 @@ const PaymentDetails = () => {
                             handleChange={field.onChange}
                             error={fieldState.error}
                             placeholder="Name on Card"
+                            autoComplete="off"
                           />
                         )}
                       />
@@ -582,6 +625,7 @@ const PaymentDetails = () => {
                             handleChange={field.onChange}
                             error={fieldState.error}
                             placeholder="Account Name"
+                            autoComplete="off"
                           />
                         )}
                       />
@@ -594,6 +638,7 @@ const PaymentDetails = () => {
                             handleChange={field.onChange}
                             error={fieldState.error}
                             placeholder="IBAN"
+                            autoComplete="off"
                           />
                         )}
                       />
@@ -606,6 +651,7 @@ const PaymentDetails = () => {
                             handleChange={field.onChange}
                             error={fieldState.error}
                             placeholder="SWIFT/BIC"
+                            autoComplete="off"
                           />
                         )}
                       />
@@ -618,6 +664,7 @@ const PaymentDetails = () => {
                             handleChange={field.onChange}
                             error={fieldState.error}
                             placeholder="Payment Reference"
+                            autoComplete="off"
                           />
                         )}
                       />
@@ -674,7 +721,7 @@ const PaymentDetails = () => {
           </div>
         </div>
         <div className="col-span-full flex justify-center">
-          <Button text="Proceed to Payment" btnClass="btnDark" />
+          <Button text="Proceed to Payment" btnClass="btnDark" width='200px'/>
         </div>
       </form>
     </section>
