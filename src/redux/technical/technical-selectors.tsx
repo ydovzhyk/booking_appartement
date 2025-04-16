@@ -17,4 +17,6 @@ export const getUpdatedWeather = (state: RootState) => state.technical.updatedWe
 export const getPaymentData = (state: RootState) => state.technical.paymentData;
 export const getPaymentStage = (state: RootState) =>
   state.technical.paymentStage;
+export const getInfoUserId = (state: RootState) =>
+  state.technical.infoUserId;
 

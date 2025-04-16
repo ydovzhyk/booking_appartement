@@ -7,6 +7,7 @@ const initialState: ITechnicalState = {
   hideHeaderFooter: false,
   screenType: 'isDesctop',
   modalWindowStatus: false,
+  infoUserId: '6682a23d394df5a1c56b1248f',
   currency: '',
   exchangeRate: 0,
   exchangeRateData: {},
@@ -23,7 +24,12 @@ const initialState: ITechnicalState = {
     servicesList: [],
     pricePerNight: 0,
     typePayment: null,
-    owner: null,
+    owner: {
+      id: '',
+      name: '',
+      phone: '',
+      email: '',
+    },
   },
 };
 

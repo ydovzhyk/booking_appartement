@@ -67,6 +67,7 @@ const AuthInfo = () => {
               btnClass="btnLight"
               textColor="white"
               onClick={navigateToAddProperty}
+              width='200px'
             />
           </div>
           <AddUserPanel />

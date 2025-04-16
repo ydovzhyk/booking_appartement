@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import useSocket from '@/hooks/useSocket';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/shared/button/button';
 import SelectField from '@/components/shared/select-field/select-field';
@@ -9,6 +10,7 @@ import Text from '@/components/shared/text/text';
 import { getUser } from '@/redux/auth/auth-selectors';
 import { getSearchConditions } from '@/redux/search/search-selectors';
 import { setPaymentStage } from '@/redux/technical/technical-slice';
+import { getInfoUserId, getPaymentData } from '@/redux/technical/technical-selectors';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { IOrder } from '../../../types/order/order';
@@ -24,9 +26,12 @@ import { FaCcMastercard } from 'react-icons/fa';
 
 const PaymentDetails = () => {
   const dispatch = useAppDispatch();
+  const { checkChat, createChat, sendMessage } = useSocket();
   const router = useRouter();
   const searchConditions = useSelector(getSearchConditions);
   const client = useSelector(getUser);
+  const paymentData = useSelector(getPaymentData);
+  const infoUserId = useSelector(getInfoUserId);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [isFilled, setIsFilled] = useState(false);
 
@@ -106,15 +111,53 @@ const PaymentDetails = () => {
 
   const onSubmit = (data: IOrder, event?: React.BaseSyntheticEvent) => {
     event?.preventDefault();
-    if (isFilled) {
-      data.orderCriteria = searchConditions;
-      console.log('Form submitted:', data);
-      // dispatch(setPaymentStage('stage-3'));
-      // router.push('/payment/stage-3');
-    } else {
+
+    if (!isFilled) {
       dispatch(setTechnicalError('Please select a payment method'));
+      return;
     }
+
+    const clientId = client._id;
+    const ownerId = paymentData?.owner?.id ?? null;
+    const apartmentId = paymentData?.propertyId ?? null;
+
+    // Перевіряємо, щоб усі ID були валідні рядки
+    if (!clientId || !ownerId || !infoUserId || !apartmentId) {
+      dispatch(
+        setTechnicalError('Some user or property information is missing.')
+      );
+      return;
+    }
+
+    const clientText = `📩 Your order was received!\nCheck-in: ${data.clientData.arrivalTime}\nCountry: ${data.clientData.country}`;
+    const ownerText = `💼 New booking from ${data.clientData.firstName}!\nCheck-in: ${data.clientData.arrivalTime}`;
+
+    const handleMessageSend = (fromId: string, toId: string, text: string) => {
+      checkChat(fromId, toId, apartmentId, (err, response) => {
+        if (response?.chatId) {
+          sendMessage(fromId, response.chatId, text, () => {});
+        } else {
+          createChat(fromId, toId, apartmentId, (err, response) => {
+            if (response?.chatId) {
+              sendMessage(fromId, response.chatId, text, () => {});
+            }
+          });
+        }
+      });
+    };
+
+    // Надсилаємо повідомлення клієнту
+    handleMessageSend(infoUserId, clientId, clientText);
+
+    // Надсилаємо повідомлення овнеру
+    handleMessageSend(infoUserId, ownerId, ownerText);
+
+    data.orderCriteria = searchConditions;
+    console.log('Form submitted:', data);
+    // dispatch(setPaymentStage('stage-3'));
+    // router.push('/payment/stage-3');
   };
+
 
   // Luhn algorithm — перевірка валідності картки
   const isValidCardNumber = (cardNumber: string): boolean => {
@@ -179,7 +222,7 @@ const PaymentDetails = () => {
         className="w-full flex flex-col justify-between gap-[40px]"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="w-full flex flex-row justify-between gap-[20px] items-start">
+        <div className="w-full flex flex-row justify-between gap-[40px] items-start">
           <div className="w-[50%] flex flex-col gap-[20px]">
             <div className="w-full flex flex-col gap-[20px] bg-gray-200 border border-gray-200 shadow rounded-lg p-[15px]">
               <Text as="p" type="small" fontWeight="bold">
